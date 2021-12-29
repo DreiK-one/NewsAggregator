@@ -8,7 +8,7 @@ namespace NewsAggregator.Entites
 {
     internal class Comment
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string? Text { get; set; }
 

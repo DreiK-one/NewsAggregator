@@ -8,7 +8,7 @@ namespace NewsAggregator.Entites
 {
     internal class UserActivity
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public int NumberOfViews { get; set; }
 
