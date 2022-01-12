@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NewsAggregator.Entities;
+using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

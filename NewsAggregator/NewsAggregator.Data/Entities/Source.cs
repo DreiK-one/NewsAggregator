@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewsAggregator.Entities
+namespace NewsAggregator.Data.Entities
 {
     public class Source
     {

@@ -12,7 +12,7 @@ using NewsAggregator.Data;
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    [Migration("20220112125804_Init")]
+    [Migration("20220112143344_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace NewsAggregator.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("NewsAggregator.Entities.Article", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Article", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -67,7 +67,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Category", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Comment", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Comment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,7 +110,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Role", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Source", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Source", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,7 +148,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Sources");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.User", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +176,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.UserActivity", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.UserActivity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -203,7 +203,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("UserActivities");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.UserRole", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -224,15 +224,15 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Article", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Article", b =>
                 {
-                    b.HasOne("NewsAggregator.Entities.Category", "Category")
+                    b.HasOne("NewsAggregator.Data.Entities.Category", "Category")
                         .WithMany("Articles")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Entities.Source", "Source")
+                    b.HasOne("NewsAggregator.Data.Entities.Source", "Source")
                         .WithMany("Articles")
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -243,15 +243,15 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Comment", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Comment", b =>
                 {
-                    b.HasOne("NewsAggregator.Entities.Article", "Article")
+                    b.HasOne("NewsAggregator.Data.Entities.Article", "Article")
                         .WithMany("Comments")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Entities.User", "User")
+                    b.HasOne("NewsAggregator.Data.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -262,15 +262,15 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.UserActivity", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.UserActivity", b =>
                 {
-                    b.HasOne("NewsAggregator.Entities.Article", "Article")
+                    b.HasOne("NewsAggregator.Data.Entities.Article", "Article")
                         .WithMany("UserActivities")
                         .HasForeignKey("ArticleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Entities.User", "User")
+                    b.HasOne("NewsAggregator.Data.Entities.User", "User")
                         .WithMany("UserActivities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -281,15 +281,15 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.UserRole", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.UserRole", b =>
                 {
-                    b.HasOne("NewsAggregator.Entities.Role", "Role")
+                    b.HasOne("NewsAggregator.Data.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Entities.User", "User")
+                    b.HasOne("NewsAggregator.Data.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -300,29 +300,29 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Article", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Article", b =>
                 {
                     b.Navigation("Comments");
 
                     b.Navigation("UserActivities");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Category", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Category", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Role", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.Source", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.Source", b =>
                 {
                     b.Navigation("Articles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Entities.User", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Entities.User", b =>
                 {
                     b.Navigation("Comments");
 
