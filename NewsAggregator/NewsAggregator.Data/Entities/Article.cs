@@ -18,8 +18,6 @@ namespace NewsAggregator.Data.Entities
 
         public DateTime CreationDate { get; set; }
 
-        public string Url { get; set; }
-
         public float Coefficient { get; set; }
 
 

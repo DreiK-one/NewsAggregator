@@ -12,8 +12,8 @@ using NewsAggregator.Data;
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    [Migration("20220112143344_Init")]
-    partial class Init
+    [Migration("20220112173050_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,10 +51,6 @@ namespace NewsAggregator.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace NewsAggregator.Data.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -72,7 +72,6 @@ namespace NewsAggregator.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Coefficient = table.Column<float>(type: "real", nullable: false),
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SourceId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
