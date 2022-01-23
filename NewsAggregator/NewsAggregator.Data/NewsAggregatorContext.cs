@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NewsAggregator.Data.Configuration;
 using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,17 @@ namespace NewsAggregator.Data
         {
             
         }
+
+
+        //Only for creation migrations
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        //    modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+        //    modelBuilder.ApplyConfiguration(new SourceConfiguration());
+        //    modelBuilder.ApplyConfiguration(new ArticleConfiguration());
+        //}
 
     }
 }

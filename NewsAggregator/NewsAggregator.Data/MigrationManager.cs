@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Data
 {
+
+    //For auto-migration (update-database) ON START
+
     public static class MigrationManager
     {
         public static IHost MigrateDatabase(this IHost host)
@@ -23,6 +26,7 @@ namespace NewsAggregator.Data
                     }
                     catch (Exception)
                     {
+                        //Log errors or do anything it's needed
                         throw;
                     }
                 }

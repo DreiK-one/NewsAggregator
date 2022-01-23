@@ -12,8 +12,8 @@ using NewsAggregator.Data;
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    [Migration("20220123151444_Seed")]
-    partial class Seed
+    [Migration("20220123203939_AddExampleData")]
+    partial class AddExampleData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -76,6 +76,18 @@ namespace NewsAggregator.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ddaea0de-7c80-471f-86c2-b2007d4f8d9e"),
+                            Name = "Sport"
+                        },
+                        new
+                        {
+                            Id = new Guid("8453b0bd-9860-45fa-a2ae-a77953d842a4"),
+                            Name = "People"
+                        });
                 });
 
             modelBuilder.Entity("NewsAggregator.Data.Entities.Comment", b =>
@@ -119,6 +131,23 @@ namespace NewsAggregator.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("fcbb86d1-0ca5-4aec-94db-e932b89a30b0"),
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = new Guid("0cd86cd8-36b8-408e-9632-f336028c9e2f"),
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = new Guid("50409b8d-9c49-40a6-9d94-97e94db38819"),
+                            Name = "Moderator"
+                        });
                 });
 
             modelBuilder.Entity("NewsAggregator.Data.Entities.Source", b =>
@@ -142,6 +171,22 @@ namespace NewsAggregator.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sources");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5"),
+                            BaseUrl = "https://www.onliner.by/",
+                            Name = "Onliner",
+                            RssUrl = "https://www.onliner.by/feed"
+                        },
+                        new
+                        {
+                            Id = new Guid("c13088a4-9467-4fce-9ef7-3903425f1f81"),
+                            BaseUrl = "https://lenta.ru",
+                            Name = "Lenta",
+                            RssUrl = "lenta.ru/rss/news"
+                        });
                 });
 
             modelBuilder.Entity("NewsAggregator.Data.Entities.User", b =>
