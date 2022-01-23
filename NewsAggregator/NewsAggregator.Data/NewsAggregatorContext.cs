@@ -22,7 +22,7 @@ namespace NewsAggregator.Data
         public NewsAggregatorContext(DbContextOptions<NewsAggregatorContext> options) 
             : base(options)
         {
-
+            
         }
 
     }
