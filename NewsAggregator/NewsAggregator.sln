@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Data", "NewsAggregator.Data\NewsAggregator.Data.csproj", "{9A88E898-844B-4CCE-B0CF-61DB1848CEA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Data", "NewsAggregator.Data\NewsAggregator.Data.csproj", "{9A88E898-844B-4CCE-B0CF-61DB1848CEA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Core", "NewsAggregator.Core\NewsAggregator.Core.csproj", "{38E0222C-476A-4045-84AD-79061887A8D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Core", "NewsAggregator.Core\NewsAggregator.Core.csproj", "{38E0222C-476A-4045-84AD-79061887A8D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Domain", "NewsAggregator.Domain\NewsAggregator.Domain.csproj", "{2794189F-88F2-428A-8586-A40676C41C4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Domain", "NewsAggregator.Domain\NewsAggregator.Domain.csproj", "{2794189F-88F2-428A-8586-A40676C41C4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.App", "NewsAggregator.App\NewsAggregator.App.csproj", "{29B42DA9-6000-4E8A-ADF2-43415B351819}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.App", "NewsAggregator.App\NewsAggregator.App.csproj", "{29B42DA9-6000-4E8A-ADF2-43415B351819}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DataAccess", "NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj", "{9B3E0938-F9F2-430E-98CB-BAA896F43688}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +37,17 @@ Global
 		{29B42DA9-6000-4E8A-ADF2-43415B351819}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29B42DA9-6000-4E8A-ADF2-43415B351819}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29B42DA9-6000-4E8A-ADF2-43415B351819}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B3E0938-F9F2-430E-98CB-BAA896F43688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B3E0938-F9F2-430E-98CB-BAA896F43688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B3E0938-F9F2-430E-98CB-BAA896F43688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B3E0938-F9F2-430E-98CB-BAA896F43688}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A88E898-844B-4CCE-B0CF-61DB1848CEA7} = {6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}
+		{9B3E0938-F9F2-430E-98CB-BAA896F43688} = {6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5FAB4299-85E4-49E0-9E0B-0AF82B620CB2}

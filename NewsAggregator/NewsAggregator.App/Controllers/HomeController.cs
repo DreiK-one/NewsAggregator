@@ -1,21 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NewsAggregator.App.Models;
+using NewsAggregator.Data;
 using System.Diagnostics;
 
 namespace NewsAggregator.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly NewsAggregatorContext _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(NewsAggregatorContext db)
         {
-            _logger = logger;
+            _db = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = await _db.Articles
+                .OrderByDescending(article => article.Coefficient)
+                .Select(article => new TopNewsOnHomeScreenViewModel()
+                {
+                    Id = article.Id,
+                    Title = article.Title
+                }).ToListAsync();
+
+            return View(model);
         }
 
         public IActionResult Privacy()
