@@ -1,4 +1,5 @@
-﻿using NewsAggregator.Data.Entities;
+﻿using NewsAggregator.Data;
+using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

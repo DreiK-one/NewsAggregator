@@ -6,17 +6,11 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Data.Entities
 {
-    public class Source
+    public class Source : BaseEntity
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
-
         public string BaseUrl { get; set; }
-
         public string RssUrl { get; set; }
-
-
         public virtual IEnumerable<Article> Articles { get; set; }
     }
 }

@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Data.Entities
 {
-    public class Role
+    public class Role : BaseEntity
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
-
-
         public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }
 }

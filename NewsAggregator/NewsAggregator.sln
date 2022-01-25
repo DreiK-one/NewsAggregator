@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.App", "NewsA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DataAccess", "NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj", "{9B3E0938-F9F2-430E-98CB-BAA896F43688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DataAccess", "NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj", "{9B3E0938-F9F2-430E-98CB-BAA896F43688}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

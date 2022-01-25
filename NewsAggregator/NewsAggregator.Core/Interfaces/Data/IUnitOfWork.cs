@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Core.Interfaces.Data
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        object Articles { get; }
+        IArticleRepository Articles { get; }
         object Roles { get; }
         object Users { get; }
         object Sources { get; }
