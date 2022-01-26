@@ -14,6 +14,7 @@ namespace NewsAggregator.DataAccess
     public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         protected readonly NewsAggregatorContext Db;
+
         protected readonly DbSet<T> DbSet;
 
         public BaseRepository(NewsAggregatorContext context)
@@ -34,14 +35,17 @@ namespace NewsAggregator.DataAccess
 
         public virtual async Task<T> GetById(Guid id)
         {
-            return await DbSet.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id.Equals(id));
+            return await DbSet.AsNoTracking()
+                .FirstOrDefaultAsync(entity => entity.Id.Equals(id));
         }
 
         public virtual async Task<T> GetByIdWithIncludes(Guid id, params Expression<Func<T, object>>[] includes)
         {
             if (includes.Any())
             {
-                return await includes.Aggregate(DbSet.Where(entity => entity.Id.Equals(id)), (current, include) => current.Include(include)).FirstOrDefaultAsync();
+                return await includes
+                    .Aggregate(DbSet.Where(entity => entity.Id.Equals(id)), (current, include) => current.Include(include))
+                    .FirstOrDefaultAsync();
             }
 
             return await GetById(id);
@@ -52,7 +56,8 @@ namespace NewsAggregator.DataAccess
             return DbSet;
         }
 
-        public virtual async Task<IQueryable<T>> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
+        public virtual async Task<IQueryable<T>> FindBy(Expression<Func<T, bool>> predicate, 
+            params Expression<Func<T, object>>[] includes)
         {
             var result = DbSet.Where(predicate);
             if (includes.Any())

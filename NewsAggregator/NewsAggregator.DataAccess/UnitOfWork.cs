@@ -6,6 +6,7 @@ namespace NewsAggregator.DataAccess
     public class UnitOfWork : IUnitOfWork
     {
         private readonly NewsAggregatorContext _db;
+
         private readonly IArticleRepository _articleRepository;
 
         public UnitOfWork(IArticleRepository articleRepository, NewsAggregatorContext context)
@@ -23,7 +24,7 @@ namespace NewsAggregator.DataAccess
         public object Categories { get; set; }
 
 
-        public async Task<int> Commit()
+        public async Task<int> Save()
         {
             return await _db.SaveChangesAsync();
         }
