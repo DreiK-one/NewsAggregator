@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
-
+using NewsAggregator.DataAccess;
+using NewsAggregator.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,12 @@ builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlSe
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
