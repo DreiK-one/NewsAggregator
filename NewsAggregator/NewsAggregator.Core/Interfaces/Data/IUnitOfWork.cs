@@ -15,6 +15,6 @@ namespace NewsAggregator.Core.Interfaces.Data
         object Comments { get; }
         object Categories { get; }
 
-        Task<int> Commit();
+        Task<int> Save();
     }
 }
