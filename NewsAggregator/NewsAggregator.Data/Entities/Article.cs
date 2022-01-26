@@ -13,6 +13,8 @@ namespace NewsAggregator.Data.Entities
         public string Body { get; set; }
         public DateTime CreationDate { get; set; }
         public float Coefficient { get; set; }
+
+
         public Guid CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public Guid SourceId { get; set; }
