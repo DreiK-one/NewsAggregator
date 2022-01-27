@@ -22,7 +22,9 @@ namespace NewsAggregator.App.Controllers
                 .Select(article => new TopNewsOnHomeScreenViewModel()
                 {
                     Id = article.Id,
-                    Title = article.Title
+                    Title = article.Title,
+                    Discription = article.Description,
+                    CreationDate = article.CreationDate
                 }).ToListAsync();
 
             return View(model);

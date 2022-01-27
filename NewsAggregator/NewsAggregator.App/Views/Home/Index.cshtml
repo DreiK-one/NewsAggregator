@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<TopNewsOnHomeScreenViewModel>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -11,7 +13,7 @@
 			<div class="row row-pb-md">
 				<div class="col-md-12">
 					<ul id="gtco-post-list">
-						<li class="full entry animate-box" data-animate-effect="fadeIn"> 
+						@*<li class="full entry animate-box" data-animate-effect="fadeIn"> 
 							<a href="single.html">
 								<div class="entry-img" style="background-image: url(../images/img_1.jpg"></div>
 								<div class="entry-desc">
@@ -20,9 +22,9 @@
 								</div>
 							</a>
 							<a href="#" class="post-meta">Business  <span class="date-posted">4 days ago</span></a>
-						</li>
+						</li>*@
 
-						<li class="two-third entry animate-box" data-animate-effect="fadeIn"> 
+						@*<li class="two-third entry animate-box" data-animate-effect="fadeIn"> 
 							<a href="single.html">
 								<div class="entry-img" style="background-image: url(../images/img_2.jpg"></div>
 								<div class="entry-desc">
@@ -41,19 +43,22 @@
 								</div>
 							</a>
 							<a href="single.html" class="post-meta">Business  <span class="date-posted">4 days ago</span></a>
-						</li>
+						</li>*@
+						@foreach(var article in Model)
+						{
+								<li class="one-third entry animate-box" data-animate-effect="fadeIn">
+									<a href="single.html">
+										<div class="entry-img" style="background-image: url(../images/img_4.jpg"></div>
+										<div class="entry-desc">
+											<h3>@article.Title</h3>
+											<p>@article.Discription</p>
+										</div>
+									</a>
+								<a href="single.html" class="post-meta"><span class="date-posted">@article.CreationDate</span></a>
+						    </li>
+						}
 
-						<li class="one-third entry animate-box" data-animate-effect="fadeIn">
-							<a href="single.html">
-								<div class="entry-img" style="background-image: url(../images/img_4.jpg"></div>
-								<div class="entry-desc">
-									<h3>How Web Hosting Can Impact Page Load Speed</h3>
-									<p>She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
-								</div>
-							</a>
-							<a href="single.html" class="post-meta">Business  <span class="date-posted">4 days ago</span></a>
-						</li>
-						<li class="one-third entry animate-box" data-animate-effect="fadeIn">
+						@*<li class="one-third entry animate-box" data-animate-effect="fadeIn">
 							<a href="single.html">
 								<div class="entry-img" style="background-image: url(../images/img_5.jpg"></div>
 								<div class="entry-desc">
@@ -72,10 +77,10 @@
 								</div>
 							</a>
 							<a href="single.html" class="post-meta">Business  <span class="date-posted">4 days ago</span></a>
-						</li>
+						</li>*@
 
 
-						<li class="one-half entry animate-box" data-animate-effect="fadeIn">
+						@*<li class="one-half entry animate-box" data-animate-effect="fadeIn">
 							<a href="single.html">
 								<div class="entry-img" style="background-image: url(../images/img_7.jpg"></div>
 								<div class="entry-desc">
@@ -115,7 +120,7 @@
 								</div>
 							</a>
 							<a href="single.html" class="post-meta">Business  <span class="date-posted">4 days ago</span></a>
-						</li>
+						</li>*@
 					</ul>	
 				</div>
 			</div>
