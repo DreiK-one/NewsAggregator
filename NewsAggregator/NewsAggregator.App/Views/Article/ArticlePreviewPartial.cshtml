@@ -5,7 +5,7 @@
         <div class="card-body">
             <h2 class="card-title">@Model.Title</h2>
             <h5 class="card-text">@Model.Description</h5>
-            <p class="card-text">@Model.Body</p>
+            <a asp-controller="Article" asp-action="Read" asp-route-id="@Model.Id" class="btn btn-primary">Read</a>
         </div>
         <div class="card-footer text-muted">
             Published: @Model.CreationDate

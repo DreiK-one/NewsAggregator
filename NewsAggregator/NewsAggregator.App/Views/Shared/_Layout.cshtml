@@ -2,48 +2,141 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - NewsAggregator.App</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/NewsAggregator.App.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">NewsAggregator.App</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - NewsAggregator.App - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+
+    <link href="https://fonts.googleapis.com/css?family=Crimson+Text:400,400i|Roboto+Mono" rel="stylesheet">
+
+	<link rel="stylesheet" href="../css/animate.css">
+	<link rel="stylesheet" href="../css/icomoon.css">
+	<link rel="stylesheet" href="../css/bootstrap.css">
+	<link rel="stylesheet" href="../css/magnific-popup.css">
+	<link rel="stylesheet" href="../css/style.css">
+	<script src="../js/modernizr-2.6.2.min.js"></script>
+
+	</head>
+	<body>
+		
+	<div class="gtco-loader"></div>
+	
+	<div id="page">
+	<nav class="gtco-nav" role="navigation">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-2 text-left">
+					<div id="gtco-logo"><a asp-controller="Home" asp-action="Index">NewsAggregator<span>.</span></a></div>
+				</div>
+				<div class="col-xs-10 text-right menu-1">
+					<ul>
+						<li class="has-dropdown">
+							<a href="category.html">Social</a>
+							<ul class="dropdown">
+								<li><a href="#">People</a></li>
+								<li><a href="#">Sport</a></li>
+								<li><a href="#">Health</a></li>
+							</ul>
+						</li>
+
+						<li><a href="category.html">Politics</a></li>
+						<li><a href="category.html">Economy</a></li>
+						<li><a href="category.html">Culture</a></li>
+						<li><a href="category.html"><b>Sing in</b></a></li>
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+	</nav>
+		@RenderBody()
+	<footer id="gtco-footer" role="contentinfo">
+		<div class="container">
+			<div class="row row-pb-md">
+				<div class="col-md-12">
+					<h3 class="footer-heading">Most Popular</h3>
+				</div>
+				<div class="col-md-4">
+					<div class="post-entry">
+						<div class="post-img">
+							<a href="#"><img src="../images/img_1.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+						</div>
+						<div class="post-copy">
+							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="post-entry">
+						<div class="post-img">
+							<a href="#"><img src="../images/img_2.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+						</div>
+						<div class="post-copy">
+							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="post-entry">
+						<div class="post-img">
+							<a href="#"><img src="../images/img_3.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+						</div>
+						<div class="post-copy">
+							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row copyright">
+				<div class="col-md-12 text-center">
+					<p>
+						<small class="block">&copy; 2022 NewsAggregator. All Rights Reserved.</small> 
+					</p>
+					<p>
+						<ul class="gtco-social-icons">
+							<li><a href="#"><i class="icon-twitter"></i></a></li>
+							<li><a href="#"><i class="icon-facebook"></i></a></li>
+							<li><a href="#"><i class="icon-linkedin"></i></a></li>
+							<li><a href="#"><i class="icon-dribbble"></i></a></li>
+						</ul>
+					</p>
+				</div>
+			</div>
+
+		</div>
+	</footer>
+	</div>
+
+	<div class="gototop js-top">
+		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
+	</div>
+	
+	<!-- jQuery -->
+	<script src="../js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="../js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="../js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="../js/jquery.waypoints.min.js"></script>
+	<!-- Stellar -->
+	<script src="../js/jquery.stellar.min.js"></script>
+	<!-- Main -->
+	<script src="../js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

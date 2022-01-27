@@ -1,0 +1,16 @@
+﻿@model ReadViewModel
+
+
+<div class="col-12">
+    <div class="card">
+        <div class="card-body">
+            <h1 class="card-title">@Model.Title</h1>
+            <h5 class="card-text">@Model.Description</h5>
+            <p class="card-text">@Model.Body</p>
+            <a asp-controller="Article" asp-action="Index" class="btn btn-primary">Back</a>
+        </div>
+        <div class="card-footer text-muted">
+            Published: @Model.CreationDate
+        </div>
+    </div>
+</div>

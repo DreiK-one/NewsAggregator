@@ -23,5 +23,17 @@ namespace NewsAggregator.App.Controllers
 
             return View(articles);
         }
+
+        public async Task<IActionResult> Read(Guid id)
+        {
+            var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+
+            if (article == null)
+                return BadRequest();
+
+            var model = _mapper.Map<ReadViewModel>(article);
+
+            return View(model);
+        }
     }
 }
