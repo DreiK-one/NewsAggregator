@@ -4,7 +4,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - NewsAggregator.App</title>
+    <title>@ViewData["Title"] - LifeStyle.</title>
+	<meta name="description" content="Fresh news" />
+	<meta name="keywords" content="news, aggregator, fresh, sport, tech, culture" />
+	<meta name="author" content="Ivan F." />
+
 
     <meta property="og:title" content=""/>
 	<meta property="og:image" content=""/>
@@ -36,30 +40,34 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-2 text-left">
-					<div id="gtco-logo"><a asp-controller="Home" asp-action="Index">NewsAggregator<span>.</span></a></div>
+					<div id="gtco-logo"><a asp-controller="Home" asp-action="Index">LifeStyle<span>.</span></a></div>
 				</div>
 				<div class="col-xs-10 text-right menu-1">
 					<ul>
 						<li class="has-dropdown">
-							<a href="category.html">Social</a>
+							<a href="category.html">Society</a>
 							<ul class="dropdown">
 								<li><a href="#">People</a></li>
-								<li><a href="#">Sport</a></li>
 								<li><a href="#">Health</a></li>
 							</ul>
 						</li>
 
-						<li><a href="category.html">Politics</a></li>
-						<li><a href="category.html">Economy</a></li>
+						<li><a href="category.html">Money</a></li>
+						<li><a href="category.html">Sport</a></li>
+						<li><a href="category.html">Tech</a></li>
 						<li><a href="category.html">Culture</a></li>
-						<li><a href="category.html"><b>Sing in</b></a></li>
+						<li><a href="category.html" class="log"><b>Log in</b></a></li>
+						<li><a href="category.html"><b>Register</b></a></li>
 					</ul>
 				</div>
 			</div>
 			
 		</div>
 	</nav>
-		@RenderBody()
+	<header id="gtco-header" class="gtco-cover" role="banner" style="background-image:url(../images/img_1.jpg);" data-stellar-background-ratio="0.5">
+		<div class="overlay"></div>
+	</header>
+					@RenderBody()
 	<footer id="gtco-footer" role="contentinfo">
 		<div class="container">
 			<div class="row row-pb-md">
@@ -69,33 +77,33 @@
 				<div class="col-md-4">
 					<div class="post-entry">
 						<div class="post-img">
-							<a href="#"><img src="../images/img_1.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+							<a href="#"><img src="images/img_1.jpg" class="img-responsive"></a>
 						</div>
 						<div class="post-copy">
-							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
-							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+							<h4><a href="#">article.Title</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">article.CreationDate</span></a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="post-entry">
 						<div class="post-img">
-							<a href="#"><img src="../images/img_2.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+							<a href="#"><img src="images/img_2.jpg" class="img-responsive"></a>
 						</div>
 						<div class="post-copy">
-							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
-							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+							<h4><a href="#">article.Title</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">article.CreationDate</span></a>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-4">
 					<div class="post-entry">
 						<div class="post-img">
-							<a href="#"><img src="../images/img_3.jpg" class="img-responsive" alt="Free HTML5 Bootstrap Template by GetTemplates.co"></a>
+							<a href="#"><img src="images/img_3.jpg" class="img-responsive"></a>
 						</div>
 						<div class="post-copy">
-							<h4><a href="#">How Web Hosting Can Impact Page Load Speed</a></h4>
-							<a href="#" class="post-meta"><span class="date-posted">4 days ago</span></a>
+							<h4><a href="#">article.Title</a></h4>
+							<a href="#" class="post-meta"><span class="date-posted">article.CreationDate</span></a>
 						</div>
 					</div>
 				</div>
@@ -104,7 +112,7 @@
 			<div class="row copyright">
 				<div class="col-md-12 text-center">
 					<p>
-						<small class="block">&copy; 2022 NewsAggregator. All Rights Reserved.</small> 
+						<small class="block">&copy;  2022 Lifestyle. All Rights Reserved.</small> 
 					</p>
 					<p>
 						<ul class="gtco-social-icons">
@@ -125,17 +133,11 @@
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
 	
-	<!-- jQuery -->
 	<script src="../js/jquery.min.js"></script>
-	<!-- jQuery Easing -->
 	<script src="../js/jquery.easing.1.3.js"></script>
-	<!-- Bootstrap -->
 	<script src="../js/bootstrap.min.js"></script>
-	<!-- Waypoints -->
 	<script src="../js/jquery.waypoints.min.js"></script>
-	<!-- Stellar -->
 	<script src="../js/jquery.stellar.min.js"></script>
-	<!-- Main -->
 	<script src="../js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

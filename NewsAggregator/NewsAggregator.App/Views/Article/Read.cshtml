@@ -1,16 +1,50 @@
 ﻿@model ReadViewModel
+{
+	ViewData["Title"] = "@Model.Title";
+	Layout = "_Layout";
+}
+<div id="gtco-maine">
+		<div class="container">
+			<div class="row row-pb-md">
+				<div class="col-md-12">
+					<article class="mt-negative">
+						<div class="text-left content-article">
+							<div class="row">
+								<div class="col-lg-8 cp-r animate-box">
+									<p class="article">@Model.Body</p>
+								</div>
+								
+								<div class="col-lg-4 animate-box">
+									<div class="gtco-highlight right">
+										<h4>Highlight</h4>
+										<p>@Model.Description</p>
+									</div>
+								</div>
+							</div>
 
+							<div class="row row-pb-sm">
+								<div class="col-md-12 animate-box">
+									<blockquote>
+										<p>@Model.Title</p>
+									</blockquote>
+								</div>
+							</div>
 
-<div class="col-12">
-    <div class="card">
-        <div class="card-body">
-            <h1 class="card-title">@Model.Title</h1>
-            <h5 class="card-text">@Model.Description</h5>
-            <p class="card-text">@Model.Body</p>
-            <a asp-controller="Article" asp-action="Index" class="btn btn-primary">Back</a>
-        </div>
-        <div class="card-footer text-muted">
-            Published: @Model.CreationDate
-        </div>
-    </div>
-</div>
+							<div class="row row-pb-sm">		
+								<div class="col-lg-6 col-md-12 animate-box">
+									<figure>
+										<img src="../wwwroot/images/img_1.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co" class="img-responsive">
+										<figcaption>Discription of image</figcaption>
+									</figure>
+								</div>
+								
+								<div class="col-lg-6 col-md-12 cp-l animate-box">
+									<p>article.Body (continue) - todo</p>
+								</div>
+							</div>
+						</div>
+					</article>
+				</div>
+			</div>
+		</div>
+	</div>
