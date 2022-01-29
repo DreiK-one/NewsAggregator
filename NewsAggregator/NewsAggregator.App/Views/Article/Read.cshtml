@@ -1,50 +1,49 @@
 ﻿@model ReadViewModel
-{
-	ViewData["Title"] = "@Model.Title";
-	Layout = "_Layout";
+@{
+	ViewData["Title"] = @Model.Title;
 }
 <div id="gtco-maine">
-		<div class="container">
-			<div class="row row-pb-md">
-				<div class="col-md-12">
-					<article class="mt-negative">
-						<div class="text-left content-article">
-							<div class="row">
-								<div class="col-lg-8 cp-r animate-box">
-									<p class="article">@Model.Body</p>
-								</div>
-								
-								<div class="col-lg-4 animate-box">
-									<div class="gtco-highlight right">
-										<h4>Highlight</h4>
-										<p>@Model.Description</p>
-									</div>
-								</div>
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<article class="mt-negative">
+					<div class="text-left content-article">
+						<div class="row">
+							<div class="col-lg-8 cp-r animate-box">
+								<p class="article">@Model.Body</p>
 							</div>
-
-							<div class="row row-pb-sm">
-								<div class="col-md-12 animate-box">
-									<blockquote>
-										<p>@Model.Title</p>
-									</blockquote>
-								</div>
-							</div>
-
-							<div class="row row-pb-sm">		
-								<div class="col-lg-6 col-md-12 animate-box">
-									<figure>
-										<img src="../wwwroot/images/img_1.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co" class="img-responsive">
-										<figcaption>Discription of image</figcaption>
-									</figure>
-								</div>
 								
-								<div class="col-lg-6 col-md-12 cp-l animate-box">
-									<p>article.Body (continue) - todo</p>
+							<div class="col-lg-4 animate-box">
+								<div class="gtco-highlight right">
+									<h4>Highlight</h4>
+									<p>@Model.Description</p>
 								</div>
 							</div>
 						</div>
-					</article>
-				</div>
+
+						<div class="row row-pb-sm">
+							<div class="col-md-12 animate-box">
+								<blockquote>
+									<p>@Model.Title</p>
+								</blockquote>
+							</div>
+						</div>
+
+						<div class="row row-pb-sm">		
+							<div class="col-lg-6 col-md-12 animate-box">
+								<figure>
+									<img src="~/images/img_1.jpg" alt="Free HTML5 Bootstrap Template by GetTemplates.co" class="img-responsive">
+									<figcaption>Discription of image</figcaption>
+								</figure>
+							</div>
+								
+							<div class="col-lg-6 col-md-12 cp-l animate-box">
+								<p>article.Body (continue) - todo</p>
+							</div>
+						</div>
+					</div>
+				</article>
 			</div>
 		</div>
 	</div>
+</div>
