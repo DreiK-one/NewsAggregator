@@ -1,5 +1,6 @@
 ﻿using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
+using NewsAggregator.Data.Entities;
 
 namespace NewsAggregator.DataAccess
 {
@@ -21,7 +22,8 @@ namespace NewsAggregator.DataAccess
         public object Users { get; }
         public object Sources { get; }
         public object Comments { get; }
-        public object Categories { get; set; }
+        public object Categories { get; }
+        public object UserActivity { get; }
 
 
         public async Task<int> Save()
