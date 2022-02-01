@@ -10,21 +10,42 @@ namespace NewsAggregator.DataAccess
 
         private readonly IArticleRepository _articleRepository;
 
-        public UnitOfWork(IArticleRepository articleRepository, NewsAggregatorContext context)
+        private readonly IBaseRepository<Category> _categoryRepository;
+
+        private readonly IBaseRepository<Comment> _commentRepository;
+
+        private readonly IBaseRepository<Role> _roleRepository;
+
+        private readonly IBaseRepository<Source> _sourceRepository;
+
+        private readonly IBaseRepository<User> _userRepository;
+
+        private readonly IBaseRepository<UserActivity> _userActivityRepository;
+
+
+        public UnitOfWork(NewsAggregatorContext context, IArticleRepository articleRepository, 
+            IBaseRepository<Category> categories, IBaseRepository<Comment> comments,
+            IBaseRepository<Role> roles, IBaseRepository<Source> sources,
+            IBaseRepository<User> users, IBaseRepository<UserActivity> userActivities)
         {
-            _articleRepository = articleRepository;
             _db = context;
+            _articleRepository = articleRepository;
+            _categoryRepository = categories;
+            _commentRepository = comments;
+            _roleRepository = roles;
+            _sourceRepository = sources;
+            _userRepository = users;
+            _userActivityRepository = userActivities;
+            
         }
 
         public IArticleRepository Articles => _articleRepository;
-
-        public object Roles { get; }
-        public object Users { get; }
-        public object Sources { get; }
-        public object Comments { get; }
-        public object Categories { get; }
-        public object UserActivity { get; }
-
+        public IBaseRepository<Category> Categories => _categoryRepository;
+        public IBaseRepository<Comment> Comments => _commentRepository;
+        public IBaseRepository<Role> Roles => _roleRepository;
+        public IBaseRepository<Source> Sources => _sourceRepository;
+        public IBaseRepository<User> Users => _userRepository;
+        public IBaseRepository<UserActivity> UserActivities => _userActivityRepository;
 
         public async Task<int> Save()
         {

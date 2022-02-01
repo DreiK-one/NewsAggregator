@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
+using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 
@@ -17,6 +18,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IArticleService, ArticleService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
+builder.Services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
+builder.Services.AddScoped<IBaseRepository<Role>, RoleRepository>();
+builder.Services.AddScoped<IBaseRepository<Source>, SourceRepository>();
+builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+builder.Services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
