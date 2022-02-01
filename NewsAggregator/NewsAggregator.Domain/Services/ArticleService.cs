@@ -28,7 +28,7 @@ namespace NewsAggregator.Domain.Services
         {
             return await _unitOfWork.Articles.Get()
                 .Select(article => _mapper.Map<ArticleDto>(article))
-                .ToArrayAsync();
+                .ToListAsync();
         }
 
         public async Task<int?> DeleteAsync(Guid modelId)

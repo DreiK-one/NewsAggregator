@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.App.Models;
+using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Data;
 using System.Diagnostics;
 
@@ -8,37 +10,21 @@ namespace NewsAggregator.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly NewsAggregatorContext _db;
+        private readonly IMapper _mapper;
+        private readonly IArticleService _articleService;
 
-        public HomeController(NewsAggregatorContext db)
+        public HomeController(IMapper mapper, IArticleService articleService)
         {
-            _db = db;
+            _mapper = mapper;
+            _articleService = articleService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var model = await _db.Articles
-                .OrderByDescending(article => article.Coefficient)
-                .Select(article => new TopNewsOnHomeScreenViewModel()
-                {
-                    Id = article.Id,
-                    Title = article.Title,
-                    Discription = article.Description,
-                    CreationDate = article.CreationDate
-                }).ToListAsync();
+            var model = (await _articleService.GetAllNewsAsync())
+                .Select(article => _mapper.Map<TopNewsOnHomeScreenViewModel>(article)).ToList();
 
             return View(model);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
