@@ -8,5 +8,6 @@ namespace NewsAggregator.Domain.Services
 {
     public class CommentService
     {
+        //TODO
     }
 }

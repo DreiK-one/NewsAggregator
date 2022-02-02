@@ -8,5 +8,7 @@ namespace NewsAggregator.App.Controllers
         {
             return View();
         }
+
+        //TODO
     }
 }
