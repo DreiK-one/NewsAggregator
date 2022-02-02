@@ -2,15 +2,25 @@
 	<div class="container">
 		<div class="row row-pb-md">
 			<div class="col-md-12">
-				<ul id="gtco-post-list">
-					<a asp-controller="Category" asp-action="Index">
-						<li class="entry animate-box" data-animate-effect="fadeIn">
-							<div class="entry-desc">
-									<h1>Edit categories</h1>
-							</div>
-						</li>
+				<div class="list-group">
+					<a asp-controller="Category" asp-action="Index" class="list-group-item list-group-item-action list-group-item-danger">
+						<div class="entry-desc">
+							<h1>Edit Categories</h1>
+						</div>
 					</a>
-				</ul>	
+
+					<a asp-controller="Role" asp-action="Index" class="list-group-item list-group-item-action list-group-item-danger">
+						<div class="entry-desc">
+							<h1>Edit Roles</h1>
+						</div>
+					</a>
+
+					<a asp-controller="Source" asp-action="Index" class="list-group-item list-group-item-action list-group-item-danger">
+						<div class="entry-desc">
+							<h1>Edit Sources</h1>
+						</div>
+					</a>
+				</div>
 			</div>
 		</div>
 	</div>

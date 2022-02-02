@@ -10,10 +10,10 @@
 							<form asp-controller="Category" asp-action="DeleteCategory" method="post">
 								<h2 class="card-title">Do you really want to delete this category?
 								<input type="hidden" asp-for="Id" />
-								<button type="submit" class="post-meta btn btn-danger">Delete</button>
+								<a asp-controller="Category" asp-action="Index" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-danger">Delete</button>
 								</h2>
 							</form>
-							<a asp-controller="Category" asp-action="Index"><button class="post-meta btn btn-info">Cancel</button></a>
 						</div>
 					</div>
 				</div>	
