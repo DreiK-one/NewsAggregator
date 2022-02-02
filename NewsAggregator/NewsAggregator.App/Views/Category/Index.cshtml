@@ -1,0 +1,22 @@
+﻿@model List<CategoryViewModel>
+
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				@foreach (var category in Model)
+				{
+					<div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="card-title">@category.Name</h2>
+                            </div>
+                        </div>
+                    </div>
+				}
+				<button class="post-meta btn btn-success"><a asp-controller="Category" asp-action="Create">Create new category</a></button>
+			</div>
+		</div>
+	</div>
+</div>

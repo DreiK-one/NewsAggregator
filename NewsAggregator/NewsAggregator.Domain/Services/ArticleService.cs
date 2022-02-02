@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,6 +59,27 @@ namespace NewsAggregator.Domain.Services
                 .GetByIdWithIncludes(id, article => article.Source, article => article.Comments);
 
             return _mapper.Map<ArticleDto>(article);
+        }
+
+        public async Task<int?> CreateArticle(ArticleDto article)
+        {
+            try
+            {
+                if (article != null)
+                {
+                    await _unitOfWork.Articles.Add(_mapper.Map<Article>(article));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                //add log
+                throw;
+            }
         }
     }
 }

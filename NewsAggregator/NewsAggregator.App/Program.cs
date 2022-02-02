@@ -16,6 +16,7 @@ builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlSe
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
