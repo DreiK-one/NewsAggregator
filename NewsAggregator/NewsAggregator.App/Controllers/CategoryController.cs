@@ -44,7 +44,29 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete()
+        public IActionResult Delete(Guid id)
+        {
+            var model = new DeleteCategoryViewModel() { Id = id};
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteCategory(DeleteCategoryViewModel model)
+        {
+            var delete = await _categoryService.DeleteAsync(model.Id);
+
+            if (delete == null)
+                return BadRequest();
+
+            return RedirectToAction("Index", "Category");
+        }
+
+
+        //TODO!!!!
+
+        [HttpGet]
+        public IActionResult Edit()
         {
             var model = new CategoryViewModel();
             return View(model);
@@ -52,7 +74,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteCategory(CategoryViewModel model)
+        public async Task<IActionResult> EditCategory(CategoryViewModel model)
         {
             if (model != null)
             {

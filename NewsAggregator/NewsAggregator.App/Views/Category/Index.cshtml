@@ -5,17 +5,21 @@
 	<div class="container">
 		<div class="row row-pb-md">
 			<div class="col-md-12">
-				@foreach (var category in Model)
-				{
-					<div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h2 class="card-title">@category.Name</h2>
-                            </div>
-                        </div>
-                    </div>
-				}
-				<button class="post-meta btn btn-success"><a asp-controller="Category" asp-action="Create">Create new category</a></button>
+					@foreach (var category in Model)
+					{
+						<div class="col-12">
+							<div class="card">
+								<div class="card-body">
+									<h2 class="card-title">@category.Name
+									<a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id"><button class="post-meta btn btn-danger">Delete</button></a>
+									<a asp-controller="Category" asp-action="Edit"><button class="post-meta btn btn-info">Edit</button></a>
+									</h2>
+								</div>
+							</div>
+						</div>
+					}
+				<a asp-controller="Category" asp-action="Create"><button class="post-meta btn btn-success">Create new category</button></a>
+				<a asp-controller="Admin" asp-action="Index"><button class="post-meta btn btn-info">Back to Admin panel</button></a>
 			</div>
 		</div>
 	</div>

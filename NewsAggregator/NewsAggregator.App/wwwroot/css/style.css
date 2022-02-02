@@ -45,10 +45,10 @@ body {
 }
 
 a {
-  color: #F73859;
-  -webkit-transition: 0.5s;
-  -o-transition: 0.5s;
-  transition: 0.5s;
+    color: #FFFFFF;
+    -webkit-transition: 0.5s;
+    -o-transition: 0.5s;
+    transition: 0.5s;
 }
 a:hover, a:active, a:focus {
   color: #F73859;
@@ -2114,4 +2114,5 @@ figure figcaption {
 .article {
     margin-top: 50px;
 }
+
 /*# sourceMappingURL=style.css.map */

@@ -1,0 +1,23 @@
+﻿@model DeleteCategoryViewModel
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<form asp-controller="Category" asp-action="DeleteCategory" method="post">
+								<h2 class="card-title">Do you really want to delete this category?
+								<input type="hidden" asp-for="Id" />
+								<button type="submit" class="post-meta btn btn-danger">Delete</button>
+								</h2>
+							</form>
+							<a asp-controller="Category" asp-action="Index"><button class="post-meta btn btn-info">Cancel</button></a>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>

@@ -14,7 +14,8 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<CategoryDto, CategoryViewModel>();
             CreateMap<CategoryViewModel, CategoryDto>();
-            
+
+            CreateMap<Category, DeleteCategoryViewModel>();
 
             
         }

@@ -7,11 +7,11 @@
 				<ul id="gtco-post-list">
 					<li class="entry animate-box" data-animate-effect="fadeIn">
 						<div class="entry-desc">
-							<form asp-controller="Category" asp-action="CreateAsync" method="post">
-							<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
-							<label asp-for="Name">Name</label>
-							<input asp-for="Name" type="text" />
-							<button type="submit" class="post-meta btn btn-success">Submit</button>
+							<form asp-controller="Category" asp-action="CreateCategory" method="post">
+								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
+								<label asp-for="Name">Name</label>
+								<input asp-for="Name" type="text" />
+								<button type="submit" class="post-meta btn btn-success">Submit</button>
 							</form>
 						</div>
 					</li>

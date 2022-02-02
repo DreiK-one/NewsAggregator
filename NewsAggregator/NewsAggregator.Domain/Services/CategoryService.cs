@@ -55,7 +55,28 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception)
             {
+                //add log
+                throw;
+            }
+        }
 
+        public async Task<int?> DeleteAsync(Guid id)
+        {
+            try
+            {
+                if (await _unitOfWork.Categories.GetById(id) != null)
+                {
+                    await _unitOfWork.Categories.Remove(id);
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                //add log
                 throw;
             }
         }
