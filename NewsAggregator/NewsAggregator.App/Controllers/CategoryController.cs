@@ -63,9 +63,9 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(Guid id)
         {
-            var model = new CategoryViewModel();
+            var model = new CategoryViewModel() { Id = id};
             return View(model);
         }
 

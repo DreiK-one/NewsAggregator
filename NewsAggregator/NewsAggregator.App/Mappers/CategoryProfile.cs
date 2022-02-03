@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 
 namespace NewsAggregator.App.Mappers
@@ -15,9 +16,7 @@ namespace NewsAggregator.App.Mappers
             CreateMap<CategoryDto, CategoryViewModel>();
             CreateMap<CategoryViewModel, CategoryDto>();
 
-            CreateMap<Category, DeleteCategoryViewModel>();
-
-            
+            CreateMap<Category, DeleteCategoryViewModel>();    
         }
     }
 }
