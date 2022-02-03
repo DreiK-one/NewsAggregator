@@ -62,9 +62,6 @@ namespace NewsAggregator.App.Controllers
             return RedirectToAction("Index", "Category");
         }
 
-
-        //TODO!!!!
-
         [HttpGet]
         public IActionResult Edit()
         {
@@ -78,7 +75,7 @@ namespace NewsAggregator.App.Controllers
         {
             if (model != null)
             {
-                await _categoryService.CreateAsync(_mapper.Map<CategoryDto>(model));
+                await _categoryService.UpdateAsync(_mapper.Map<CategoryDto>(model));
             }
             return RedirectToAction("Index", "Category");
         }
