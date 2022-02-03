@@ -60,6 +60,27 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<int?> UpdateAsync(CategoryDto categoryDto)
+        {
+            try
+            {
+                if (categoryDto != null)
+                {
+                    await _unitOfWork.Categories.Update(_mapper.Map<Category>(categoryDto));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                //add log
+                throw;
+            }
+        }
+
         public async Task<int?> DeleteAsync(Guid id)
         {
             try
