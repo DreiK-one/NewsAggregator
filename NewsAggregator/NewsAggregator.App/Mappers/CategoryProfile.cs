@@ -10,11 +10,9 @@ namespace NewsAggregator.App.Mappers
     {
         public CategoryProfile()
         {
-            CreateMap<Category, CategoryDto>();
-            CreateMap<CategoryDto, Category>();
+            CreateMap<Category, CategoryDto>().ReverseMap();
 
-            CreateMap<CategoryDto, CategoryViewModel>();
-            CreateMap<CategoryViewModel, CategoryDto>();
+            CreateMap<CategoryDto, CategoryViewModel>().ReverseMap();
 
             CreateMap<Category, DeleteCategoryViewModel>();    
         }

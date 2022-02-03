@@ -15,5 +15,7 @@ namespace NewsAggregator.Core.DTOs
         public string Body { get; set; }
         public DateTime CreationDate { get; set; }
         public float Coefficient { get; set; }
+
+        //public List<Comment> Comments { get; set; }
     }
 }
