@@ -16,22 +16,14 @@ namespace NewsAggregator.App.Controllers
             _articleService = articleService;
         }
 
-        public async Task<IActionResult> Index()
-        {
-            var articles = (await _articleService.GetAllNewsAsync())
-                .Select(article => _mapper.Map<ArticleViewModel>(article)).ToList();  
-
-            return View(articles);
-        }
-
-        public async Task<IActionResult> Read(Guid id)
+        public async Task<IActionResult> ReadArticle(Guid id)
         {
             var article = await _articleService.GetArticleWithAllNavigationProperties(id);
 
             if (article == null)
                 return BadRequest();
 
-            var model = _mapper.Map<ReadViewModel>(article);
+            var model = _mapper.Map<ReadArticleViewModel>(article);
 
             return View(model);
         }

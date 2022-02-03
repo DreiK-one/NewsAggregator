@@ -1,6 +1,6 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class ReadViewModel
+    public class ReadArticleViewModel
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

@@ -13,11 +13,11 @@
 						<div class="entry-desc">
 							<form asp-controller="Category" asp-action="EditCategory" method="post">
 								<input asp-for="Id" type="hidden" value="@Model.Id" />
-								<label asp-for="Name">Name</label>
-								<input asp-for="Name" type="text" value="@Model.Name"/>
+								<label asp-for="Name">Name of category</label>
+								<input asp-for="Name" type="text" value="@Model.Name"/> @*To do a value (null)*@
 								<br /><br />
-								<button type="submit" class="btn btn-success">Submit</button>
 								<a asp-controller="Category" asp-action="Index" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-success">Submit</button>
 							</form>
 						</div>
 					</li>

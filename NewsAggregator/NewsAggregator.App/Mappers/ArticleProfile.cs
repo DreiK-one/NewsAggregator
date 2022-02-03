@@ -17,7 +17,7 @@ namespace NewsAggregator.App.Mappers
             CreateMap<ArticleDto, ArticleViewModel>()
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Coefficient));
 
-            CreateMap<ArticleDto, ReadViewModel>();
+            CreateMap<ArticleDto, ReadArticleViewModel>();
 
             CreateMap<ArticleDto, TopNewsOnHomeScreenViewModel>();
         }
