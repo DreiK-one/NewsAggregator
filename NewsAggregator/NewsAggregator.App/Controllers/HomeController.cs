@@ -22,7 +22,8 @@ namespace NewsAggregator.App.Controllers
         public async Task<IActionResult> Index()
         {
             var model = (await _articleService.GetAllNewsAsync())
-                .Select(article => _mapper.Map<TopNewsOnHomeScreenViewModel>(article)).ToList();
+                .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
+                .ToList();
 
             return View(model);
         }

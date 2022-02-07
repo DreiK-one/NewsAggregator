@@ -9,9 +9,11 @@ namespace NewsAggregator.App.Mappers
     {
         public CommentProfile()
         {
-            CreateMap<CommentDto, Comment>().ReverseMap();
+            CreateMap<Comment, CommentDto>().ReverseMap();
 
             CreateMap<CommentModel, CommentDto>().ReverseMap();
+
+            CreateMap<CommentModel, ReadArticleViewModel>();
 
         }
     }

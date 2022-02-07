@@ -6,6 +6,6 @@
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
 
-        //todo UserName
+        public UserModel User { get; set; }
     }
 }

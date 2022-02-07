@@ -47,6 +47,18 @@
 								</blockquote>
 							</div>
 						</div>
+
+						<div class="row">
+							<div class="col-lg-6 cp-r animate-box">
+								<p class="article">
+									@foreach(var comment in Model.Comments)
+									{
+										<h6></h6>
+										<p>@comment.Text</p>
+									}
+								</p>
+							</div>
+						</div>
 					</div>
 				</article>
 			</div>

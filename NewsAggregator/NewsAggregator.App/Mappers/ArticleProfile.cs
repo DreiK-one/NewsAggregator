@@ -9,17 +9,13 @@ namespace NewsAggregator.App.Mappers
     {
         public ArticleProfile()
         {
-            CreateMap<Article, ArticleDto>();
-
-            CreateMap<Article, ArticleViewModel>()
-                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Coefficient));
-
-            CreateMap<ArticleDto, ArticleViewModel>()
-                .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Coefficient));
+            CreateMap<Article, ArticleDto>()
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.SourceName, opt => opt.MapFrom(src => src.Source));
 
             CreateMap<ArticleDto, ReadArticleViewModel>();
 
-            CreateMap<ArticleDto, TopNewsOnHomeScreenViewModel>();
+            CreateMap<ArticleDto, AllNewsOnHomeScreenViewModel>();
         }
     }
 }

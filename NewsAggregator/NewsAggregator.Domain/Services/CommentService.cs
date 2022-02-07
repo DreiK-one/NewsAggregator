@@ -25,7 +25,7 @@ namespace NewsAggregator.Domain.Services
 
         //THINK ABOUT IT
 
-        //public async Task<IEnumerable<CommentDto>> GetAllCommentsByArticle(Guid id)
+        //public async Task<IEnumerable<CommentDto>> GetAllCommentsByArticleId(Guid id)
         //{
         //    var comments = await _unitOfWork.Comments.Get().Select(article => article.ArticleId == id).ToListAsync();
 
