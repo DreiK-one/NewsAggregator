@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Domain.Services
 {
-    public class CommentService
+    public class CommentService : ICommentService
     {
         private readonly IMapper _mapper;
 
@@ -21,17 +22,5 @@ namespace NewsAggregator.Domain.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-
-
-        //THINK ABOUT IT
-
-        //public async Task<IEnumerable<CommentDto>> GetAllCommentsByArticleId(Guid id)
-        //{
-        //    var comments = await _unitOfWork.Comments.Get().Select(article => article.ArticleId == id).ToListAsync();
-
-        //    var model = new List<CommentDto>();
-
-        //    return model;
-        //}
     }
 }
