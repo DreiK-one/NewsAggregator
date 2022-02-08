@@ -9,7 +9,6 @@
         public DateTime CreationDate { get; set; }
 
         public SourceModel SourceName { get; set; }
-
         public List<CommentModel> Comments { get; set; }
     }
 }

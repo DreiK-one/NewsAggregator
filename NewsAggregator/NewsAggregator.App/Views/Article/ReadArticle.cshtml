@@ -53,7 +53,7 @@
 								<p class="article">
 									@foreach(var comment in Model.Comments)
 									{
-										<h6></h6>
+										<h3>@comment.User.FullName</h3>
 										<p>@comment.Text</p>
 									}
 								</p>

@@ -43,8 +43,8 @@ namespace NewsAggregator.DataAccess
         {
             if (includes.Any())
             {
-                return await includes
-                    .Aggregate(DbSet.Where(entity => entity.Id.Equals(id)), (current, include) => current.Include(include))
+                return await includes.Aggregate(DbSet.
+                    Where(entity => entity.Id.Equals(id)), (current, include) => current.Include(include))
                     .FirstOrDefaultAsync();
             }
 

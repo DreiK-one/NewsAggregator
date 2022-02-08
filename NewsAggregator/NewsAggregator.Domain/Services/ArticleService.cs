@@ -32,6 +32,18 @@ namespace NewsAggregator.Domain.Services
                 .ToListAsync();
         }
 
+        public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
+        {
+            var model = await _unitOfWork.Articles.Get()
+                .Where(a => a.Id.Equals(id))
+                .Include(source => source.Source)
+                .Include(comments => comments.Comments)
+                .ThenInclude(user => user.User)
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<ArticleDto>(model);
+        }
+
         public async Task<int?> DeleteAsync(Guid modelId)
         {
             try
@@ -51,14 +63,6 @@ namespace NewsAggregator.Domain.Services
                 //add log
                 throw;
             }
-        }
-
-        public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
-        {
-            var article = await _unitOfWork.Articles
-                .GetByIdWithIncludes(id, article => article.Source, article => article.Comments);
-
-            return _mapper.Map<ArticleDto>(article);
         }
 
         public async Task<int?> CreateArticle(ArticleDto article)
