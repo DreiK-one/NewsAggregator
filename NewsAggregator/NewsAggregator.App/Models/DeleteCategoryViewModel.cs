@@ -1,7 +1,7 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class DeleteCategoryViewModel
+    public class DeleteCategoryViewModel : BaseModel
     {
-        public Guid Id { get; set; }
+
     }
 }

@@ -1,8 +1,7 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class UserModel
+    public class UserModel : BaseModel
     {
-        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
