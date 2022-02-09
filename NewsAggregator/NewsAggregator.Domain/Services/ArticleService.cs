@@ -64,26 +64,5 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
-
-        public async Task<int?> CreateArticle(ArticleDto article)
-        {
-            try
-            {
-                if (article != null)
-                {
-                    await _unitOfWork.Articles.Add(_mapper.Map<Article>(article));
-                    return await _unitOfWork.Save();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                //add log
-                throw;
-            }
-        }
     }
 }

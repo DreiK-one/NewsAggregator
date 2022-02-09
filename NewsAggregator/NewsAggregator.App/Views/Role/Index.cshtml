@@ -1,0 +1,31 @@
+﻿@model List<RoleViewModel>
+
+@{
+	ViewData["Title"] = "All roles";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<table class="table">
+					@foreach (var role in Model)
+					{
+						<tr>
+							<td>
+								<h2 class="card-title">@role.Name</h2>
+							</td>
+							<td>
+								<a asp-controller="Role" asp-action="Delete" asp-route-id="@role.Id" class="post-meta btn btn-danger">Delete</a>
+								<a asp-controller="Role" asp-action="Edit" asp-route-id="@role.Id" class="post-meta btn btn-info">Edit</a>
+							</td>
+						</tr>
+					}
+				</table>
+				<a asp-controller="Admin" asp-action="Index"><button class="post-meta btn btn-info">Back to Admin panel</button></a>
+				<a asp-controller="Role" asp-action="Create"><button class="post-meta btn btn-success">Create new role</button></a>
+				
+			</div>
+		</div>
+	</div>
+</div>

@@ -13,11 +13,10 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
 
-builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<CategoryService>();
+
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
@@ -26,7 +25,16 @@ builder.Services.AddScoped<IBaseRepository<Source>, SourceRepository>();
 builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
 builder.Services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
 
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<ISourceService, SourceService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 

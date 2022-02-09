@@ -1,6 +1,6 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class RoleModel : BaseModel
+    public class RoleViewModel : BaseModel
     {
         public string Name { get; set; }
     }

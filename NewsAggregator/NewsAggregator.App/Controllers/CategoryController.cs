@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Domain.Services;
 
 namespace NewsAggregator.App.Controllers
@@ -9,9 +10,9 @@ namespace NewsAggregator.App.Controllers
     public class CategoryController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly CategoryService _categoryService;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(IMapper mapper, CategoryService categoryService)
+        public CategoryController(IMapper mapper, ICategoryService categoryService)
         {
             _mapper = mapper;
             _categoryService = categoryService;

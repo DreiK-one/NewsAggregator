@@ -9,6 +9,9 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface IRoleService
     {
-        
+        Task<IEnumerable<RoleDto>> GetAllRolesAsync();
+        Task<int?> CreateAsync(RoleDto roleDto);
+        Task<int?> UpdateAsync(RoleDto roleDto);
+        Task<int?> DeleteAsync(Guid id);
     }
 }
