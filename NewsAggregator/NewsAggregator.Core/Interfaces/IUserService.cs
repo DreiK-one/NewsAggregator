@@ -9,6 +9,9 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface IUserService
     {
-        
+        Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync();
+        //Task<int?> CreateAsync(UserDto userDto); 
+        Task<int?> UpdateAsync(UserDto userDto);
+        Task<int?> DeleteAsync(Guid id);
     }
 }

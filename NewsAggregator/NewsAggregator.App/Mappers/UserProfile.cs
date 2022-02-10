@@ -13,6 +13,7 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<UserDto, UserModel>();
 
+            CreateMap<UserDto, UserViewModel>();
         }
     }
 }

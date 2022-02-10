@@ -60,7 +60,7 @@ namespace NewsAggregator.App.Controllers
             if (delete == null)
                 return BadRequest();
 
-            return RedirectToAction("Index", "Category");
+            return RedirectToAction("Index", "Role");
         }
 
         [HttpGet]
