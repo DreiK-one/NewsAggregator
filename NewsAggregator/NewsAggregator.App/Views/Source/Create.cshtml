@@ -1,0 +1,32 @@
+﻿@model SourceModel
+
+@{
+	ViewData["Title"] = "Create source";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<ul id="gtco-post-list">
+					<li class="entry animate-box" data-animate-effect="fadeIn">
+						<div class="entry-desc">
+							<form asp-controller="Source" asp-action="CreateSource" method="post">
+								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
+								<label asp-for="Name">Name</label>
+								<input asp-for="Name" type="text" />
+								<label asp-for="BaseUrl">BaseUrl</label>
+								<input asp-for="BaseUrl" type="text" />
+								<label asp-for="RssUrl">RssUrl</label>
+								<input asp-for="RssUrl" type="text" />
+								<br /><br />
+								<a asp-controller="Source" asp-action="Index" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-success">Create</button>
+							</form>
+						</div>
+					</li>
+				</ul>	
+			</div>
+		</div>
+	</div>
+</div> 
