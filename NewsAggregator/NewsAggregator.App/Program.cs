@@ -5,56 +5,82 @@ using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
-
-var builder = WebApplication.CreateBuilder(args);
-
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
-
-// Add services to the container.
+using Serilog;
 
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
-builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
-builder.Services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
-builder.Services.AddScoped<IBaseRepository<Role>, RoleRepository>();
-builder.Services.AddScoped<IBaseRepository<Source>, SourceRepository>();
-builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
-builder.Services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
+    builder.Host.UseSerilog((ctx, lc) => 
+    {
+        lc.MinimumLevel.Fatal().WriteTo.File(
+            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Fatal\fatal.log",
+            fileSizeLimitBytes: 1_000_000,
+            rollOnFileSizeLimit: true,
+            flushToDiskInterval: TimeSpan.FromDays(1));
+        lc.MinimumLevel.Error().WriteTo.File(
+            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Error\error.log",
+            fileSizeLimitBytes: 1_000_000,
+            rollOnFileSizeLimit: true,
+            flushToDiskInterval: TimeSpan.FromDays(1));
+        lc.MinimumLevel.Warning().WriteTo.File(
+            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Warning\warning.log",
+            fileSizeLimitBytes: 1_000_000,
+            rollOnFileSizeLimit: true,
+            flushToDiskInterval: TimeSpan.FromDays(1));
+        lc.MinimumLevel.Information().WriteTo.File(
+            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Info\info.log",
+            fileSizeLimitBytes: 1_000_000,
+            rollOnFileSizeLimit: true,
+            flushToDiskInterval: TimeSpan.FromDays(1));
+    });
 
-builder.Services.AddScoped<IArticleService, ArticleService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICommentService, CommentService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<ISourceService, SourceService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddControllersWithViews();
+    // Add services to the container.
 
-var app = builder.Build();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
+    builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+    builder.Services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
+    builder.Services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
+    builder.Services.AddScoped<IBaseRepository<Role>, RoleRepository>();
+    builder.Services.AddScoped<IBaseRepository<Source>, SourceRepository>();
+    builder.Services.AddScoped<IBaseRepository<User>, UserRepository>();
+    builder.Services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+    builder.Services.AddScoped<IArticleService, ArticleService>();
+    builder.Services.AddScoped<ICategoryService, CategoryService>();
+    builder.Services.AddScoped<ICommentService, CommentService>();
+    builder.Services.AddScoped<IRoleService, RoleService>();
+    builder.Services.AddScoped<ISourceService, SourceService>();
+    builder.Services.AddScoped<IUserService, UserService>();
 
-app.UseRouting();
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-app.UseAuthorization();
+    builder.Services.AddControllersWithViews();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    var app = builder.Build();
+    Log.Information("Starting web host");
 
-app.MigrateDatabase().Run();
+    // Configure the HTTP request pipeline.
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+
+    app.UseRouting();
+
+    app.UseAuthorization();
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.MigrateDatabase().Run();

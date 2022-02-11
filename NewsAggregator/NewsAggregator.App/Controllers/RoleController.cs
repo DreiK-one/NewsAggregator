@@ -11,74 +11,152 @@ namespace NewsAggregator.App.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IRoleService _roleService;
+        private readonly ILogger<RoleController> _logger;
 
-        public RoleController(IMapper mapper, IRoleService roleService)
+        public RoleController(IMapper mapper, IRoleService roleService, ILogger<RoleController> logger)
         {
             _mapper = mapper;
             _roleService = roleService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var model = (await _roleService.GetAllRolesAsync())
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Index was called");
+
+                var model = (await _roleService.GetAllRolesAsync())
                 .Select(role => _mapper.Map<RoleViewModel>(role))
                 .ToList();
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }          
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new RoleViewModel();
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Create was called");
+
+                var model = new RoleViewModel();
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRole(RoleViewModel model)
         {
-            if (model != null)
+            try
             {
-                await _roleService.CreateAsync(_mapper.Map<RoleDto>(model));
+                _logger.LogInformation($"{DateTime.Now}: CreateRole was called");
+
+                if (model != null)
+                {
+                    await _roleService.CreateAsync(_mapper.Map<RoleDto>(model));
+                }
+                return RedirectToAction("Index", "Role");
             }
-            return RedirectToAction("Index", "Role");
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            } 
         }
 
         [HttpGet]
         public IActionResult Delete(Guid id)
         {
-            var model = new DeleteRoleViewModel() { Id = id };
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Delete was called");
+
+                var model = new DeleteRoleViewModel() { Id = id };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteRole(DeleteRoleViewModel model)
         {
-            var delete = await _roleService.DeleteAsync(model.Id);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: DeleteRole was called");
 
-            if (delete == null)
+                var delete = await _roleService.DeleteAsync(model.Id);
+
+                if (delete == null)
+                {
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteRole method");
+                    return BadRequest();
+                }
+
+                return RedirectToAction("Index", "Role");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
-
-            return RedirectToAction("Index", "Role");
+            }
         }
 
         [HttpGet]
         public IActionResult Edit(Guid id)
         {
-            var model = new RoleViewModel() { Id = id };
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Edit was called");
+
+                var model = new RoleViewModel() { Id = id };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditRole(RoleViewModel model)
         {
-            if (model != null)
+            try
             {
-                await _roleService.UpdateAsync(_mapper.Map<RoleDto>(model));
+                _logger.LogInformation($"{DateTime.Now}: EditRole was called");
+
+                if (model != null)
+                {
+                    await _roleService.UpdateAsync(_mapper.Map<RoleDto>(model));
+                }
+                return RedirectToAction("Index", "Role");
             }
-            return RedirectToAction("Index", "Role");
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+            
         }
     }
 }

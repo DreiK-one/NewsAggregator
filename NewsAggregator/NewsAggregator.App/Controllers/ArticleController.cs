@@ -9,23 +9,38 @@ namespace NewsAggregator.App.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IArticleService _articleService;
+        private readonly ILogger<ArticleController> _logger;
 
-        public ArticleController(IMapper mapper, IArticleService articleService)
+        public ArticleController(IMapper mapper, IArticleService articleService, ILogger<ArticleController> logger)
         {
             _mapper = mapper;
             _articleService = articleService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> ReadArticle(Guid id)
         {
-            var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: ReadArticle was called");
 
-            if (article == null)
+                var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+
+                if (article == null)
+                {
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in ReadArticle method");
+                    return BadRequest();
+                }
+
+                var model = _mapper.Map<ReadArticleViewModel>(article);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-
-            var model = _mapper.Map<ReadArticleViewModel>(article);
-
-            return View(model);
+            }
+            
         }
     }
 }

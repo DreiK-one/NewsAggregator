@@ -10,76 +10,149 @@ namespace NewsAggregator.App.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISourceService _sourceService;
+        private readonly ILogger<SourceController> _logger;
 
-        public SourceController(IMapper mapper, ISourceService sourceService)
+        public SourceController(IMapper mapper, ISourceService sourceService, ILogger<SourceController> logger)
         {
             _mapper = mapper;
             _sourceService = sourceService;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var model = (await _sourceService.GetAllSourcesAsync())
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Index was called");
+
+                var model = (await _sourceService.GetAllSourcesAsync())
                 .Select(source => _mapper.Map<SourceModel>(source))
                 .ToList();
-            return View(model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            var model = new SourceModel();
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Create was called");
+
+                var model = new SourceModel();
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateSource(SourceModel model)
         {
-            return View();
-            if (model != null)
+            try
             {
-                await _sourceService.CreateAsync(_mapper.Map<SourceDto>(model));
+                _logger.LogInformation($"{DateTime.Now}: CreateSource was called");
+
+                if (model != null)
+                {
+                    await _sourceService.CreateAsync(_mapper.Map<SourceDto>(model));
+                }
+                return RedirectToAction("Index", "Source");
             }
-            return RedirectToAction("Index", "Source");
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
-        //TODO
         [HttpGet]
         public IActionResult Delete(Guid id)
         {
-            var model = new DeleteSourceViewModel() { Id = id };
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Delete was called");
+
+                var model = new DeleteSourceViewModel() { Id = id };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSource(DeleteSourceViewModel model)
         {
-            var delete = await _sourceService.DeleteAsync(model.Id);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: DeleteSource was called");
 
-            if (delete == null)
+                var delete = await _sourceService.DeleteAsync(model.Id);
+
+                if (delete == null)
+                {
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteSource method");
+                    return BadRequest();
+                }
+
+                return RedirectToAction("Index", "Source");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
-
-            return RedirectToAction("Index", "Source");
+            }
         }
 
         [HttpGet]
         public IActionResult Edit(Guid id)
         {
-            var model = new SourceModel() { Id = id };
-            return View(model);
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Edit was called");
+
+                var model = new SourceModel() { Id = id };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            } 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditSource(SourceModel model)
         {
-            if (model != null)
+            try
             {
-                await _sourceService.UpdateAsync(_mapper.Map<SourceDto>(model));
+                _logger.LogInformation($"{DateTime.Now}: EditSource was called");
+
+                if (model != null)
+                {
+                    await _sourceService.UpdateAsync(_mapper.Map<SourceDto>(model));
+                }
+                return RedirectToAction("Index", "Source");
             }
-            return RedirectToAction("Index", "Source");
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
     }
 }
