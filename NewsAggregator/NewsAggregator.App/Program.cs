@@ -6,33 +6,53 @@ using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using Serilog;
+using Serilog.Events;
 
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .WriteTo.Console()
+    .Enrich.FromLogContext()
+    .CreateBootstrapLogger();
+
+try
+{
+    Log.Information("Starting web host");
 
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.Host.UseSerilog((ctx, lc) => 
-    {
-        lc.MinimumLevel.Fatal().WriteTo.File(
-            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Fatal\fatal.log",
-            fileSizeLimitBytes: 1_000_000,
-            rollOnFileSizeLimit: true,
-            flushToDiskInterval: TimeSpan.FromDays(1));
-        lc.MinimumLevel.Error().WriteTo.File(
-            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Error\error.log",
-            fileSizeLimitBytes: 1_000_000,
-            rollOnFileSizeLimit: true,
-            flushToDiskInterval: TimeSpan.FromDays(1));
-        lc.MinimumLevel.Warning().WriteTo.File(
-            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Warning\warning.log",
-            fileSizeLimitBytes: 1_000_000,
-            rollOnFileSizeLimit: true,
-            flushToDiskInterval: TimeSpan.FromDays(1));
-        lc.MinimumLevel.Information().WriteTo.File(
-            @$"D:\Games\C#\Web\NewsAggregator\testLogs\Info\info.log",
-            fileSizeLimitBytes: 1_000_000,
-            rollOnFileSizeLimit: true,
-            flushToDiskInterval: TimeSpan.FromDays(1));
-    });
+    // Full setup of serilog. We read log settings from appsettings.json
+    builder.Host.UseSerilog((context, services, configuration) => configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext());
+
+    //builder.Host.UseSerilog((ctx, lc) =>
+    //{
+    //    lc.MinimumLevel.Fatal().WriteTo.File(
+    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Fatal\fatal.log",
+    //        fileSizeLimitBytes: 1_000_000,
+    //        rollOnFileSizeLimit: true,
+    //        shared: true,
+    //        flushToDiskInterval: TimeSpan.FromDays(1));
+    //    lc.MinimumLevel.Error().WriteTo.File(
+    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Error\error.log",
+    //        fileSizeLimitBytes: 1_000_000,
+    //        rollOnFileSizeLimit: true,
+    //        shared: true,
+    //        flushToDiskInterval: TimeSpan.FromDays(1));
+    //    lc.MinimumLevel.Warning().WriteTo.File(
+    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Warning\warning.log",
+    //        fileSizeLimitBytes: 1_000_000,
+    //        rollOnFileSizeLimit: true,
+    //        shared: true,
+    //        flushToDiskInterval: TimeSpan.FromDays(1));
+    //    lc.MinimumLevel.Information().WriteTo.File(
+    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Info\info.log",
+    //        fileSizeLimitBytes: 1_000_000,
+    //        rollOnFileSizeLimit: true,
+    //        shared: true,
+    //        flushToDiskInterval: TimeSpan.FromDays(1));
+    //});
 
 
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -62,7 +82,11 @@ using Serilog;
     builder.Services.AddControllersWithViews();
 
     var app = builder.Build();
-    Log.Information("Starting web host");
+
+    app.UseSerilogRequestLogging(configure =>
+    {
+        configure.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ({UserId}) responded {StatusCode} in {Elapsed:0.0000}ms";
+    }); // We want to log all HTTP requests
 
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())
@@ -84,3 +108,15 @@ using Serilog;
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
     app.MigrateDatabase().Run();
+}
+
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+    return 1;
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+return 0;
