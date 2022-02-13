@@ -34,24 +34,6 @@ try
     //        rollOnFileSizeLimit: true,
     //        shared: true,
     //        flushToDiskInterval: TimeSpan.FromDays(1));
-    //    lc.MinimumLevel.Error().WriteTo.File(
-    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Error\error.log",
-    //        fileSizeLimitBytes: 1_000_000,
-    //        rollOnFileSizeLimit: true,
-    //        shared: true,
-    //        flushToDiskInterval: TimeSpan.FromDays(1));
-    //    lc.MinimumLevel.Warning().WriteTo.File(
-    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Warning\warning.log",
-    //        fileSizeLimitBytes: 1_000_000,
-    //        rollOnFileSizeLimit: true,
-    //        shared: true,
-    //        flushToDiskInterval: TimeSpan.FromDays(1));
-    //    lc.MinimumLevel.Information().WriteTo.File(
-    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Info\info.log",
-    //        fileSizeLimitBytes: 1_000_000,
-    //        rollOnFileSizeLimit: true,
-    //        shared: true,
-    //        flushToDiskInterval: TimeSpan.FromDays(1));
     //});
 
 
@@ -83,10 +65,11 @@ try
 
     var app = builder.Build();
 
+    // We want to log all HTTP requests
     app.UseSerilogRequestLogging(configure =>
     {
         configure.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ({UserId}) responded {StatusCode} in {Elapsed:0.0000}ms";
-    }); // We want to log all HTTP requests
+    }); 
 
     // Configure the HTTP request pipeline.
     if (!app.Environment.IsDevelopment())

@@ -23,6 +23,7 @@ namespace NewsAggregator.Domain.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
+
         public async Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync()
         {
             return await _unitOfWork.Users.Get()
@@ -33,6 +34,15 @@ namespace NewsAggregator.Domain.Services
                 .ThenInclude(articles => articles.Article)
                 .Select(users => _mapper.Map<UserDto>(users))
                 .ToListAsync();
+        }
+
+        public async Task<UserDto> GetUserByIdAsync(Guid id)
+        {
+            var user = await _unitOfWork.Users.Get()
+                .Where(u => u.Id.Equals(id))
+                .FirstOrDefaultAsync();
+
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<int?> UpdateAsync(UserDto userDto)

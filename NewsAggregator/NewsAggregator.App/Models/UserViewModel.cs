@@ -20,13 +20,5 @@ namespace NewsAggregator.App.Models
             }
         }
         public DateTime RegistrationDate { get; set; }
-
-        //public List<Article> Articles { get; set; } + Comments
-
-        //public Role Role { get; set; }
-
-        //public UserActivity UserActivity { get; set; }
-
-
     }
 }

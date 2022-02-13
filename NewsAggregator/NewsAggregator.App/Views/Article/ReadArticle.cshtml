@@ -53,7 +53,7 @@
 								<p class="article">
 									@foreach(var comment in Model.Comments)
 									{
-										<h3>@comment.User.FullName</h3>
+										<h3><a asp-controller="User" asp-action="Details" asp-route-id="@comment.User.Id">@comment.User.FullName</a></h3>
 										<p>@comment.Text</p>
 									}
 								</p>

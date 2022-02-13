@@ -38,6 +38,35 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation($"{DateTime.Now}: Details was called");
+
+                var user = _userService.GetUserByIdAsync(id);
+
+                if (user == null)
+                {
+                    _logger.LogError($"{DateTime.Now}: Model is null in Details method");
+                    return BadRequest();
+                }
+
+                var model = _mapper.Map<UserViewModel>(user);
+                return View(model);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+
+            
+
+        }
+
+        [HttpGet]
         public IActionResult Edit(Guid id)
         {
             try
