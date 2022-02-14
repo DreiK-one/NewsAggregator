@@ -12,7 +12,7 @@ namespace NewsAggregator.App.Models
         public string Email { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string Fullname
+        public string FullName
         {
             get
             {

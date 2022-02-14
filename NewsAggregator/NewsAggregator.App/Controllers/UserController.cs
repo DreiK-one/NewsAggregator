@@ -44,7 +44,7 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogInformation($"{DateTime.Now}: Details was called");
 
-                var user = _userService.GetUserByIdAsync(id);
+                var user = await _userService.GetUserByIdAsync(id);
 
                 if (user == null)
                 {
@@ -61,9 +61,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-
-            
-
         }
 
         [HttpGet]
