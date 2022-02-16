@@ -16,6 +16,10 @@ namespace NewsAggregator.App.Mappers
             CreateMap<SourceModel, DeleteSourceViewModel>();
 
             CreateMap<SourceModel, ReadArticleViewModel>();
+
+            CreateMap<Source, RssUrlsFromSourceDto>()
+                .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.RssUrl, opt => opt.MapFrom(src => src.RssUrl));
         }
     }
 }

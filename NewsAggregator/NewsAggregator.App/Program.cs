@@ -58,6 +58,7 @@ try
     builder.Services.AddScoped<IRoleService, RoleService>();
     builder.Services.AddScoped<ISourceService, SourceService>();
     builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<IRssService, RssService>();
 
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

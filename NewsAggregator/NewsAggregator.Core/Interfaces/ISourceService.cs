@@ -13,5 +13,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<int?> CreateAsync(SourceDto sourceDto);
         Task<int?> UpdateAsync(SourceDto sourceDto);
         Task<int?> DeleteAsync(Guid id);
+        public Task<IEnumerable<RssUrlsFromSourceDto>> GetRssUrlsAsync();
     }
 }

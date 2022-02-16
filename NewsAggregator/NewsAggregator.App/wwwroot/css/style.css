@@ -2003,6 +2003,7 @@ figure figcaption {
   color: #fff;
   border: 2px solid #d9534f;
 }
+
 .btn-danger:hover, .btn-danger:focus, .btn-danger:active {
   background: #d43f3a !important;
   border-color: #d43f3a !important;
@@ -2113,6 +2114,19 @@ figure figcaption {
 
 .article {
     margin-top: 50px;
+}
+
+.get-news {
+    background-color: black;
+    color: #dd7878;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: "Roboto Mono", serif;
+}
+
+.get-news:hover{
+    color: white;
 }
 
 /*# sourceMappingURL=style.css.map */

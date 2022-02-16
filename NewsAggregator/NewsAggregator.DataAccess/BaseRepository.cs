@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.DataAccess
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : BaseEntity
     {
         protected readonly NewsAggregatorContext Db;
 
