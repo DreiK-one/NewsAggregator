@@ -15,7 +15,6 @@ namespace NewsAggregator.Domain.Services
     public class ArticleService : IArticleService
     {
         private readonly IMapper _mapper;
-
         private readonly IUnitOfWork _unitOfWork;
 
         public ArticleService(IMapper mapper, IUnitOfWork unitOfWork)

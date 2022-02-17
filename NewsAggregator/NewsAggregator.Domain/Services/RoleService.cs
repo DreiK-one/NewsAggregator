@@ -15,9 +15,7 @@ namespace NewsAggregator.Domain.Services
     public class RoleService : IRoleService
     {
         private readonly IMapper _mapper;
-
         private readonly IUnitOfWork _unitOfWork;
-
         public RoleService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;

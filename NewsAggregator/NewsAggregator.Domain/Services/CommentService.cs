@@ -14,9 +14,7 @@ namespace NewsAggregator.Domain.Services
     public class CommentService : ICommentService
     {
         private readonly IMapper _mapper;
-
         private readonly IUnitOfWork _unitOfWork;
-
         public CommentService(IMapper mapper, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;

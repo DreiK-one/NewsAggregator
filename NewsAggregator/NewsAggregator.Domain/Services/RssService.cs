@@ -38,8 +38,7 @@ namespace NewsAggregator.Domain.Services
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return null;
-            }
-            
+            }            
         }
     }
 }

@@ -1,0 +1,32 @@
+﻿.descriptiomo-nalonvevons {
+    position: relative;
+    margin: 10px;
+    padding: 15px;
+    width: 56%;
+    min-height: 10px;
+    font-family: sans-serif;
+    background: #f1edf94d;
+    border: 2px solid #c66c6c;
+}
+
+    .descriptiomo-nalonvevons:before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: 15px;
+        border: 10px solid #f1edf94d;
+        border-bottom: 10px solid #c66c6c;
+        border-left: 10px solid #c66c6c;
+        z-index: -1;
+    }
+
+    .descriptiomo-nalonvevons:after {
+        content: '';
+        position: absolute;
+        top: -15px;
+        left: 17px;
+        border: 10px solid hsla(0, 0%, 0%, 0);
+        border-bottom: 10px solid rgb(236, 235, 240);
+        border-left: 10px solid rgb(236, 235, 240);
+        z-index: 1;
+    }

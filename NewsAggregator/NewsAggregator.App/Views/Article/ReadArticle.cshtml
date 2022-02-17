@@ -50,13 +50,11 @@
 
 						<div class="row">
 							<div class="col-lg-6 cp-r animate-box">
-								<p class="article">
-									@foreach(var comment in Model.Comments)
-									{
-										<h3><a asp-controller="User" asp-action="Details" asp-route-id="@comment.User.Id">@comment.User.FullName</a></h3>
-										<p>@comment.Text</p>
-									}
-								</p>
+								@foreach(var comment in Model.Comments)
+								{
+									<h3><a asp-controller="User" asp-action="Details" asp-route-id="@comment.User.Id">@comment.User.FullName</a></h3>
+									<div class="descriptiomo-nalonvevons">@comment.Text</div>
+								}
 							</div>
 						</div>
 					</div>

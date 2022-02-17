@@ -45,10 +45,11 @@ body {
 }
 
 a {
-    color: #FFFFFF;
+    color: #c66c6c;
     -webkit-transition: 0.5s;
     -o-transition: 0.5s;
     transition: 0.5s;
+    text-decoration: none;
 }
 a:hover, a:active, a:focus {
   color: #F73859;
@@ -486,7 +487,7 @@ article .content-article {
   padding-top: 1em;
 }
 article .content-article a {
-  text-decoration: underline;
+  text-decoration: none;
 }
 article .content-article blockquote {
   border-left: none;
