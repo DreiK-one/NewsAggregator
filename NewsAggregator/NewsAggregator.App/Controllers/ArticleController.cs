@@ -22,8 +22,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: ReadArticle was called");
-
                 var article = await _articleService.GetArticleWithAllNavigationProperties(id);
 
                 if (article == null)

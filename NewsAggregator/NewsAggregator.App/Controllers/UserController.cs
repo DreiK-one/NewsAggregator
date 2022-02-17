@@ -23,8 +23,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
-
                 var model = (await _userService.GetAllUsersWithAllInfoAsync())
                 .Select(user => _mapper.Map<UserViewModel>(user))
                 .ToList();
@@ -42,8 +40,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Details was called");
-
                 var user = await _userService.GetUserByIdAsync(id);
 
                 if (user == null)
@@ -68,8 +64,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Delete was called");
-
                 var model = new UserViewModel() { Id = id };
                 return View(model);
             }
@@ -86,8 +80,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: EditUser was called");
-
                 if (model != null)
                 {
                     await _userService.UpdateAsync(_mapper.Map<UserDto>(model));

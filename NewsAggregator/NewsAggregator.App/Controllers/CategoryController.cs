@@ -24,8 +24,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
-
                 var model = (await _categoryService.GetAllCategoriesAsync())
                 .Select(category => _mapper.Map<CategoryViewModel>(category))
                 .ToList();
@@ -36,7 +34,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
 
         [HttpGet]
@@ -44,8 +41,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-               _logger.LogInformation($"{DateTime.Now}: Create was called");
-
                 var model = new CategoryViewModel();
                 return View(model);
             }
@@ -53,8 +48,7 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-            }
-            
+            } 
         }
 
         [HttpPost]
@@ -63,8 +57,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: CreateCategory was called");
-
                 if (model != null)
                 {
                     await _categoryService.CreateAsync(_mapper.Map<CategoryDto>(model));
@@ -75,8 +67,7 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-            }
-            
+            } 
         }
 
         [HttpGet]
@@ -84,8 +75,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Delete was called");
-
                 var model = new DeleteCategoryViewModel() { Id = id };
                 return View(model);
             }
@@ -94,7 +83,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
 
         [HttpPost]
@@ -103,8 +91,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: DeleteCategory was called");
-
                 var delete = await _categoryService.DeleteAsync(model.Id);
 
                 if (delete == null)
@@ -127,8 +113,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Edit was called");
-
                 var model = new CategoryViewModel() { Id = id };
                 return View(model);
             }
@@ -137,7 +121,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
 
         [HttpPost]
@@ -146,8 +129,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: EditCategory was called");
-
                 if (model != null)
                 {
                     await _categoryService.UpdateAsync(_mapper.Map<CategoryDto>(model));
@@ -159,7 +140,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
     }
 }

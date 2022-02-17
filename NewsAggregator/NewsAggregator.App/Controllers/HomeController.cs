@@ -34,8 +34,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
-
                 var model = (await _articleService.GetAllNewsAsync())
                 .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
                 .ToList();
@@ -53,8 +51,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: GetNewsFromSources was called");
-
                 var rssUrls = await _sourceService.GetRssUrlsAsync();
                 var concurrentBag = new ConcurrentBag<RssArticleDto>();
                 var result = Parallel.ForEach(rssUrls, dto =>
@@ -63,7 +59,6 @@ namespace NewsAggregator.App.Controllers
                 });
 
                 return Ok();
-
             }
             catch (Exception ex)
             {

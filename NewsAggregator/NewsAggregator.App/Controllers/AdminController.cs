@@ -15,7 +15,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
                 return View();
             }
             catch (Exception ex)

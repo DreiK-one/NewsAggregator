@@ -24,8 +24,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
-
                 var model = (await _roleService.GetAllRolesAsync())
                 .Select(role => _mapper.Map<RoleViewModel>(role))
                 .ToList();
@@ -43,8 +41,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Create was called");
-
                 var model = new RoleViewModel();
                 return View(model);
             }
@@ -61,8 +57,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: CreateRole was called");
-
                 if (model != null)
                 {
                     await _roleService.CreateAsync(_mapper.Map<RoleDto>(model));
@@ -81,8 +75,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Delete was called");
-
                 var model = new DeleteRoleViewModel() { Id = id };
                 return View(model);
             }
@@ -91,7 +83,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
 
         [HttpPost]
@@ -100,8 +91,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: DeleteRole was called");
-
                 var delete = await _roleService.DeleteAsync(model.Id);
 
                 if (delete == null)
@@ -124,8 +113,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Edit was called");
-
                 var model = new RoleViewModel() { Id = id };
                 return View(model);
             }
@@ -134,7 +121,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
 
         [HttpPost]
@@ -143,8 +129,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: EditRole was called");
-
                 if (model != null)
                 {
                     await _roleService.UpdateAsync(_mapper.Map<RoleDto>(model));
@@ -156,7 +140,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
     }
 }

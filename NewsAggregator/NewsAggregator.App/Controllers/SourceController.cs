@@ -23,8 +23,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Index was called");
-
                 var model = (await _sourceService.GetAllSourcesAsync())
                 .Select(source => _mapper.Map<SourceModel>(source))
                 .ToList();
@@ -42,8 +40,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Create was called");
-
                 var model = new SourceModel();
                 return View(model);
             }
@@ -60,8 +56,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: CreateSource was called");
-
                 if (model != null)
                 {
                     await _sourceService.CreateAsync(_mapper.Map<SourceDto>(model));
@@ -80,8 +74,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Delete was called");
-
                 var model = new DeleteSourceViewModel() { Id = id };
                 return View(model);
             }
@@ -98,8 +90,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: DeleteSource was called");
-
                 var delete = await _sourceService.DeleteAsync(model.Id);
 
                 if (delete == null)
@@ -122,8 +112,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Edit was called");
-
                 var model = new SourceModel() { Id = id };
                 return View(model);
             }
@@ -140,8 +128,6 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: EditSource was called");
-
                 if (model != null)
                 {
                     await _sourceService.UpdateAsync(_mapper.Map<SourceDto>(model));
