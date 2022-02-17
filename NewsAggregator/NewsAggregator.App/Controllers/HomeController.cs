@@ -58,6 +58,8 @@ namespace NewsAggregator.App.Controllers
                     _rssService.GetArticlesInfoFromRss(dto.RssUrl).AsParallel().ForAll(articleDto => concurrentBag.Add(articleDto));
                 });
 
+                var newArticlesFromRss = concurrentBag.ToDictionary(dto => new KeyValuePair<string, RssArticleDto>(dto.Url, dto));
+
                 return Ok();
             }
             catch (Exception ex)

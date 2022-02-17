@@ -35,6 +35,8 @@ namespace NewsAggregator.Data
         //    modelBuilder.ApplyConfiguration(new CategoryConfiguration());
         //    modelBuilder.ApplyConfiguration(new SourceConfiguration());
         //    modelBuilder.ApplyConfiguration(new ArticleConfiguration());
+        //    modelBuilder.ApplyConfiguration(new UserConfiguration());
+        //    modelBuilder.ApplyConfiguration(new CommentConfiguration());
         //}
 
     }

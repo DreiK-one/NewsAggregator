@@ -31,7 +31,6 @@ namespace NewsAggregator.Data
                     }
                 }
             }
-
             return host;
         }
     }

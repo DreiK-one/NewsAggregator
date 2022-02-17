@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAggregator.Data;
 
@@ -11,9 +12,10 @@ using NewsAggregator.Data;
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    partial class NewsAggregatorContextModelSnapshot : ModelSnapshot
+    [Migration("20220217085705_AddExampleUser")]
+    partial class AddExampleUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,16 +104,6 @@ namespace NewsAggregator.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("97e4fcc3-f30c-40d2-bd1b-516a04db5cbf"),
-                            ArticleId = new Guid("205e2d6a-76d2-40f1-800b-9d652146c158"),
-                            CreationDate = new DateTime(2022, 2, 17, 10, 5, 44, 662, DateTimeKind.Local).AddTicks(9018),
-                            Text = "Интересная статья!",
-                            UserId = new Guid("c46d09f1-f535-4822-9372-dc3af86672fb")
-                        });
                 });
 
             modelBuilder.Entity("NewsAggregator.Data.Entities.Role", b =>
@@ -178,6 +170,17 @@ namespace NewsAggregator.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("c46d09f1-f535-4822-9372-dc3af86672fb"),
+                            Email = "123@mail.ru",
+                            FirstName = "Ted",
+                            LastName = "Jackson",
+                            PasswordHash = "123",
+                            RegistrationDate = new DateTime(2022, 2, 17, 9, 57, 5, 34, DateTimeKind.Local).AddTicks(5860)
+                        });
                 });
 
             modelBuilder.Entity("NewsAggregator.Data.Entities.UserActivity", b =>
