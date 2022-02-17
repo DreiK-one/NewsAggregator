@@ -118,5 +118,16 @@ namespace NewsAggregator.Domain.Services
                 return null;
             }
         }
+
+        public async Task<Guid> GetSourceByUrl(string url)
+        {
+            var domain = string.Join(".", 
+                new Uri(url).Host
+                .Split('.')
+                .TakeLast(2)
+                .ToList());
+           return (await _unitOfWork.Sources.Get()
+                .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
+        }
     }
 }

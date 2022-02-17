@@ -17,17 +17,20 @@ namespace NewsAggregator.App.Controllers
         private readonly ISourceService _sourceService;
         private readonly ILogger<HomeController> _logger;
         private readonly IRssService _rssService;
+        private readonly IHtmlParserService _htmlParserService;
 
         public HomeController(IMapper mapper,
             IArticleService articleService,
             ILogger<HomeController> logger,
-            ISourceService sourceService, IRssService rssService)
+            ISourceService sourceService, IRssService rssService, 
+            IHtmlParserService htmlParserService)
         {
             _mapper = mapper;
             _articleService = articleService;
             _logger = logger;
             _sourceService = sourceService;
             _rssService = rssService;
+            _htmlParserService = htmlParserService;
         }
 
         public async Task<IActionResult> Index()
@@ -52,13 +55,22 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var rssUrls = await _sourceService.GetRssUrlsAsync();
-                var concurrentBag = new ConcurrentBag<RssArticleDto>();
+                var concurrentDictionary = new ConcurrentDictionary<string, RssArticleDto?>();
                 var result = Parallel.ForEach(rssUrls, dto =>
                 {
-                    _rssService.GetArticlesInfoFromRss(dto.RssUrl).AsParallel().ForAll(articleDto => concurrentBag.Add(articleDto));
+                    _rssService.GetArticlesInfoFromRss(dto.RssUrl).AsParallel().ForAll(articleDto 
+                        => concurrentDictionary.TryAdd(articleDto.Url, articleDto));
                 });
 
-                var newArticlesFromRss = concurrentBag.ToDictionary(dto => new KeyValuePair<string, RssArticleDto>(dto.Url, dto));
+                var extArticlesUrls = await _articleService.GetAllExistingArticleUrls();
+
+                Parallel.ForEach(extArticlesUrls.Where(url => concurrentDictionary.ContainsKey(url)), 
+                    s => concurrentDictionary.Remove(s, out var dto));
+
+                foreach (var rssArticleDto in concurrentDictionary)
+                {
+                    var body = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
+                }
 
                 return Ok();
             }

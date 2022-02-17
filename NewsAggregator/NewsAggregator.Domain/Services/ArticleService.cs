@@ -64,9 +64,9 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<IEnumerable<string>> GetAllExistingArticleUrls()
+        public async Task<List<string>> GetAllExistingArticleUrls()
         {
-            return await _unitOfWork.Articles.Get().Select(article => article.Source.BaseUrl).ToListAsync();
+            return await _unitOfWork.Articles.Get().Select(article => article.SourceUrl).ToListAsync();
         }
     }
 }
