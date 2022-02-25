@@ -14,8 +14,8 @@
 									<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id">
 										<div class="entry-img" style="background-image: url(../images/img_4.jpg)"></div>
 										<div class="entry-desc">
-											<h3>@article.Title</h3>
-											<p>@article.Description</p>
+											<h3>@Html.Raw(article.Title)</h3>
+											<p>@Html.Raw(article.Description)</p>
 										</div>
 									</a>
 								<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id" class="post-meta"><span class="date-posted">@article.CreationDate</span></a>

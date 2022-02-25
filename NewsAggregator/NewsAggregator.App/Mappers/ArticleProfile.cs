@@ -22,6 +22,8 @@ namespace NewsAggregator.App.Mappers
                 .ForMember(dest => dest.Url, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title.Text))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Summary.Text));
+
+            CreateMap<NewArticleDto, Article>();
         }
     }
 }

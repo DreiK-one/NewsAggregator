@@ -101,5 +101,14 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
+        public async Task<Guid> GetCategoryByUrl(string url)
+        {
+            var str = url.Substring(8);
+            var res = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.')).ToUpperInvariant();
+            return (await _unitOfWork.Categories.Get()
+                 .FirstOrDefaultAsync(category => category.Name.ToUpperInvariant().Equals(res)))?.Id 
+                 ?? (new Category() { Id = Guid.NewGuid(), Name = str}).Id;
+        }
     }
 }

@@ -8,6 +8,6 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface IHtmlParserService
     {
-        Task<string> GetArticleContentFromUrlAsync(string url); 
+        Task<int?> GetArticleContentFromUrlAsync(string url); 
     }
 }

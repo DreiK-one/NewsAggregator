@@ -13,5 +13,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<int?> CreateAsync(CategoryDto categoryDto);
         Task<int?> UpdateAsync(CategoryDto categoryDto);
         Task<int?> DeleteAsync(Guid id);
+        Task<Guid> GetCategoryByUrl(string url);
     }
 }

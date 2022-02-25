@@ -72,7 +72,7 @@ namespace NewsAggregator.App.Controllers
                     var body = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
                 }
 
-                return Ok();
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
             {

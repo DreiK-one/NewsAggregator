@@ -17,16 +17,24 @@ namespace NewsAggregator.Data.Configuration
                 new Source
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Onliner",
-                    BaseUrl = "https://www.onliner.by/",
-                    RssUrl = "https://www.onliner.by/feed"
+                    Name = "4pda",
+                    BaseUrl = "4pda.to",
+                    RssUrl = "https://4pda.to/feed/"
                 },
                 new Source
                 {
                     Id = Guid.NewGuid(),
-                    Name = "Lenta",
-                    BaseUrl = "https://lenta.ru",
-                    RssUrl = "lenta.ru/rss/news"
+                    Name = "Onliner",
+                    BaseUrl = "onliner.by",
+                    RssUrl = "https://www.onliner.by/feed"
+
+                },
+                new Source
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Ria news",
+                    BaseUrl = "ria.ru",
+                    RssUrl = "https://ria.ru/export/rss2/archive/index.xml"
 
                 });
         }
