@@ -43,12 +43,13 @@ namespace NewsAggregator.Domain.Services
                 switch (sourceId.ToString("D").ToUpperInvariant())
                 {
                     case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
-                        var article = await ParseOnlinerArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(article));
+                        var articleOnliner = await ParseOnlinerArticle(url);
+                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
                         return await _unitOfWork.Save();
-                    //case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
-                    //    articleBody = await ParseShazooArticle(url);
-                    //    break;
+                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
+                        var articleRia = await ParseRiaArticle(url);
+                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleRia));
+                        return await _unitOfWork.Save();
                     //case "C13088A4-9467-4FCE-9EF7-3903425F1F82":
                     //    articleBody = await Parse4pdaArticle(url);
                     //    break;
@@ -132,7 +133,7 @@ namespace NewsAggregator.Domain.Services
                     Description = articleDesc,
                     Body = articleText,
                     CreationDate = DateTime.Now,   //todo date from source article
-                                                   //Coefficient = ??,             todo
+                    //Coefficient = ??,             
                     SourceUrl = articleSourceUrl,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
@@ -147,11 +148,74 @@ namespace NewsAggregator.Domain.Services
             } 
         }
 
-        //public async Task<string> ParseShazooArticle(string url)
-        //{
-        //    //todo algorythm of web scrapping
-        //    return null;
-        //}
+        public async Task<NewArticleDto> ParseRiaArticle(string url)
+        {
+            try
+            {
+                var web = new HtmlWeb();
+                var htmlDoc = web.Load(url);
+
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'article__body')]");
+
+                var scriptNode = bodyNode.SelectNodes("//div[contains(@class, 'article__body')]/script");
+                if (scriptNode != null)
+                {
+                    bodyNode.RemoveChildren(scriptNode);
+                }
+
+                var bannerNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@data-type, 'banner')]");
+                if (bannerNode != null)
+                {
+                    bodyNode.RemoveChild(bannerNode);
+                }
+
+                var fotoNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@data-article, 'main-foto')]");
+                if (fotoNode != null)
+                {
+                    bodyNode.RemoveChild(fotoNode);
+                }
+
+                var editorNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@class, 'article__editor')]");
+                if (editorNode != null)
+                {
+                    bodyNode.RemoveChild(editorNode);
+                }
+
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__title']");
+
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__info-date']/a");
+
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='article__second-title']");
+
+                var sourceUrlNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='analytics:url']");
+
+                var articleText = bodyNode.InnerHtml.Trim();
+                var articleTitle = titleNode.InnerHtml.Trim();
+                var articleDate = dateNode.InnerHtml.Trim();
+                var articleDesc = descriptionNode.InnerHtml.Trim();
+                var articleSourceUrl = sourceUrlNode.Attributes["content"].Value.Trim();
+
+                var model = new NewArticleDto()
+                {
+                    Id = Guid.NewGuid(),
+                    Title = articleTitle,
+                    Description = articleDesc,
+                    Body = articleText,
+                    CreationDate = DateTime.Now,   //todo date from source article
+                    //Coefficient = ??,            
+                    SourceUrl = articleSourceUrl,
+                    CategoryId = await _categoryService.GetCategoryByUrl(url),
+                    SourceId = await _sourceService.GetSourceByUrl(url),
+                };
+
+                return model;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
 
         //public async Task<string> Parse4pdaArticle(string url)
         //{
