@@ -23,6 +23,31 @@ namespace NewsAggregator.Data.Configuration
                 {
                     Id = Guid.NewGuid(),
                     Name = "People"
+                },
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Money"
+                },
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Tech"
+                },
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Auto"
+                },
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Realt"
+                },
+                new Category
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Other"
                 });
         }
     }
