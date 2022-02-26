@@ -47,7 +47,6 @@ namespace NewsAggregator.DataAccess
                     Where(entity => entity.Id.Equals(id)), (current, include) => current.Include(include))
                     .FirstOrDefaultAsync();
             }
-
             return await GetById(id);
         }
 
@@ -83,7 +82,6 @@ namespace NewsAggregator.DataAccess
             dbEntityEntry.CurrentValues.SetValues(nameValuePairProperties);
             dbEntityEntry.State = EntityState.Modified;
         }
-
 
         public virtual async Task Remove(Guid id)
         {

@@ -1,11 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Data.Entities;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NewsAggregator.Data.Configuration
 {
@@ -27,7 +23,6 @@ namespace NewsAggregator.Data.Configuration
                     Name = "Onliner",
                     BaseUrl = "onliner.by",
                     RssUrl = "https://www.onliner.by/feed"
-
                 },
                 new Source
                 {
@@ -35,7 +30,6 @@ namespace NewsAggregator.Data.Configuration
                     Name = "Ria news",
                     BaseUrl = "ria.ru",
                     RssUrl = "https://ria.ru/export/rss2/archive/index.xml"
-
                 });
         }
     }

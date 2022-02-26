@@ -36,7 +36,6 @@ namespace NewsAggregator.DataAccess
             _sourceRepository = sources;
             _userRepository = users;
             _userActivityRepository = userActivities;
-            
         }
 
         public IArticleRepository Articles => _articleRepository;

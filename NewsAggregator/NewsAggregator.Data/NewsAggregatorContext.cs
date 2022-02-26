@@ -26,7 +26,6 @@ namespace NewsAggregator.Data
             
         }
 
-
         //Only for creation migrations
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +37,5 @@ namespace NewsAggregator.Data
         //    modelBuilder.ApplyConfiguration(new UserConfiguration());
         //    modelBuilder.ApplyConfiguration(new CommentConfiguration());
         //}
-
     }
 }

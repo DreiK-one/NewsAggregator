@@ -30,7 +30,6 @@ namespace NewsAggregator.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
-
         public async Task<IEnumerable<ArticleDto>> GetAllNewsAsync()
         {
             try

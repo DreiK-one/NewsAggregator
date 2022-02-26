@@ -10,7 +10,6 @@ namespace NewsAggregator.Data.Entities
     {
         public string Name { get; set; }
 
-
         public virtual IEnumerable<UserRole> UserRoles { get; set; }
     }
 }
