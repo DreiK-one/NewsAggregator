@@ -33,7 +33,7 @@ namespace NewsAggregator.Data.Migrations
                 columns: new[] { "Id", "BaseUrl", "Name", "RssUrl" },
                 values: new object[,]
                 {
-                    { new Guid("c13088a4-9467-4fce-9ef7-3903425f1f81"), "4pda.to", "4pda", "https://4pda.to/feed/" },
+                    { new Guid("c13088a4-9467-4fce-9ef7-3903425f1f81"), "shazoo.ru", "Shazoo", "https://shazoo.ru/feed/rss" },
                     { new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5"), "onliner.by", "Onliner", "https://www.onliner.by/feed" },
                     { new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b4"), "ria.ru", "Ria news", "https://ria.ru/export/rss2/archive/index.xml" }
                 });

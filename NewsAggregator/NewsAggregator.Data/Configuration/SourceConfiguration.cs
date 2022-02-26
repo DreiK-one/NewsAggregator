@@ -17,9 +17,9 @@ namespace NewsAggregator.Data.Configuration
                 new Source
                 {
                     Id = Guid.NewGuid(),
-                    Name = "4pda",
-                    BaseUrl = "4pda.to",
-                    RssUrl = "https://4pda.to/feed/"
+                    Name = "Shazoo",
+                    BaseUrl = "shazoo.to",
+                    RssUrl = "https://shazoo.ru/feed/rss"
                 },
                 new Source
                 {
