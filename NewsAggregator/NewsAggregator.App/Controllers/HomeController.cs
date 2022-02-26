@@ -13,21 +13,21 @@ namespace NewsAggregator.App.Controllers
     public class HomeController : Controller
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<HomeController> _logger;
         private readonly IArticleService _articleService;
         private readonly ISourceService _sourceService;
-        private readonly ILogger<HomeController> _logger;
         private readonly IRssService _rssService;
         private readonly IHtmlParserService _htmlParserService;
 
         public HomeController(IMapper mapper,
-            IArticleService articleService,
             ILogger<HomeController> logger,
+            IArticleService articleService,
             ISourceService sourceService, IRssService rssService, 
             IHtmlParserService htmlParserService)
         {
             _mapper = mapper;
-            _articleService = articleService;
             _logger = logger;
+            _articleService = articleService;
             _sourceService = sourceService;
             _rssService = rssService;
             _htmlParserService = htmlParserService;
@@ -69,7 +69,7 @@ namespace NewsAggregator.App.Controllers
 
                 foreach (var rssArticleDto in concurrentDictionary)
                 {
-                    var body = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
+                    var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
                 }
 
                 return RedirectToAction("Index", "Home");

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
@@ -15,17 +16,23 @@ namespace NewsAggregator.Domain.Services
     public class UserService : IUserService
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<UserService> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UserService(IMapper mapper, IUnitOfWork unitOfWork)
+        public UserService(IMapper mapper, 
+            ILogger<UserService> logger, 
+            IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
+            _logger = logger;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync()
         {
-            return await _unitOfWork.Users.Get()
+            try
+            {
+                return await _unitOfWork.Users.Get()
                 .Include(userRoles => userRoles.UserRoles)
                 .ThenInclude(role => role.Role)
                 .Include(userActivity => userActivity.UserActivities)
@@ -33,15 +40,29 @@ namespace NewsAggregator.Domain.Services
                 .ThenInclude(articles => articles.Article)
                 .Select(users => _mapper.Map<UserDto>(users))
                 .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<UserDto> GetUserByIdAsync(Guid id)
         {
-            var user = await _unitOfWork.Users.Get()
+            try
+            {
+                var user = await _unitOfWork.Users.Get()
                 .Where(u => u.Id.Equals(id))
                 .FirstOrDefaultAsync();
 
-            return _mapper.Map<UserDto>(user);
+                return _mapper.Map<UserDto>(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<int?> UpdateAsync(UserDto userDto)
@@ -58,9 +79,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -79,9 +100,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }

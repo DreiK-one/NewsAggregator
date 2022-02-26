@@ -6,6 +6,7 @@ using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data.Entities;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,21 +16,32 @@ namespace NewsAggregator.Domain.Services
 {
     public class SourceService : ISourceService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<SourceService> _logger;
-        private readonly IUnitOfWork _unitOfWork;
-
-        public SourceService(IMapper mapper, IUnitOfWork unitOfWork, ILogger<SourceService> logger)
+        
+        public SourceService(IUnitOfWork unitOfWork,
+            IMapper mapper,
+            ILogger<SourceService> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
             _logger = logger;
         }
+
         public async Task<IEnumerable<SourceDto>> GetAllSourcesAsync()
         {
-            return await _unitOfWork.Sources.Get()
+            try
+            {
+                return await _unitOfWork.Sources.Get()
                 .Select(source => _mapper.Map<SourceDto>(source))
                 .ToListAsync();
+            }
+            catch (Exception ex )
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<int?> CreateAsync(SourceDto sourceDto)
@@ -58,9 +70,10 @@ namespace NewsAggregator.Domain.Services
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return null;
+               throw;
             }
         }
+
         public async Task<int?> UpdateAsync(SourceDto sourceDto)
         {
             try
@@ -78,7 +91,7 @@ namespace NewsAggregator.Domain.Services
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return null;
+                throw;
             }
         }
 
@@ -99,7 +112,7 @@ namespace NewsAggregator.Domain.Services
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return null;
+                throw;
             }
         }
 
@@ -115,19 +128,27 @@ namespace NewsAggregator.Domain.Services
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return null;
+                throw;
             }
         }
 
         public async Task<Guid> GetSourceByUrl(string url)
         {
-            var domain = string.Join(".", 
+            try
+            {
+                var domain = string.Join(".",
                 new Uri(url).Host
                 .Split('.')
                 .TakeLast(2)
                 .ToList());
-           return (await _unitOfWork.Sources.Get()
-                .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
+                return (await _unitOfWork.Sources.Get()
+                     .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            } 
         }
     }
 }

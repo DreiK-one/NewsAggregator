@@ -8,14 +8,16 @@ namespace NewsAggregator.App.Controllers
     public class ArticleController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IArticleService _articleService;
         private readonly ILogger<ArticleController> _logger;
+        private readonly IArticleService _articleService;
 
-        public ArticleController(IMapper mapper, IArticleService articleService, ILogger<ArticleController> logger)
+        public ArticleController(IMapper mapper, 
+            ILogger<ArticleController> logger, 
+            IArticleService articleService)
         {
             _mapper = mapper;
-            _articleService = articleService;
             _logger = logger;
+            _articleService = articleService;
         }
 
         public async Task<IActionResult> ReadArticle(Guid id)
@@ -38,7 +40,6 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-            
         }
     }
 }

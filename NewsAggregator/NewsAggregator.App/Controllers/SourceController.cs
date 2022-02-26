@@ -9,14 +9,16 @@ namespace NewsAggregator.App.Controllers
     public class SourceController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ISourceService _sourceService;
         private readonly ILogger<SourceController> _logger;
+        private readonly ISourceService _sourceService;
 
-        public SourceController(IMapper mapper, ISourceService sourceService, ILogger<SourceController> logger)
+        public SourceController(IMapper mapper, 
+            ILogger<SourceController> logger, 
+            ISourceService sourceService)
         {
             _mapper = mapper;
-            _sourceService = sourceService;
             _logger = logger;
+            _sourceService = sourceService;
         }
 
         public async Task<IActionResult> Index()

@@ -10,14 +10,16 @@ namespace NewsAggregator.App.Controllers
     public class RoleController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IRoleService _roleService;
         private readonly ILogger<RoleController> _logger;
+        private readonly IRoleService _roleService;
 
-        public RoleController(IMapper mapper, IRoleService roleService, ILogger<RoleController> logger)
+        public RoleController(IMapper mapper, 
+            ILogger<RoleController> logger, 
+            IRoleService roleService)
         {
             _mapper = mapper;
-            _roleService = roleService;
             _logger = logger;
+            _roleService = roleService;
         }
 
         public async Task<IActionResult> Index()

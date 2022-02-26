@@ -10,14 +10,16 @@ namespace NewsAggregator.App.Controllers
     public class CategoryController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ICategoryService _categoryService;
         private readonly ILogger<CategoryController> _logger;
+        private readonly ICategoryService _categoryService;
 
-        public CategoryController(IMapper mapper, ICategoryService categoryService, ILogger<CategoryController> logger)
+        public CategoryController(IMapper mapper, 
+            ILogger<CategoryController> logger, 
+            ICategoryService categoryService)
         {
             _mapper = mapper;
-            _categoryService = categoryService;
             _logger = logger;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> Index()

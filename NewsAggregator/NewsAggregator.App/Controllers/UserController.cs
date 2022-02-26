@@ -9,14 +9,16 @@ namespace NewsAggregator.App.Controllers
     public class UserController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
         private readonly ILogger<UserController> _logger;
+        private readonly IUserService _userService;
 
-        public UserController(IMapper mapper, IUserService userService, ILogger<UserController> logger)
+        public UserController(IMapper mapper, 
+            ILogger<UserController> logger, 
+            IUserService userService)
         {
             _mapper = mapper;
-            _userService = userService;
             _logger = logger;
+            _userService = userService;
         }
 
         public async Task<IActionResult> Index()

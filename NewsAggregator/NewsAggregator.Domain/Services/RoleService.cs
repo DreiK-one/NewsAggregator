@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
@@ -15,17 +16,31 @@ namespace NewsAggregator.Domain.Services
     public class RoleService : IRoleService
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<RoleService> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public RoleService(IMapper mapper, IUnitOfWork unitOfWork)
+        public RoleService(IMapper mapper, 
+            ILogger<RoleService> logger, 
+            IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
+            _logger = logger;
             _unitOfWork = unitOfWork;
+            
         }
+
         public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
         {
-            return await _unitOfWork.Roles.Get()
+            try
+            {
+                return await _unitOfWork.Roles.Get()
                 .Select(role => _mapper.Map<RoleDto>(role))
                 .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<int?> CreateAsync(RoleDto roleDto)
@@ -51,12 +66,13 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
+
         public async Task<int?> UpdateAsync(RoleDto roleDto)
         {
             try
@@ -71,9 +87,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -92,9 +108,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }

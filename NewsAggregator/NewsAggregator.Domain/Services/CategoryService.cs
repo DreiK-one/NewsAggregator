@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
@@ -15,19 +16,31 @@ namespace NewsAggregator.Domain.Services
     public class CategoryService : ICategoryService
     {
         private readonly IMapper _mapper;
+        private readonly ILogger<CategoryService> _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryService(IMapper mapper, IUnitOfWork unitOfWork)
+        public CategoryService(IMapper mapper, 
+            ILogger<CategoryService> logger, 
+            IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
+            _logger = logger;
             _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<CategoryDto>> GetAllCategoriesAsync()
         {
-            return await _unitOfWork.Categories.Get()
+            try
+            {
+                return await _unitOfWork.Categories.Get()
                 .Select(category => _mapper.Map<CategoryDto>(category))
                 .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<int?> CreateAsync(CategoryDto categoryDto)
@@ -53,9 +66,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -74,9 +87,9 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
@@ -95,20 +108,31 @@ namespace NewsAggregator.Domain.Services
                     return null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //add log
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
         }
 
         public async Task<Guid> GetCategoryByUrl(string url)
         {
-            var str = url.Substring(8);
-            var res = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.')).ToUpperInvariant();
-            return (await _unitOfWork.Categories.Get()
-                 .FirstOrDefaultAsync(category => category.Name.ToUpperInvariant().Equals(res)))?.Id 
-                 ?? (new Category() { Id = Guid.NewGuid(), Name = str}).Id;
+            try
+            {
+                var str = url.Substring(8);
+                var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
+                var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
+
+                return (await _unitOfWork.Categories.Get()
+                     .FirstOrDefaultAsync(category => category.Name.Equals(res)))?.Id
+                     ?? (await _unitOfWork.Categories.Get()
+                     .FirstOrDefaultAsync(category => category.Name.Equals("Other"))).Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }
