@@ -98,13 +98,13 @@ namespace NewsAggregator.Domain.Services
                     bodyNode.RemoveChildren(telegramLinks);
                 }
 
-                var imgNode = bodyNode.SelectNodes("//div[@class='news-text']/div[contains(@class, 'news-media news-media_condensed')]");
+                var imgNode = bodyNode.SelectNodes("//div[@class='news-text']/div[contains(@class, 'news-media')]");
                 if (imgNode != null)
                 {
                     bodyNode.RemoveChildren(imgNode);
                 }
 
-                var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[@class='news-header__title']");
+                var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-header__title')]");
                 if (titleInText != null)
                 {
                     bodyNode.RemoveChild(titleInText);
