@@ -50,10 +50,10 @@ namespace NewsAggregator.Domain.Services
                         var articleRia = await ParseRiaArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleRia));
                         return await _unitOfWork.Save();
-                    //case "C13088A4-9467-4FCE-9EF7-3903425F1F82":
-                    //    articleBody = await Parse4pdaArticle(url);
-                    //    break;
-
+                    case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
+                        var article4pda = await ParseShazooArticle(url);
+                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(article4pda));
+                        return await _unitOfWork.Save();
                     default:
                         break;
                 }
@@ -117,14 +117,10 @@ namespace NewsAggregator.Domain.Services
 
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
 
-                var sourceUrlNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:url']");
-
-
                 var articleText = bodyNode.InnerHtml.Trim();
                 var articleTitle = titleNode.InnerHtml.Trim();
                 var articleDate = dateNode.InnerHtml.Trim();
                 var articleDesc = descriptionNode.Attributes["content"].Value.Trim();
-                var articleSourceUrl = sourceUrlNode.Attributes["content"].Value.Trim();
 
                 var model = new NewArticleDto()
                 {
@@ -134,7 +130,7 @@ namespace NewsAggregator.Domain.Services
                     Body = articleText,
                     CreationDate = DateTime.Now,   //todo date from source article
                     //Coefficient = ??,             
-                    SourceUrl = articleSourceUrl,
+                    SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
                 };
@@ -187,13 +183,10 @@ namespace NewsAggregator.Domain.Services
 
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='article__second-title']");
 
-                var sourceUrlNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='analytics:url']");
-
                 var articleText = bodyNode.InnerHtml.Trim();
                 var articleTitle = titleNode.InnerHtml.Trim();
                 var articleDate = dateNode.InnerHtml.Trim();
                 var articleDesc = descriptionNode.InnerHtml.Trim();
-                var articleSourceUrl = sourceUrlNode.Attributes["content"].Value.Trim();
 
                 var model = new NewArticleDto()
                 {
@@ -203,7 +196,7 @@ namespace NewsAggregator.Domain.Services
                     Body = articleText,
                     CreationDate = DateTime.Now,   //todo date from source article
                     //Coefficient = ??,            
-                    SourceUrl = articleSourceUrl,
+                    SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
                 };
@@ -217,10 +210,54 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        //public async Task<string> Parse4pdaArticle(string url)
-        //{
-        //    //todo algorythm of web scrapping
-        //    return null;
-        //}
+        public async Task<NewArticleDto> ParseShazooArticle(string url)
+        {
+            try
+            {
+                var web = new HtmlWeb();
+                var htmlDoc = web.Load(url);
+
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]");
+
+                var spanNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/span[contains(@class, 'Entry__embed')]");
+                if (spanNode != null)
+                {
+                    bodyNode.RemoveChildren(spanNode);
+                }
+
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[contains(@class, 'sm:max-w-4xl')]");
+
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='flex flex-col text-xs']/time");
+
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]/p");
+
+
+                var articleText = bodyNode.InnerHtml.Trim();//
+                var articleTitle = titleNode.InnerHtml.Trim();
+                var articleDate = dateNode.InnerHtml.Trim();
+                var articleDesc = descriptionNode.FirstChild.InnerText.Trim();
+
+                var model = new NewArticleDto()
+                {
+                    Id = Guid.NewGuid(),
+                    Title = articleTitle,
+                    Description = articleDesc,
+                    Body = articleText,
+                    CreationDate = DateTime.Now,   //todo date from source article
+                    //Coefficient = ??,            
+                    SourceUrl = url,
+                    CategoryId = await _categoryService.GetCategoryByUrl(url),
+                    SourceId = await _sourceService.GetSourceByUrl(url),
+                };
+
+                return model;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }
