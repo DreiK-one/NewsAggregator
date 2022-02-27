@@ -19,7 +19,7 @@ namespace NewsAggregator.Data.Configuration
                     CreationDate = DateTime.Now,
                     Coefficient = 3.5f,
                     CategoryId = new Guid("ddaea0de-7c80-471f-86c2-b2007d4f8d9e"),
-                    SourceId = new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5") 
+                    SourceId = new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5"),
                 },
                 new Article
                 {
@@ -30,7 +30,7 @@ namespace NewsAggregator.Data.Configuration
                     CreationDate = DateTime.Now,
                     Coefficient = 4.0f,
                     CategoryId = new Guid("8453b0bd-9860-45fa-a2ae-a77953d842a4"),
-                    SourceId = new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5")
+                    SourceId = new Guid("f2fb2a60-c1de-4da5-b047-0871d2d677b5"),
                 },
                 new Article
                 {
@@ -41,8 +41,7 @@ namespace NewsAggregator.Data.Configuration
                     CreationDate = DateTime.Now,
                     Coefficient = 5.0f,
                     CategoryId = new Guid("ddaea0de-7c80-471f-86c2-b2007d4f8d9e"),
-                    SourceId = new Guid("c13088a4-9467-4fce-9ef7-3903425f1f81")
-
+                    SourceId = new Guid("c13088a4-9467-4fce-9ef7-3903425f1f81"),
                 });
         }
     }
