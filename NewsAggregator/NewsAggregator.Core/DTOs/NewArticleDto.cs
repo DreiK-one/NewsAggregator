@@ -13,6 +13,7 @@ namespace NewsAggregator.Core.DTOs
         public string Description { get; set; }
         public string Body { get; set; }
         public string SourceUrl { get; set; }
+        public string Image { get; set; }
         public DateTime CreationDate { get; set; }
         public float Coefficient { get; set; }
         public Guid CategoryId { get; set; }

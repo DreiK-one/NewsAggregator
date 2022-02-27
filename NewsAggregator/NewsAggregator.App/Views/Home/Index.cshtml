@@ -12,7 +12,7 @@
 						{
 							<li class="one-third entry animate-box" data-animate-effect="fadeIn">
 									<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id">
-										<div class="entry-img" style="background-image: url(../images/img_4.jpg)"></div>
+										<div class="entry-img" style="@article.Image"></div>
 										<div class="entry-desc">
 											<h3>@Html.Raw(article.Title)</h3>
 											<p>@Html.Raw(article.Description)</p>

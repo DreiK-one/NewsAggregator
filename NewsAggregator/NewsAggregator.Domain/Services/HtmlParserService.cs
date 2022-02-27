@@ -42,14 +42,14 @@ namespace NewsAggregator.Domain.Services
 
                 switch (sourceId.ToString("D").ToUpperInvariant())
                 {
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
-                        var articleOnliner = await ParseOnlinerArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
-                        return await _unitOfWork.Save();
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
-                        var articleRia = await ParseRiaArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleRia));
-                        return await _unitOfWork.Save();
+                    //case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
+                    //    var articleOnliner = await ParseOnlinerArticle(url);
+                    //    await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
+                    //    return await _unitOfWork.Save();
+                    //case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
+                    //    var articleRia = await ParseRiaArticle(url);
+                    //    await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleRia));
+                    //    return await _unitOfWork.Save();
                     case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
                         var article4pda = await ParseShazooArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(article4pda));
@@ -112,27 +112,28 @@ namespace NewsAggregator.Domain.Services
                 }
 
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__title']/h1");
-
                 var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__time']");
-
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__image']");
 
-                var articleText = bodyNode.InnerHtml.Trim();
-                var articleTitle = titleNode.InnerHtml.Trim();
-                var articleDate = dateNode.InnerHtml.Trim();
-                var articleDesc = descriptionNode.Attributes["content"].Value.Trim();
+                var text = bodyNode.InnerHtml.Trim();
+                var title = titleNode.InnerHtml.Trim();
+                var date = dateNode.InnerHtml.Trim();
+                var description = descriptionNode.Attributes["content"].Value.Trim();
+                var image = imageNode.Attributes["style"].Value.Trim();
 
                 var model = new NewArticleDto()
                 {
                     Id = Guid.NewGuid(),
-                    Title = articleTitle,
-                    Description = articleDesc,
-                    Body = articleText,
+                    Title = title,
+                    Description = description,
+                    Body = text,
                     CreationDate = DateTime.Now,   //todo date from source article
                     //Coefficient = ??,             
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
+                    Image = image
                 };
 
                 return model;
@@ -171,6 +172,12 @@ namespace NewsAggregator.Domain.Services
                     bodyNode.RemoveChild(fotoNode);
                 }
 
+                var imagesNodes = bodyNode.SelectNodes("//div[contains(@class, 'article__article-image')]");
+                if (imagesNodes != null)
+                {
+                    bodyNode.RemoveChildren(imagesNodes);
+                }
+
                 var editorNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@class, 'article__editor')]");
                 if (editorNode != null)
                 {
@@ -178,27 +185,30 @@ namespace NewsAggregator.Domain.Services
                 }
 
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__title']");
-
                 var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__info-date']/a");
-
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='article__second-title']");
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='photoview__open']");
 
-                var articleText = bodyNode.InnerHtml.Trim();
-                var articleTitle = titleNode.InnerHtml.Trim();
-                var articleDate = dateNode.InnerHtml.Trim();
-                var articleDesc = descriptionNode.InnerHtml.Trim();
+                var text = bodyNode.InnerHtml.Trim();
+                var title = titleNode.InnerHtml.Trim();
+                var date = dateNode.InnerHtml.Trim();
+                var description = descriptionNode.InnerHtml.Trim();
+
+                var imageSource = imageNode.Attributes["data-photoview-src"].Value.Trim();
+                var image = $"background-image: url('{imageSource}');";
 
                 var model = new NewArticleDto()
                 {
                     Id = Guid.NewGuid(),
-                    Title = articleTitle,
-                    Description = articleDesc,
-                    Body = articleText,
+                    Title = title,
+                    Description = description,
+                    Body = text,
                     CreationDate = DateTime.Now,   //todo date from source article
                     //Coefficient = ??,            
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
+                    Image = image
                 };
 
                 return model;
@@ -226,32 +236,43 @@ namespace NewsAggregator.Domain.Services
                 }
 
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[contains(@class, 'sm:max-w-4xl')]");
-
                 var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='flex flex-col text-xs']/time");
-
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]/p");
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//img[@class='w-full rounded-md']");
+                var imageNodeAlt = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'flex-shrink-0')]");
 
+                string image;
+                string imageSource;
+                if (imageNode != null)
+                {
+                    imageSource = imageNode.Attributes["src"].Value.Trim();
+                    image = $"background-image: url('{imageSource}');";
+                }
+                else
+                {
+                    image = imageNodeAlt.Attributes["style"].Value.Trim();
+                }
 
-                var articleText = bodyNode.InnerHtml.Trim();//
-                var articleTitle = titleNode.InnerHtml.Trim();
-                var articleDate = dateNode.InnerHtml.Trim();
-                var articleDesc = descriptionNode.FirstChild.InnerText.Trim();
-
+                var text = bodyNode.InnerHtml.Trim();
+                var title = titleNode.InnerHtml.Trim();
+                var date = dateNode.InnerHtml.Trim();
+                var description = descriptionNode.FirstChild.InnerText.Trim();
+                
                 var model = new NewArticleDto()
                 {
                     Id = Guid.NewGuid(),
-                    Title = articleTitle,
-                    Description = articleDesc,
-                    Body = articleText,
+                    Title = title,
+                    Description = description,
+                    Body = text,
                     CreationDate = DateTime.Now,   //todo date from source article
                     //Coefficient = ??,            
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
+                    Image = image
                 };
 
                 return model;
-
             }
             catch (Exception ex)
             {
