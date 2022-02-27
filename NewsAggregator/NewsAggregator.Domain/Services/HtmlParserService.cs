@@ -112,13 +112,13 @@ namespace NewsAggregator.Domain.Services
                 }
 
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__title']/h1");
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__time']");
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article:published_time']");
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
                 var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__image']");
 
                 var text = bodyNode.InnerHtml.Trim();
                 var title = titleNode.InnerHtml.Trim();
-                var date = dateNode.InnerHtml.Trim();
+                var date = dateNode.Attributes["content"].Value.Trim();
                 var description = descriptionNode.Attributes["content"].Value.Trim();
                 var image = imageNode.Attributes["style"].Value.Trim();
 
@@ -255,7 +255,7 @@ namespace NewsAggregator.Domain.Services
 
                 var text = bodyNode.InnerHtml.Trim();
                 var title = titleNode.InnerHtml.Trim();
-                var date = dateNode.InnerHtml.Trim();
+                var date = dateNode.Attributes["datetime"].Value.Trim();
                 var description = descriptionNode.FirstChild.InnerText.Trim();
                 
                 var model = new NewArticleDto()
