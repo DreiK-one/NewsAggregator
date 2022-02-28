@@ -46,14 +46,17 @@ namespace NewsAggregator.Domain.Services
                         var articleOnliner = await ParseOnlinerArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
                         return await _unitOfWork.Save();
+
                     case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
                         var articleGoha = await ParseGohaArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleGoha));
                         return await _unitOfWork.Save();
+
                     case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
                         var article4pda = await ParseShazooArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(article4pda));
                         return await _unitOfWork.Save();
+
                     default:
                         break;
                 }
@@ -80,7 +83,7 @@ namespace NewsAggregator.Domain.Services
                 var description = descriptionNode.Attributes["content"].Value.Trim();
 
                 var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article:published_time']");
-                string date = null;
+                string date;
                 if (dateNode == null)
                 {
                     dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__time']");
@@ -119,6 +122,16 @@ namespace NewsAggregator.Domain.Services
                 if (imgNode != null)
                 {
                     bodyNode.RemoveChildren(imgNode);
+                }
+                var hrefNode = bodyNode.SelectSingleNode("//div[@class='news-text']/p/a");
+                if (hrefNode != null)
+                {
+                    hrefNode.SetAttributeValue("href", "");
+                }
+                var imgInBodyNode = bodyNode.SelectSingleNode("//div[@class='news-media__preview']/img");
+                if (imgInBodyNode != null)
+                {
+                    imgInBodyNode.SetAttributeValue("src", "");
                 }
                 var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-header__title')]");
                 if (titleInText != null)

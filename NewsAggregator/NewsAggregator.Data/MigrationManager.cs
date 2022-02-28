@@ -5,9 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace NewsAggregator.Data
 {
-
     //For auto-migration (update-database) ON START
-
     public static class MigrationManager
     {
         public static IHost MigrateDatabase(this IHost host)
