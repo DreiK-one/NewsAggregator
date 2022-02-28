@@ -6,13 +6,13 @@ namespace NewsAggregator.App.Controllers
     public class AdminController : Controller
     {
         private readonly ILogger<AdminController> _logger;
-        private readonly IArticlesConcurrentService _articlesConcurrentService;
+        private readonly IRssService _rssService;
 
-        public AdminController(ILogger<AdminController> logger, 
-            IArticlesConcurrentService articlesConcurrentService)
+        public AdminController(ILogger<AdminController> logger,
+            IRssService rssService)
         {
             _logger = logger;
-            _articlesConcurrentService = articlesConcurrentService;
+            _rssService = rssService;
         }
 
         public IActionResult Index()
@@ -32,7 +32,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                await _articlesConcurrentService.GetNewsFromSources();
+                await _rssService.GetNewsFromSources();
 
                 return RedirectToAction("Index", "Home");
             }

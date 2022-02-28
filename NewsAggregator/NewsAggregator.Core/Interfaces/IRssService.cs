@@ -9,6 +9,7 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface IRssService
     {
-        public IEnumerable<RssArticleDto> GetArticlesInfoFromRss(string rssUrl);
+        IEnumerable<RssArticleDto> GetArticlesInfoFromRss(string rssUrl);
+        Task<bool> GetNewsFromSources();
     }
 }

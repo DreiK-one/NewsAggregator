@@ -51,7 +51,6 @@ try
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<IRssService, RssService>();
     builder.Services.AddScoped<IHtmlParserService, HtmlParserService>();
-    builder.Services.AddScoped<IArticlesConcurrentService, ArticlesConcurrentService>();
 
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
