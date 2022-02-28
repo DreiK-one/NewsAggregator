@@ -42,14 +42,14 @@ namespace NewsAggregator.Domain.Services
 
                 switch (sourceId.ToString("D").ToUpperInvariant())
                 {
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
-                        var articleOnliner = await ParseOnlinerArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
-                        return await _unitOfWork.Save();
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
-                        var articleGoha = await ParseGohaArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleGoha));
-                        return await _unitOfWork.Save();
+                    //case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
+                    //    var articleOnliner = await ParseOnlinerArticle(url);
+                    //    await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
+                    //    return await _unitOfWork.Save();
+                    //case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
+                    //    var articleGoha = await ParseGohaArticle(url);
+                    //    await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleGoha));
+                    //    return await _unitOfWork.Save();
                     case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
                         var article4pda = await ParseShazooArticle(url);
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(article4pda));
@@ -215,6 +215,12 @@ namespace NewsAggregator.Domain.Services
                 if (spanNode != null)
                 {
                     bodyNode.RemoveChildren(spanNode);
+                }
+
+                var figureNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/figure");
+                if (figureNode != null)
+                {
+                    bodyNode.RemoveChildren(figureNode);
                 }
 
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[contains(@class, 'sm:max-w-4xl')]");

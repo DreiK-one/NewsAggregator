@@ -36,6 +36,7 @@ namespace NewsAggregator.Domain.Services
             {
                 return await _unitOfWork.Articles.Get()
                     .Select(article => _mapper.Map<ArticleDto>(article))
+                    .OrderByDescending(article => article.CreationDate)
                     .ToListAsync();
             }
             catch (Exception ex)
