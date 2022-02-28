@@ -143,5 +143,22 @@ namespace NewsAggregator.App.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> ShowCategoryWithNews(string name)
+        {
+            try
+            {
+                var category = await _categoryService.GetCategoryByNameWithArticlesAsync(name);
+                var model = _mapper.Map<CategoryWithArticlesViewModel>(category);
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            } 
+        }
     }
 }

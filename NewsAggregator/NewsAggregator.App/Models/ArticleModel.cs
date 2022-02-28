@@ -1,11 +1,10 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class ArticleViewModel : BaseModel
+    public class ArticleModel : BaseModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public string Body { get; set; }
-        public float Rating { get; set; }
+        public string Image { get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

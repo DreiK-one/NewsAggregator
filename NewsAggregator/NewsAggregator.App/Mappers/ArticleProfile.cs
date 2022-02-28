@@ -24,6 +24,10 @@ namespace NewsAggregator.App.Mappers
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Summary.Text));
 
             CreateMap<NewArticleDto, Article>();
+
+            CreateMap<ArticleDto, ArticleModel>();
+
+            CreateMap<ArticleModel, CategoryWithArticlesViewModel>();
         }
     }
 }

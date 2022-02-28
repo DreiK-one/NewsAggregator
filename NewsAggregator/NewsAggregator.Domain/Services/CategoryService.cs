@@ -142,5 +142,22 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get()
+                .Where(category => category.Name.Equals(name))
+                .Include(article => article.Articles)
+                .FirstOrDefaultAsync();
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw; ;
+            }
+        }
     }
 }
