@@ -73,54 +73,59 @@ namespace NewsAggregator.Domain.Services
                 var web = new HtmlWeb();
                 var htmlDoc = web.Load(url);
 
-                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__title']/h1");
+                var title = titleNode.InnerHtml.Trim();
 
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
+                var description = descriptionNode.Attributes["content"].Value.Trim();
+
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article:published_time']");
+                string date = null;
+                if (dateNode == null)
+                {
+                    dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__time']");
+                    date = dateNode.InnerHtml.Trim();
+                }
+                else
+                {
+                    date = dateNode.Attributes["content"].Value.Trim();
+                }
+
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__image']");
+                var image = imageNode.Attributes["style"].Value.Trim();
+
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
                 var scriptNode = bodyNode.SelectSingleNode("//div[@class='news-text']/script");
                 if (scriptNode != null)
                 {
                     bodyNode.RemoveChild(scriptNode);
                 }
-
                 var refNode = bodyNode.SelectSingleNode("//div[@class='news-text']/div[@class='news-reference']");
                 if (refNode != null)
                 {
                     bodyNode.RemoveChild(refNode);
                 }
-
                 var widget = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-widget')]");
                 if (widget != null)
                 {
                     bodyNode.RemoveChild(widget);
                 }
-
                 var telegramLinks = bodyNode.SelectNodes("//div[@class='news-text']/p[@style='text-align: right;']");
                 if (telegramLinks != null)
                 {
                     bodyNode.RemoveChildren(telegramLinks);
                 }
-
                 var imgNode = bodyNode.SelectNodes("//div[@class='news-text']/div[contains(@class, 'news-media')]");
                 if (imgNode != null)
                 {
                     bodyNode.RemoveChildren(imgNode);
                 }
-
                 var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-header__title')]");
                 if (titleInText != null)
                 {
                     bodyNode.RemoveChild(titleInText);
                 }
-
-                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__title']/h1");
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article:published_time']");
-                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='og:description']");
-                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-header__image']");
-
                 var text = bodyNode.InnerHtml.Trim();
-                var title = titleNode.InnerHtml.Trim();
-                var date = dateNode.Attributes["content"].Value.Trim();
-                var description = descriptionNode.Attributes["content"].Value.Trim();
-                var image = imageNode.Attributes["style"].Value.Trim();
 
                 var model = new NewArticleDto()
                 {
@@ -152,33 +157,36 @@ namespace NewsAggregator.Domain.Services
                 var web = new HtmlWeb();
                 var htmlDoc = web.Load(url);
 
-                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]");
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h1");
+                var title = titleNode.InnerHtml.Trim();
 
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h2");
+                if(descriptionNode == null)
+                {
+                    descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]/p");
+                }
+                var description = descriptionNode.InnerHtml.Trim();
+
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='data']/div[@class='date']");
+                var date = dateNode.InnerHtml.Trim();
+
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
+                var imageSource = imageNode.Attributes["src"].Value.Trim();
+                var image = $"background-image: url('{imageSource}');";
+
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]");
                 var quoteNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[contains(@class, 'quote')]");
                 if (quoteNode != null)
                 {
                     bodyNode.RemoveChildren(quoteNode);
                 }
-
                 var videoNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[@class='youtube-container']");
                 if (videoNode != null)
                 {
                     bodyNode.RemoveChildren(videoNode);
                 }
-
-                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h1");
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='data']/div[@class='date']");
-                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h2");
-                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
-
                 var text = bodyNode.InnerHtml.Trim();
-                var title = titleNode.InnerHtml.Trim();
-                var date = dateNode.InnerHtml.Trim();
-                var description = descriptionNode.InnerHtml.Trim();
-
-                var imageSource = imageNode.Attributes["src"].Value.Trim();
-                var image = $"background-image: url('{imageSource}');";
-
+                
                 var model = new NewArticleDto()
                 {
                     Id = Guid.NewGuid(),
@@ -209,26 +217,25 @@ namespace NewsAggregator.Domain.Services
                 var web = new HtmlWeb();
                 var htmlDoc = web.Load(url);
 
-                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]");
-
-                var spanNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/span[contains(@class, 'Entry__embed')]");
-                if (spanNode != null)
-                {
-                    bodyNode.RemoveChildren(spanNode);
-                }
-
-                var figureNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/figure");
-                if (figureNode != null)
-                {
-                    bodyNode.RemoveChildren(figureNode);
-                }
-
                 var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[contains(@class, 'sm:max-w-4xl')]");
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='flex flex-col text-xs']/time");
+                if (titleNode == null)
+                {
+                    titleNode = htmlDoc.DocumentNode.SelectSingleNode("//article[contains(@class, 'Entry__feature')]/section/h1");
+                }
+                var title = titleNode.InnerHtml.Trim();
+
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]/p");
+                var description = descriptionNode.FirstChild.InnerText.Trim();
+
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='flex flex-col text-xs']/time");
+                if (dateNode == null)
+                {
+                    dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'flex text-center')]/time");
+                }
+                var date = dateNode.Attributes["datetime"].Value.Trim();
+
                 var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//img[@class='w-full rounded-md']");
                 var imageNodeAlt = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'flex-shrink-0')]");
-
                 string image;
                 string imageSource;
                 if (imageNode != null)
@@ -241,10 +248,18 @@ namespace NewsAggregator.Domain.Services
                     image = imageNodeAlt.Attributes["style"].Value.Trim();
                 }
 
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]");
+                var spanNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/span[contains(@class, 'Entry__embed')]");
+                if (spanNode != null)
+                {
+                    bodyNode.RemoveChildren(spanNode);
+                }
+                var figureNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/figure");
+                if (figureNode != null)
+                {
+                    bodyNode.RemoveChildren(figureNode);
+                }
                 var text = bodyNode.InnerHtml.Trim();
-                var title = titleNode.InnerHtml.Trim();
-                var date = dateNode.Attributes["datetime"].Value.Trim();
-                var description = descriptionNode.FirstChild.InnerText.Trim();
                 
                 var model = new NewArticleDto()
                 {

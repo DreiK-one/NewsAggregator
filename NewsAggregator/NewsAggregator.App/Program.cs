@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
@@ -26,17 +28,6 @@ try
         .ReadFrom.Services(services)
         .Enrich.FromLogContext());
 
-    //builder.Host.UseSerilog((ctx, lc) =>
-    //{
-    //    lc.MinimumLevel.Fatal().WriteTo.File(
-    //        @$"D:\Games\C#\Web\NewsAggregator\testLogs\Fatal\fatal.log",
-    //        fileSizeLimitBytes: 1_000_000,
-    //        rollOnFileSizeLimit: true,
-    //        shared: true,
-    //        flushToDiskInterval: TimeSpan.FromDays(1));
-    //});
-
-
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
 
@@ -60,9 +51,24 @@ try
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddScoped<IRssService, RssService>();
     builder.Services.AddScoped<IHtmlParserService, HtmlParserService>();
-    
+    builder.Services.AddScoped<IArticlesConcurrentService, ArticlesConcurrentService>();
 
     builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+    builder.Services.AddHangfire(configuration => configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"),
+            new SqlServerStorageOptions
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.Zero,
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            }));
+    builder.Services.AddHangfireServer();
 
     builder.Services.AddControllersWithViews();
 
@@ -83,6 +89,7 @@ try
     }
 
     app.UseHttpsRedirection();
+
     app.UseStaticFiles();
 
     app.UseRouting();
@@ -92,6 +99,8 @@ try
     app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.UseHangfireDashboard();
 
     app.MigrateDatabase().Run();
 }

@@ -18,12 +18,14 @@ namespace NewsAggregator.App.Controllers
         private readonly ISourceService _sourceService;
         private readonly IRssService _rssService;
         private readonly IHtmlParserService _htmlParserService;
+        private readonly IArticlesConcurrentService _articlesConcurrentService;
 
         public HomeController(IMapper mapper,
             ILogger<HomeController> logger,
             IArticleService articleService,
-            ISourceService sourceService, IRssService rssService, 
-            IHtmlParserService htmlParserService)
+            ISourceService sourceService, IRssService rssService,
+            IHtmlParserService htmlParserService,
+            IArticlesConcurrentService articlesConcurrentService)
         {
             _mapper = mapper;
             _logger = logger;
@@ -31,6 +33,7 @@ namespace NewsAggregator.App.Controllers
             _sourceService = sourceService;
             _rssService = rssService;
             _htmlParserService = htmlParserService;
+            _articlesConcurrentService = articlesConcurrentService;
         }
 
         public async Task<IActionResult> Index()
@@ -54,23 +57,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var rssUrls = await _sourceService.GetRssUrlsAsync();
-                var concurrentDictionary = new ConcurrentDictionary<string, RssArticleDto?>();
-                var result = Parallel.ForEach(rssUrls, dto =>
-                {
-                    _rssService.GetArticlesInfoFromRss(dto.RssUrl).AsParallel().ForAll(articleDto 
-                        => concurrentDictionary.TryAdd(articleDto.Url, articleDto));
-                });
-
-                var extArticlesUrls = await _articleService.GetAllExistingArticleUrls();
-
-                Parallel.ForEach(extArticlesUrls.Where(url => concurrentDictionary.ContainsKey(url)), 
-                    s => concurrentDictionary.Remove(s, out var dto));
-
-                foreach (var rssArticleDto in concurrentDictionary)
-                {
-                    var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
-                }
+                await _articlesConcurrentService.GetNewsFromSources();
 
                 return RedirectToAction("Index", "Home");
             }
