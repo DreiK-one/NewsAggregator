@@ -11,7 +11,7 @@ namespace NewsAggregator.Core.Interfaces
     {
         Task<int?> GetArticleContentFromUrlAsync(string url);
         Task<NewArticleDto> ParseOnlinerArticle(string url);
-        Task<NewArticleDto> ParseRiaArticle(string url);
+        Task<NewArticleDto> ParseGohaArticle(string url);
         Task<NewArticleDto> ParseShazooArticle(string url);
     }
 }

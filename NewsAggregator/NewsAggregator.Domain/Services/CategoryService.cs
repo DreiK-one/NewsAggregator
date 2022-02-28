@@ -133,7 +133,7 @@ namespace NewsAggregator.Domain.Services
                 else
                 {
                     return (await _unitOfWork.Categories.Get()
-                    .FirstOrDefaultAsync(category => category.Name.Equals("Other")))?.Id ?? Guid.Empty;
+                    .FirstOrDefaultAsync(category => category.Name.Equals("Games")))?.Id ?? Guid.Empty;
                 }
             }
             catch (Exception ex)

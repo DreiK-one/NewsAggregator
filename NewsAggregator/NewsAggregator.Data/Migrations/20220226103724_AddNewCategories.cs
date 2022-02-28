@@ -14,7 +14,7 @@ namespace NewsAggregator.Data.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { new Guid("338b97c5-6a3c-40d7-a4e4-1aa542685883"), "Other" },
+                    { new Guid("338b97c5-6a3c-40d7-a4e4-1aa542685883"), "Games" },
                     { new Guid("41dd49d2-d3ee-4329-951e-430551fafca0"), "Realt" },
                     { new Guid("5de4aa36-8072-49ae-bf5e-80c3b381aeeb"), "Auto" },
                     { new Guid("80dc4c7b-2d21-4d0d-906c-81716327b4fa"), "Money" },

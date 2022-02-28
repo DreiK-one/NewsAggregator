@@ -47,8 +47,8 @@ namespace NewsAggregator.Domain.Services
                         await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
                         return await _unitOfWork.Save();
                     case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
-                        var articleRia = await ParseRiaArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleRia));
+                        var articleGoha = await ParseGohaArticle(url);
+                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleGoha));
                         return await _unitOfWork.Save();
                     case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
                         var article4pda = await ParseShazooArticle(url);
@@ -145,56 +145,38 @@ namespace NewsAggregator.Domain.Services
             } 
         }
 
-        public async Task<NewArticleDto> ParseRiaArticle(string url)
+        public async Task<NewArticleDto> ParseGohaArticle(string url)
         {
             try
             {
                 var web = new HtmlWeb();
                 var htmlDoc = web.Load(url);
 
-                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'article__body')]");
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]");
 
-                var scriptNode = bodyNode.SelectNodes("//div[contains(@class, 'article__body')]/script");
-                if (scriptNode != null)
+                var quoteNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[contains(@class, 'quote')]");
+                if (quoteNode != null)
                 {
-                    bodyNode.RemoveChildren(scriptNode);
+                    bodyNode.RemoveChildren(quoteNode);
                 }
 
-                var bannerNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@data-type, 'banner')]");
-                if (bannerNode != null)
+                var videoNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[@class='youtube-container']");
+                if (videoNode != null)
                 {
-                    bodyNode.RemoveChild(bannerNode);
+                    bodyNode.RemoveChildren(videoNode);
                 }
 
-                var fotoNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@data-article, 'main-foto')]");
-                if (fotoNode != null)
-                {
-                    bodyNode.RemoveChild(fotoNode);
-                }
-
-                var imagesNodes = bodyNode.SelectNodes("//div[contains(@class, 'article__article-image')]");
-                if (imagesNodes != null)
-                {
-                    bodyNode.RemoveChildren(imagesNodes);
-                }
-
-                var editorNode = bodyNode.SelectSingleNode("//div[contains(@class, 'article__body')]/div[contains(@class, 'article__editor')]");
-                if (editorNode != null)
-                {
-                    bodyNode.RemoveChild(editorNode);
-                }
-
-                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__title']");
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='article__info-date']/a");
-                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//h1[@class='article__second-title']");
-                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='photoview__open']");
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h1");
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='data']/div[@class='date']");
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h2");
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
 
                 var text = bodyNode.InnerHtml.Trim();
                 var title = titleNode.InnerHtml.Trim();
                 var date = dateNode.InnerHtml.Trim();
                 var description = descriptionNode.InnerHtml.Trim();
 
-                var imageSource = imageNode.Attributes["data-photoview-src"].Value.Trim();
+                var imageSource = imageNode.Attributes["src"].Value.Trim();
                 var image = $"background-image: url('{imageSource}');";
 
                 var model = new NewArticleDto()
