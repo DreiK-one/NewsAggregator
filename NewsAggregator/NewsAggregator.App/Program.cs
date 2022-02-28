@@ -101,6 +101,14 @@ try
 
     app.UseHangfireDashboard();
 
+    using (var scope = app.Services.CreateScope()) //need refactoring
+    {
+        var rssService = scope.ServiceProvider.GetRequiredService<IRssService>();
+        RecurringJob.AddOrUpdate("Aggregate news", 
+            () => rssService.GetNewsFromSources(),
+            "*/10 * * * *");
+    }
+
     app.MigrateDatabase().Run();
 }
 
