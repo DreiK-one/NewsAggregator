@@ -7,7 +7,10 @@
 	<div class="container">
 			<div class="row row-pb-md">
 				<div class="col-md-12">
-					<ul id="gtco-post-list">
+					<a asp-controller="Admin" asp-action="Index" class="btn btn-info">Back to Admin panel</a>
+					<a asp-controller="Article" asp-action="Create" class="btn btn-success">Create article</a>
+					<br /><br />
+					<ul id="gtco-post-list">	
 						@foreach(var article in Model)
 						{
 							<li class="one-third entry animate-box" data-animate-effect="fadeIn">
