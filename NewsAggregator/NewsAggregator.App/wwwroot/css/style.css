@@ -591,6 +591,20 @@ figure figcaption {
 #gtco-post-list li .post-meta .date-posted {
   margin-left: 10px;
 }
+#gtco-post-list li .post-meta-left {
+    position: absolute;
+    bottom: 30px;
+    display: block;
+    padding: 0 30px;
+    margin-left: 10px;
+}
+#gtco-post-list li .post-meta-right {
+    position: absolute;
+    bottom: 30px;
+    display: block;
+    padding: 0 30px;
+    margin-left: 240px;
+}
 #gtco-post-list li.two-third {
   width: 64.6%;
 }

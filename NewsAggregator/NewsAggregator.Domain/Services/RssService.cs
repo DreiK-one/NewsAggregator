@@ -73,7 +73,7 @@ namespace NewsAggregator.Domain.Services
                 {
                     var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
                 }
-                return true;
+                return false;
             }
             catch (Exception ex)
             {

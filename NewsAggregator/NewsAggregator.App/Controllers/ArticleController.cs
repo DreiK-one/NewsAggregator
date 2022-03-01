@@ -41,5 +41,43 @@ namespace NewsAggregator.App.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public IActionResult Delete(Guid id)
+        {
+            try
+            {
+                var model = new DeleteArticleViewModel() { Id = id };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteArticle(DeleteArticleViewModel model)
+        {
+            try
+            {
+                var delete = await _articleService.DeleteAsync(model.Id);
+
+                if (delete == null)
+                {
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteCategory method");
+                    return BadRequest();
+                }
+
+                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
     }
 }
