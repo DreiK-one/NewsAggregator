@@ -42,7 +42,7 @@ namespace NewsAggregator.App.Controllers
             {
                 await _rssService.GetNewsFromSources();
 
-                return RedirectToAction("GetArticlesOnAdminPanel", "Article");
+                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
             }
             catch (Exception ex)
             {
