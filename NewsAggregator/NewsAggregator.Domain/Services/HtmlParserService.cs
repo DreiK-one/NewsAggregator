@@ -123,22 +123,37 @@ namespace NewsAggregator.Domain.Services
                 {
                     bodyNode.RemoveChildren(telegramLinks);
                 }
+                var videoNode = bodyNode.SelectNodes("//div[@class='news-text']/p[iframe]");
+                if (videoNode != null)
+                {
+                    bodyNode.RemoveChildren(videoNode);
+                }
                 var imgNode = bodyNode.SelectNodes("//div[@class='news-text']/div[contains(@class, 'news-media')]");
                 if (imgNode != null)
                 {
                     bodyNode.RemoveChildren(imgNode);
                 }
-                var hrefNode = bodyNode.SelectSingleNode("//div[@class='news-text']/p/a");
+                var image2Node = bodyNode.SelectNodes("//div[@class='news-text']/a[img]");
+                if (image2Node != null)
+                {
+                    bodyNode.RemoveChildren(image2Node);
+                }
+                var hrefNode = bodyNode.SelectNodes("//div[@class='news-text']/p[a]");
                 if (hrefNode != null)
                 {
-                    hrefNode.SetAttributeValue("href", "");
+                    bodyNode.RemoveChildren(hrefNode);
+                }
+                var href2Node = bodyNode.SelectSingleNode("//div[@class='news-text']/a");
+                if (href2Node != null)
+                {
+                    href2Node.SetAttributeValue("href", "");
                 }
                 var imgInBodyNode = bodyNode.SelectSingleNode("//div[@class='news-media__preview']/img");
                 if (imgInBodyNode != null)
                 {
                     imgInBodyNode.SetAttributeValue("src", "");
                 }
-                var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-header__title')]");
+                var titleInText = bodyNode.SelectSingleNode("//div[@class='news-text']/div[contains(@class, 'news-header')]");
                 if (titleInText != null)
                 {
                     bodyNode.RemoveChild(titleInText);
@@ -186,6 +201,10 @@ namespace NewsAggregator.Domain.Services
                 var description = descriptionNode.InnerHtml.Trim();
 
                 var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='data']/div[@class='date']");
+                if (dateNode == null)
+                {
+                    dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='date']");
+                }
                 var date = dateNode.InnerHtml.Trim();
 
                 var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
