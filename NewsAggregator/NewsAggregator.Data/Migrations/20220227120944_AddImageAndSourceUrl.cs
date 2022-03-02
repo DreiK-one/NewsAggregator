@@ -13,7 +13,7 @@ namespace NewsAggregator.Data.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("1320bf13-6c2a-4394-aad7-d110ed1c95fc"),
                 column: "Image",
-                value: "background-image: url(https://icdn.lenta.ru/images/2022/01/23/20/20220123205528951/owl_detail_240_8f5c7372e6d9266ee5f02b47356eae9f.jpeg);"
+                value: "background-image: url(https://fighttime.ru/media/k2/items/cache/8f24ade3a588e8d943f33b6f45e3cc72_XL.jpg);"
                 );
             migrationBuilder.UpdateData(
                 table: "Articles",
