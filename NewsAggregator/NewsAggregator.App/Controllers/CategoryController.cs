@@ -27,7 +27,7 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var model = (await _categoryService.GetAllCategoriesAsync())
-                .Select(category => _mapper.Map<CategoryViewModel>(category))
+                .Select(category => _mapper.Map<CategoryModel>(category))
                 .ToList();
                 return View(model);
             }
@@ -43,7 +43,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var model = new CategoryViewModel();
+                var model = new CategoryModel();
                 return View(model);
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCategory(CategoryViewModel model)
+        public async Task<IActionResult> CreateCategory(CategoryModel model)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var model = new CategoryViewModel() { Id = id };
+                var model = new CategoryModel() { Id = id };
                 return View(model);
             }
             catch (Exception ex)
@@ -127,7 +127,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditCategory(CategoryViewModel model)
+        public async Task<IActionResult> EditCategory(CategoryModel model)
         {
             try
             {

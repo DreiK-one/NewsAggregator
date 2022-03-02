@@ -66,6 +66,48 @@ namespace NewsAggregator.Domain.Services
             }           
         }
 
+        public async Task<int?> CreateAsync(CreateArticleDto articleDto)
+        {
+            try
+            {
+                if (articleDto != null)
+                {
+                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleDto));
+                        return await _unitOfWork.Save();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<int?> UpdateAsync(ArticleDto articleDto)
+        {
+            try
+            {
+                if (articleDto != null)
+                {
+                    await _unitOfWork.Articles.Update(_mapper.Map<Article>(articleDto));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<int?> DeleteAsync(Guid modelId)
         {
             try

@@ -1,5 +1,4 @@
-﻿using NewsAggregator.Data.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Core.DTOs
 {
-    public class ArticleDto
+    public class CreateArticleDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -17,8 +16,7 @@ namespace NewsAggregator.Core.DTOs
         public string Image { get; set; }
         public DateTime CreationDate { get; set; }
         public float? Coefficient { get; set; }
-
-        public SourceDto SourceName { get; set; }
-        public List<CommentDto> Comments { get; set; }
+        public Guid CategoryId { get; set; }
+        public Guid SourceId { get; set; }
     }
 }

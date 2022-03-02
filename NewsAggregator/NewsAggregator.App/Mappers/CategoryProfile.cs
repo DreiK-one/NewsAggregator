@@ -12,13 +12,15 @@ namespace NewsAggregator.App.Mappers
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
 
-            CreateMap<CategoryDto, CategoryViewModel>().ReverseMap();
+            CreateMap<CategoryDto, CategoryModel>().ReverseMap();
+
+            CreateMap<CategoryModel, CreateArticleViewModel>();
 
             CreateMap<Category, DeleteCategoryViewModel>();
             
             CreateMap<Category, CategoryWithArticlesDto>();
 
-            CreateMap<CategoryWithArticlesDto, CategoryWithArticlesViewModel>();
+            CreateMap<CategoryWithArticlesDto, CategoryWithArticlesViewModel>();   
         }
     }
 }

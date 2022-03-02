@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NewsAggregator.App.Models;
+using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 
 namespace NewsAggregator.App.Controllers
@@ -10,14 +12,20 @@ namespace NewsAggregator.App.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<ArticleController> _logger;
         private readonly IArticleService _articleService;
+        private readonly ISourceService _sourceService;
+        private readonly ICategoryService _categoryService;
 
-        public ArticleController(IMapper mapper, 
-            ILogger<ArticleController> logger, 
-            IArticleService articleService)
+        public ArticleController(IMapper mapper,
+            ILogger<ArticleController> logger,
+            IArticleService articleService, 
+            ISourceService sourceService,
+            ICategoryService categoryService)
         {
             _mapper = mapper;
             _logger = logger;
             _articleService = articleService;
+            _sourceService = sourceService;
+            _categoryService = categoryService;
         }
 
         public async Task<IActionResult> ReadArticle(Guid id)
@@ -38,6 +46,56 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            try
+            {
+                var sources = (await _sourceService.GetAllSourcesAsync())
+                    .Select(source => _mapper.Map<SourceModel>(source))
+                    .ToList();
+
+                //ViewBag.Sources = sources; // for tag-helpers in view, second option - MAY BE BAD PRACTICE???
+
+                var categories = (await _categoryService.GetAllCategoriesAsync())
+                .Select(category => _mapper.Map<CategoryModel>(category))
+                .ToList();
+
+                //ViewBag.Categories = categories; // for tag-helpers in view, second option - MAY BE BAD PRACTICE???
+
+                var model = new CreateArticleViewModel()
+                {
+                    Sources = sources.Select(source => new SelectListItem(source.Name, source.Id.ToString())),
+                    Categories = categories.Select(category => new SelectListItem(category.Name, category.Id.ToString()))
+                };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateArticle(CreateArticleViewModel model)
+        {
+            try
+            {
+                if (model != null)
+                {
+                    await _articleService.CreateAsync(_mapper.Map<CreateArticleDto>(model));
+                }
+                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
         }
@@ -53,7 +111,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -67,7 +125,7 @@ namespace NewsAggregator.App.Controllers
 
                 if (delete == null)
                 {
-                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteCategory method");
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteArticle method");
                     return BadRequest();
                 }
 
@@ -76,7 +134,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
     }

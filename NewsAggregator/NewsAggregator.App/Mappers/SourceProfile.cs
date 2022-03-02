@@ -9,9 +9,11 @@ namespace NewsAggregator.App.Mappers
     {
         public SourceProfile()
         {
-            CreateMap<Source, SourceDto>();
+            CreateMap<Source, SourceDto>().ReverseMap();
 
-            CreateMap<SourceDto, SourceModel>();
+            CreateMap<SourceDto, SourceModel>().ReverseMap();
+
+            CreateMap<SourceModel, CreateArticleViewModel>();
 
             CreateMap<SourceModel, DeleteSourceViewModel>();
 

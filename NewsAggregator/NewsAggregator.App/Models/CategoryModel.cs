@@ -1,6 +1,6 @@
 ﻿namespace NewsAggregator.App.Models
 {
-    public class CategoryViewModel : BaseModel
+    public class CategoryModel : BaseModel
     {
         public string Name { get; set;}
     }

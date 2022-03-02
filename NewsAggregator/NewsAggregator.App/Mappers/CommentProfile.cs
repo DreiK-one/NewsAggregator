@@ -15,6 +15,8 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<CommentModel, ReadArticleViewModel>();
 
+            CreateMap<CommentModel, ArticleEditViewModel>();
+
             CreateMap<CommentModel, UserViewModel>();
         }
     }

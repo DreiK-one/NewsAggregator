@@ -12,7 +12,12 @@ namespace NewsAggregator.App.Mappers
         {
             CreateMap<Article, ArticleDto>()
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
-                .ForMember(dest => dest.SourceName, opt => opt.MapFrom(src => src.Source));
+                .ForMember(dest => dest.SourceName, opt => opt.MapFrom(src => src.Source))
+                .ReverseMap();
+
+            CreateMap<ArticleDto, CreateArticleViewModel>();
+
+            CreateMap<ArticleDto, DeleteArticleViewModel>();
 
             CreateMap<ArticleDto, ReadArticleViewModel>();
 
@@ -28,6 +33,12 @@ namespace NewsAggregator.App.Mappers
             CreateMap<ArticleDto, ArticleModel>();
 
             CreateMap<ArticleModel, CategoryWithArticlesViewModel>();
+
+            CreateMap<CreateArticleViewModel, CreateArticleDto>()
+                .ForPath(dest => dest.SourceId, opt => opt.MapFrom(src => src.Source.Id))
+                .ForPath(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id));
+
+            CreateMap<CreateArticleDto, Article>();
         }
     }
 }

@@ -222,6 +222,11 @@ namespace NewsAggregator.Domain.Services
                 {
                     bodyNode.RemoveChildren(videoNode);
                 }
+                var figureNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/figure[contains(@class,'image-container')]");
+                if (figureNode != null)
+                {
+                    bodyNode.RemoveChildren(figureNode);
+                }
                 var text = bodyNode.InnerHtml.Trim();
                 
                 var model = new NewArticleDto()
@@ -295,6 +300,11 @@ namespace NewsAggregator.Domain.Services
                 if (figureNode != null)
                 {
                     bodyNode.RemoveChildren(figureNode);
+                }
+                var imgNode = bodyNode.SelectNodes("//section[contains(@class, 'Entry__content')]/div[contains(@class, 'Gallery')]");
+                if (imgNode != null)
+                {
+                    bodyNode.RemoveChildren(imgNode);
                 }
                 var text = bodyNode.InnerHtml.Trim();
                 
