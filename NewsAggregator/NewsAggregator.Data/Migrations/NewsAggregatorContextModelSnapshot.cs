@@ -35,7 +35,7 @@ namespace NewsAggregator.Data.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Coefficient")
+                    b.Property<float?>("Coefficient")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("CreationDate")
