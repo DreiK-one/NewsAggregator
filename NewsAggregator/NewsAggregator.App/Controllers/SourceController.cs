@@ -33,7 +33,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -48,7 +48,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -82,7 +82,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -105,7 +105,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
 
@@ -120,7 +120,7 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             } 
         }
 
