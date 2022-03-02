@@ -98,6 +98,11 @@ namespace NewsAggregator.Domain.Services
                 var image = imageNode.Attributes["style"].Value.Trim();
 
                 var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
+                var rightBannerNode = bodyNode.SelectNodes("//div[@class='news-text']/div[contains(@class, 'news-incut')]");
+                if (rightBannerNode != null)
+                {
+                    bodyNode.RemoveChildren(rightBannerNode);
+                }
                 var scriptNode = bodyNode.SelectSingleNode("//div[@class='news-text']/script");
                 if (scriptNode != null)
                 {
