@@ -63,10 +63,6 @@ namespace NewsAggregator.App.Controllers
                 .Select(category => _mapper.Map<CategoryModel>(category))
                 .ToList();
 
-                //ViewBag.Sources = sources; // for tag-helpers in view, second option - MAY BE BAD PRACTICE???
-
-                //ViewBag.Categories = categories; // for tag-helpers in view, second option - MAY BE BAD PRACTICE???
-
                 var model = new CreateOrEditArticleViewModel()
                 {
                     Sources = sources.Select(source => new SelectListItem(source.Name, source.Id.ToString())),
@@ -100,10 +96,12 @@ namespace NewsAggregator.App.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> Edit(CreateOrEditArticleDto articleDto)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
+                var article = await _articleService.GetArticleAsync(id);
+
                 var sources = (await _sourceService.GetAllSourcesAsync())
                     .Select(source => _mapper.Map<SourceModel>(source))
                     .ToList();
@@ -112,7 +110,7 @@ namespace NewsAggregator.App.Controllers
                 .Select(category => _mapper.Map<CategoryModel>(category))
                 .ToList();
 
-                var model = _mapper.Map<CreateOrEditArticleViewModel>(articleDto);
+                var model = _mapper.Map<CreateOrEditArticleViewModel>(article);
                 model.Categories = categories.Select(category => new SelectListItem(category.Name, category.Id.ToString()));
                 model.Sources = sources.Select(source => new SelectListItem(source.Name, source.Id.ToString()));
 

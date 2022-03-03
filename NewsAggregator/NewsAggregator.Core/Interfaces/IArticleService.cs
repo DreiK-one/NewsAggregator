@@ -10,6 +10,7 @@ namespace NewsAggregator.Core.Interfaces
     public interface IArticleService
     {
         Task<IEnumerable<ArticleDto>> GetAllNewsAsync();
+        Task<CreateOrEditArticleDto> GetArticleAsync(Guid Id);
         Task<int?> CreateAsync(CreateOrEditArticleDto articleDto);
         Task<int?> UpdateAsync(CreateOrEditArticleDto articleDto);
         Task<int?> DeleteAsync(Guid modelId);

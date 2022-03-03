@@ -46,6 +46,20 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<CreateOrEditArticleDto> GetArticleAsync(Guid Id)
+        {
+            try
+            {
+                var article = await _unitOfWork.Articles.GetById(Id);
+                return _mapper.Map<CreateOrEditArticleDto>(article);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
         {
             try
