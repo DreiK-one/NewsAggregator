@@ -66,7 +66,7 @@ namespace NewsAggregator.Domain.Services
             }           
         }
 
-        public async Task<int?> CreateAsync(CreateArticleDto articleDto)
+        public async Task<int?> CreateAsync(CreateOrEditArticleDto articleDto)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<int?> UpdateAsync(ArticleDto articleDto)
+        public async Task<int?> UpdateAsync(CreateOrEditArticleDto articleDto)
         {
             try
             {

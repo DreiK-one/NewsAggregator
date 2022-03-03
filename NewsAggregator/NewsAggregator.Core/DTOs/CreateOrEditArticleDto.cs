@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Core.DTOs
 {
-    public class CreateArticleDto
+    public class CreateOrEditArticleDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }

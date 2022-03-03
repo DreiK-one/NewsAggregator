@@ -2095,10 +2095,12 @@ output {
   opacity: 1;
 }
 .form-control:-ms-input-placeholder {
-  color: #999;
+    color: #999;
+    opacity: 1;
 }
 .form-control::-webkit-input-placeholder {
-  color: #999;
+    color: #999;
+    opacity: 1;
 }
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
   background-color: #eeeeee;

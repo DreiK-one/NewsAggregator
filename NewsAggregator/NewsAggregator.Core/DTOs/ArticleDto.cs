@@ -17,7 +17,8 @@ namespace NewsAggregator.Core.DTOs
         public string Image { get; set; }
         public DateTime CreationDate { get; set; }
         public float? Coefficient { get; set; }
-
+        public Guid CategoryId { get; set; }
+        public Guid SourceId { get; set; }
         public SourceDto SourceName { get; set; }
         public List<CommentDto> Comments { get; set; }
     }

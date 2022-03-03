@@ -2,7 +2,7 @@
 
 namespace NewsAggregator.App.Models
 {
-    public class CreateArticleViewModel : BaseModel
+    public class CreateOrEditArticleViewModel : BaseModel
     {
         public string Title { get; set; }
         public string Description { get; set; }

@@ -15,7 +15,7 @@ namespace NewsAggregator.App.Mappers
                 .ForMember(dest => dest.SourceName, opt => opt.MapFrom(src => src.Source))
                 .ReverseMap();
 
-            CreateMap<ArticleDto, CreateArticleViewModel>();
+            CreateMap<ArticleDto, CreateOrEditArticleViewModel>();
 
             CreateMap<ArticleDto, DeleteArticleViewModel>();
 
@@ -34,11 +34,18 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<ArticleModel, CategoryWithArticlesViewModel>();
 
-            CreateMap<CreateArticleViewModel, CreateArticleDto>()
+            CreateMap<CreateOrEditArticleViewModel, CreateOrEditArticleDto>()
                 .ForPath(dest => dest.SourceId, opt => opt.MapFrom(src => src.Source.Id))
-                .ForPath(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id));
+                .ForPath(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
+                .ReverseMap();
 
-            CreateMap<CreateArticleDto, Article>();
+            CreateMap<CreateOrEditArticleDto, Article>();
+
+
+
+            CreateMap<AllNewsOnHomeScreenViewModel, CreateOrEditArticleViewModel>()
+                .ForPath(dest => dest.Source.Id, opt => opt.MapFrom(src => src.SourceId))
+                .ForPath(dest => dest.Category.Id, opt => opt.MapFrom(src => src.CategoryId)); ;
         }
     }
 }

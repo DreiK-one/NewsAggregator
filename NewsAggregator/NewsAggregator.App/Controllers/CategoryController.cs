@@ -111,11 +111,11 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid id)
+        public IActionResult Edit(CategoryDto categoryDto)
         {
             try
             {
-                var model = new CategoryModel() { Id = id };
+                var model = _mapper.Map<CategoryModel>(categoryDto);
                 return View(model);
             }
             catch (Exception ex)

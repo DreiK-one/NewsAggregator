@@ -21,7 +21,12 @@
 											<p>@Html.Raw(article.Description)</p>
 										</div>
 									</a>
-								<a asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id" class="post-meta-left btn btn-info">Edit</a>
+								<a asp-controller="Article" asp-action="Edit" 
+								asp-route-id="@article.Id" asp-route-title="@article.Title" 
+								asp-route-description="@article.Description" asp-route-body="@article.Body"
+								asp-route-sourceurl="@article.SourceUrl" asp-route-image="@article.Image"
+								asp-route-creationdate="@article.CreationDate" asp-route-categoryid="@article.CategoryId"
+								asp-route-sourceid="@article.SourceId" class="post-meta-left btn btn-info">Edit</a>
 								<a asp-controller="Article" asp-action="Delete" asp-route-id="@article.Id" class="post-meta-right btn btn-danger">Delete</a>
 							</li>
 						}

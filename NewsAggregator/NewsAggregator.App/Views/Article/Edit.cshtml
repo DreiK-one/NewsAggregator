@@ -1,7 +1,7 @@
 ﻿@model CreateOrEditArticleViewModel
 
 @{
-	ViewData["Title"] = "Create article";
+	ViewData["Title"] = "Edit article";
 }
 
 <div id="gtco-main">
@@ -11,34 +11,37 @@
 				<ul id="gtco-post-list">
 					<li class="entry animate-box" data-animate-effect="fadeIn">
 						<div class="entry-desc">
-							<h1>Creation of a new article</h1>
-							<form asp-controller="Article" asp-action="CreateArticle" method="post">
-								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
-								<input asp-for="CreationDate" type="hidden" value="@DateTime.Now" />
+							<h1>Editing of article</h1>
+							<form asp-controller="Article" asp-action="EditArticle" method="post">
+								<input asp-for="Id" type="hidden" value="@Model.Id" />
+								<input asp-for="CreationDate" type="hidden" value="@Model.CreationDate" />
 	
 								<label asp-for="Title">Title</label>
-								<input asp-for="Title" type="text" />
+								<textarea asp-for="Title" type="text">@Model.Title</textarea>
 								<p></p>
 								<label asp-for="Description">Description</label>
-								<input asp-for="Description" type="text" />
+								<textarea asp-for="Description" type="text">@Model.Description</textarea>
 								<p></p>
+
 								<label asp-for="Body">Body</label>
-								<input asp-for="Body" type="text" />
+								<textarea asp-for="Body" type="text">@Model.Body</textarea>
 								<p></p>
+
 								<label asp-for="Image">Path for Image</label>
-								<input asp-for="Image" type="text" />
+								<textarea asp-for="Image" type="text">@Model.Image</textarea>
 								<p></p>
+
 								<label asp-for="SourceUrl">Url of article</label>
-								<input asp-for="SourceUrl" type="text" />
+								<textarea asp-for="SourceUrl" type="text">@Model.SourceUrl</textarea>
 								<p></p>
 
 								@*First option without viewbag in controller, with Html-helpers*@
 
-								<label asp-for="Category.Id">Name of category</label>
+								<label asp-for="Category.Id">Previous name of category: @Model.Category.Name</label>
 								@Html.DropDownListFor(model => model.Category.Id, Model?.Categories, "Select category")
 								<p></p>
 
-								<label asp-for="Source.Id">Name of article source</label>
+								<label asp-for="Source.Id">Previous name of article source: @Model.Source.Name</label>
 								@Html.DropDownListFor(model => model.Source.Id, Model?.Sources, "Select article source")
 
 								@*Second option with view bag in controller, with tag-helpers - MAY BE BAD PRACTICE???*@
@@ -56,7 +59,7 @@
 
 								<br /><br />
 								<a asp-controller="Admin" asp-action="GetArticlesOnAdminPanel" class="btn btn-info">Cancel</a>
-								<button type="submit" class="btn btn-success">Create</button>
+								<button type="submit" class="btn btn-success">Save changes</button>
 							</form>
 						</div>
 					</li>
