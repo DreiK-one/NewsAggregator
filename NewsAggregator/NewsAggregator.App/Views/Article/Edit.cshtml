@@ -35,27 +35,12 @@
 								<textarea asp-for="SourceUrl" type="text">@Model.SourceUrl</textarea>
 								<p></p>
 
-								@*First option without viewbag in controller, with Html-helpers*@
-
 								<label asp-for="Category.Id">Previous name of category: @Model.Category.Name</label>
 								@Html.DropDownListFor(model => model.Category.Id, Model?.Categories, "Select category")
 								<p></p>
 
 								<label asp-for="Source.Id">Previous name of article source: @Model.Source.Name</label>
 								@Html.DropDownListFor(model => model.Source.Id, Model?.Sources, "Select article source")
-
-								@*Second option with view bag in controller, with tag-helpers - MAY BE BAD PRACTICE???*@
-
-								@*<label asp-for="Source.Name">Name of article source</label>
-								<select asp-for="Source.Id" 
-									asp-items="@(new SelectList(ViewBag.Sources, "Id", "Name"))">
-								</select>
-								<p></p>
-
-								<label asp-for="Category.Name">Name of category</label>
-								<select asp-for="Category.Id" 
-									asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
-								</select>*@
 
 								<br /><br />
 								<a asp-controller="Admin" asp-action="GetArticlesOnAdminPanel" class="btn btn-info">Cancel</a>
