@@ -35,12 +35,13 @@
 								<textarea asp-for="SourceUrl" type="text">@Model.SourceUrl</textarea>
 								<p></p>
 
-								<label asp-for="Category.Id">Previous name of category: @Model.Category.Name</label>
-								@Html.DropDownListFor(model => model.Category.Id, Model?.Categories, "Select category")
+								<label asp-for="Category.Id">Name of category:</label>
+								<select asp-for="@Model.Category.Id" asp-items="@Model.Categories"></select>
 								<p></p>
 
-								<label asp-for="Source.Id">Previous name of article source: @Model.Source.Name</label>
-								@Html.DropDownListFor(model => model.Source.Id, Model?.Sources, "Select article source")
+								<label asp-for="Source.Id">Name of article source:</label>
+								<select asp-for="@Model.Source.Id" asp-items="@Model.Sources"></select>
+								<p></p>
 
 								<br /><br />
 								<a asp-controller="Admin" asp-action="GetArticlesOnAdminPanel" class="btn btn-info">Cancel</a>
