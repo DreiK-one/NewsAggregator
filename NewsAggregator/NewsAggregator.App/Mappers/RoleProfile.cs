@@ -13,7 +13,7 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<RoleDto, RoleModel>().ReverseMap();
 
-            CreateMap<RoleModel, DeleteRoleViewModel>().ReverseMap();
+            CreateMap<RoleDto, DeleteRoleViewModel>().ReverseMap();
         }
     }
 }

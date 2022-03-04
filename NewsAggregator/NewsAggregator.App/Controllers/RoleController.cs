@@ -78,7 +78,7 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var role = await _roleService.GetRoleAsync(id);
-                var model = _mapper.Map<RoleModel>(role);
+                var model = _mapper.Map<DeleteRoleViewModel>(role);
                 return View(model);
             }
             catch (Exception ex)
