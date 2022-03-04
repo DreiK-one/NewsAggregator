@@ -114,5 +114,19 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
+        public async Task<RoleDto> GetRoleAsync(Guid Id)
+        {
+            try
+            {
+                var role = await _unitOfWork.Roles.GetById(Id);
+                return _mapper.Map<RoleDto>(role);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

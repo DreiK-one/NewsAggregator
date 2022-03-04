@@ -13,7 +13,7 @@
 						<div class="card-body">
 							<h1>Deletion of role</h1>
 							<form asp-controller="Role" asp-action="DeleteRole" method="post">
-								<h2 class="card-title">Do you really want to delete this role?
+								<h2 class="card-title">Do you really want to delete role @Model.Name?
 								<input type="hidden" asp-for="Id" />
 								<a asp-controller="Role" asp-action="Index" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-danger">Delete</button>

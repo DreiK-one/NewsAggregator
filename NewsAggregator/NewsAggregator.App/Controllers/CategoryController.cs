@@ -73,11 +73,11 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var category = _categoryService.GetCategoryAsync(id);
+                var category = await _categoryService.GetCategoryAsync(id);
                 var model = _mapper.Map<DeleteCategoryViewModel>(category);
                 return View(model);
             }

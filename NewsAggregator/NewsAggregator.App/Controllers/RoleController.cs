@@ -27,7 +27,7 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var model = (await _roleService.GetAllRolesAsync())
-                .Select(role => _mapper.Map<RoleViewModel>(role))
+                .Select(role => _mapper.Map<RoleModel>(role))
                 .ToList();
                 return View(model);
             }
@@ -43,7 +43,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var model = new RoleViewModel();
+                var model = new RoleModel();
                 return View(model);
             }
             catch (Exception ex)
@@ -55,7 +55,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRole(RoleViewModel model)
+        public async Task<IActionResult> CreateRole(RoleModel model)
         {
             try
             {
@@ -73,11 +73,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var model = new DeleteRoleViewModel() { Id = id };
+                var role = await _roleService.GetRoleAsync(id);
+                var model = _mapper.Map<RoleModel>(role);
                 return View(model);
             }
             catch (Exception ex)
@@ -111,11 +112,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                var model = new RoleViewModel() { Id = id };
+                var role = await _roleService.GetRoleAsync(id);
+                var model = _mapper.Map<RoleModel>(role);
                 return View(model);
             }
             catch (Exception ex)
@@ -127,7 +129,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditRole(RoleViewModel model)
+        public async Task<IActionResult> EditRole(RoleModel model)
         {
             try
             {

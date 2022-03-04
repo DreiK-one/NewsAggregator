@@ -1,4 +1,4 @@
-﻿@model RoleViewModel
+﻿@model RoleModel
 
 @{
 	ViewData["Title"] = "Edit role";
@@ -15,7 +15,7 @@
 							<form asp-controller="Role" asp-action="EditRole" method="post">
 								<input asp-for="Id" type="hidden" value="@Model.Id" />
 								<label asp-for="Name">Name of role</label>
-								<input asp-for="Name" type="text" value="@Model.Name"/> @*To do a value (null)*@
+								<input asp-for="Name" type="text" value="@Model.Name"/>
 								<br /><br />
 								<a asp-controller="Role" asp-action="Index" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-success">Submit</button>

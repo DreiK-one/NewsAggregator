@@ -2,5 +2,6 @@
 {
     public class DeleteRoleViewModel : BaseModel
     {
+        public string Name { get; set; }
     }
 }
