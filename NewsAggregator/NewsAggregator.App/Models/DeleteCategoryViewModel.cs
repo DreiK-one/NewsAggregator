@@ -2,6 +2,6 @@
 {
     public class DeleteCategoryViewModel : BaseModel
     {
-
+        public string Name { get; set; }
     }
 }

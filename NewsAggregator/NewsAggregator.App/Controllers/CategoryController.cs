@@ -77,7 +77,8 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var model = new DeleteCategoryViewModel() { Id = id };
+                var category = _categoryService.GetCategoryAsync(id);
+                var model = _mapper.Map<DeleteCategoryViewModel>(category);
                 return View(model);
             }
             catch (Exception ex)
@@ -111,11 +112,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(CategoryDto categoryDto)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                var model = _mapper.Map<CategoryModel>(categoryDto);
+                var category = await _categoryService.GetCategoryAsync(id);
+                var model = _mapper.Map<CategoryModel>(category);
                 return View(model);
             }
             catch (Exception ex)

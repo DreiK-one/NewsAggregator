@@ -13,7 +13,7 @@
 						<div class="card-body">
 							<h1>Deletion of category</h1>
 							<form asp-controller="Category" asp-action="DeleteCategory" method="post">
-								<h2 class="card-title">Do you really want to delete this category?
+								<h2 class="card-title">Do you really want to delete category @Model.Name?
 								<input type="hidden" asp-for="Id" />
 								<a asp-controller="Category" asp-action="Index" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-danger">Delete</button>
