@@ -72,11 +72,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var model = new DeleteSourceViewModel() { Id = id };
+                var source = await _sourceService.GetSourceAsync(id);
+                var model = _mapper.Map<DeleteSourceViewModel>(source);
                 return View(model);
             }
             catch (Exception ex)
@@ -110,11 +111,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                var model = new SourceModel() { Id = id };
+                var source = await _sourceService.GetSourceAsync(id);
+                var model = _mapper.Map<SourceModel>(source);
                 return View(model);
             }
             catch (Exception ex)

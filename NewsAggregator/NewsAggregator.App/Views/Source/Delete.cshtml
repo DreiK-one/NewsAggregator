@@ -13,7 +13,7 @@
 						<div class="card-body">
 							<h1>Deletion of source</h1>
 							<form asp-controller="Source" asp-action="DeleteSource" method="post">
-								<h2 class="card-title">Do you really want to delete this source?
+								<h2 class="card-title">Do you really want to delete source @Model.Name?
 								<input type="hidden" asp-for="Id" />
 								<a asp-controller="Source" asp-action="Index" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-danger">Delete</button>

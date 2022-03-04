@@ -13,9 +13,9 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<SourceDto, SourceModel>().ReverseMap();
 
-            CreateMap<SourceModel, CreateOrEditArticleViewModel>();
+            CreateMap<SourceModel, DeleteSourceViewModel>().ReverseMap();
 
-            CreateMap<SourceModel, DeleteSourceViewModel>();
+            CreateMap<SourceModel, CreateOrEditArticleViewModel>();
 
             CreateMap<SourceModel, ReadArticleViewModel>();
 

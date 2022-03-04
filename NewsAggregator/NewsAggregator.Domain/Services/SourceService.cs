@@ -150,5 +150,19 @@ namespace NewsAggregator.Domain.Services
                 throw;
             } 
         }
+
+        public async Task<SourceDto> GetSourceAsync(Guid Id)
+        {
+            try
+            {
+                var source = await _unitOfWork.Sources.GetById(Id);
+                return _mapper.Map<SourceDto>(source);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }
