@@ -58,11 +58,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _sourceService.CreateAsync(_mapper.Map<SourceDto>(model));
+                    if (model != null)
+                    {
+                        await _sourceService.CreateAsync(_mapper.Map<SourceDto>(model));
+                    }
+                    return RedirectToAction("Index", "Source");
                 }
-                return RedirectToAction("Index", "Source");
+
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -93,15 +98,18 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var delete = await _sourceService.DeleteAsync(model.Id);
-
-                if (delete == null)
+                if (ModelState.IsValid)
                 {
-                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteSource method");
-                    return BadRequest();
+                    var delete = await _sourceService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteSource method");
+                        return BadRequest();
+                    }
+                    return RedirectToAction("Index", "Source");
                 }
 
-                return RedirectToAction("Index", "Source");
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -132,11 +140,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _sourceService.UpdateAsync(_mapper.Map<SourceDto>(model));
+                    if (model != null)
+                    {
+                        await _sourceService.UpdateAsync(_mapper.Map<SourceDto>(model));
+                    }
+                    return RedirectToAction("Index", "Source");
                 }
-                return RedirectToAction("Index", "Source");
+
+                return View(model);
             }
             catch (Exception ex)
             {

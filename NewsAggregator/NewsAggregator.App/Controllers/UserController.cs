@@ -62,11 +62,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             try
             {
-                var model = new UserViewModel() { Id = id };
+                var user = await _userService.GetUserByIdAsync(id);
+                var model = _mapper.Map<UserViewModel>(user);
                 return View(model);
             }
             catch (Exception ex)
@@ -82,11 +83,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _userService.UpdateAsync(_mapper.Map<UserDto>(model));
+                    if (model != null)
+                    {
+                        await _userService.UpdateAsync(_mapper.Map<UserDto>(model));
+                    }
+                    return RedirectToAction("Index", "User");
                 }
-                return RedirectToAction("Index", "User");
+                  
+                return View(model);
             }
             catch (Exception ex)
             {

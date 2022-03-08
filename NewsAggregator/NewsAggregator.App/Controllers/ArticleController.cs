@@ -83,11 +83,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _articleService.CreateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
+                    if (model != null)
+                    {
+                        await _articleService.CreateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
+                    }
+                    return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
-                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+                
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -129,11 +134,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _articleService.UpdateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
+                    if (model != null)
+                    {
+                        await _articleService.UpdateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
+                    }
+                    return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
-                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+
+                return View(model);    
             }
             catch (Exception ex)
             {
@@ -143,11 +153,12 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var model = new DeleteArticleViewModel() { Id = id };
+                var article = await _articleService.GetArticleAsync(id);
+                var model = _mapper.Map<DeleteArticleViewModel>(article);
                 return View(model);
             }
             catch (Exception ex)
@@ -163,15 +174,18 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var delete = await _articleService.DeleteAsync(model.Id);
-
-                if (delete == null)
+                if (ModelState.IsValid)
                 {
-                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteArticle method");
-                    return BadRequest();
+                    var delete = await _articleService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteArticle method");
+                        return BadRequest();
+                    }
+                    return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
 
-                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+                return View(model);    
             }
             catch (Exception ex)
             {

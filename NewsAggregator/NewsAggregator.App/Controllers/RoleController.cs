@@ -59,11 +59,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _roleService.CreateAsync(_mapper.Map<RoleDto>(model));
+                    if (model != null)
+                    {
+                        await _roleService.CreateAsync(_mapper.Map<RoleDto>(model));
+                    }
+                    return RedirectToAction("Index", "Role");
                 }
-                return RedirectToAction("Index", "Role");
+                  
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -94,15 +99,18 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var delete = await _roleService.DeleteAsync(model.Id);
-
-                if (delete == null)
+                if (ModelState.IsValid)
                 {
-                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteRole method");
-                    return BadRequest();
+                    var delete = await _roleService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteRole method");
+                        return BadRequest();
+                    }
+                    return RedirectToAction("Index", "Role");
                 }
-
-                return RedirectToAction("Index", "Role");
+                 
+                return View(model); 
             }
             catch (Exception ex)
             {
@@ -133,11 +141,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _roleService.UpdateAsync(_mapper.Map<RoleDto>(model));
+                    if (model != null)
+                    {
+                        await _roleService.UpdateAsync(_mapper.Map<RoleDto>(model));
+                    }
+                    return RedirectToAction("Index", "Role");
                 }
-                return RedirectToAction("Index", "Role");
+
+                return View(model);      
             }
             catch (Exception ex)
             {

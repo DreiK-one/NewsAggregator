@@ -13,13 +13,21 @@
 						<div class="entry-desc">
 							<h1>Creation of source</h1>
 							<form asp-controller="Source" asp-action="CreateSource" method="post">
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div>
 								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
+
 								<label asp-for="Name">Name</label>
 								<input asp-for="Name" type="text" />
+								<p></p>
+
 								<label asp-for="BaseUrl">BaseUrl</label>
 								<input asp-for="BaseUrl" type="text" />
+								<p></p>
+
 								<label asp-for="RssUrl">RssUrl</label>
 								<input asp-for="RssUrl" type="text" />
+								<p></p>
+
 								<br /><br />
 								<a asp-controller="Source" asp-action="Index" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-success">Create</button>
@@ -31,3 +39,8 @@
 		</div>
 	</div>
 </div> 
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

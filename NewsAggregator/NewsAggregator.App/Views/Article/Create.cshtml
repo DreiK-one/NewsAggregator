@@ -13,46 +13,39 @@
 						<div class="entry-desc">
 							<h1>Creation of a new article</h1>
 							<form asp-controller="Article" asp-action="CreateArticle" method="post">
+
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+
 								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
 								<input asp-for="CreationDate" type="hidden" value="@DateTime.Now" />
 	
 								<label asp-for="Title">Title</label>
 								<input asp-for="Title" type="text" />
 								<p></p>
+
 								<label asp-for="Description">Description</label>
 								<input asp-for="Description" type="text" />
 								<p></p>
+
 								<label asp-for="Body">Body</label>
 								<input asp-for="Body" type="text" />
 								<p></p>
+
 								<label asp-for="Image">Path for Image</label>
 								<input asp-for="Image" type="text" />
 								<p></p>
+
 								<label asp-for="SourceUrl">Url of article</label>
 								<input asp-for="SourceUrl" type="text" />
 								<p></p>
 
-								@*First option without viewbag in controller, with Html-helpers*@
-
-								<label asp-for="Category.Id">Name of category</label>
-								@Html.DropDownListFor(model => model.Category.Id, Model?.Categories, "Select category")
+								<label asp-for="Category.Id">Name of category:</label>
+								<select asp-for="@Model.Category.Id" asp-items="@Model.Categories"></select>
 								<p></p>
 
-								<label asp-for="Source.Id">Name of article source</label>
-								@Html.DropDownListFor(model => model.Source.Id, Model?.Sources, "Select article source")
-
-								@*Second option with view bag in controller, with tag-helpers - MAY BE BAD PRACTICE???*@
-
-								@*<label asp-for="Source.Name">Name of article source</label>
-								<select asp-for="Source.Id" 
-									asp-items="@(new SelectList(ViewBag.Sources, "Id", "Name"))">
-								</select>
+								<label asp-for="Source.Id">Name of article source:</label>
+								<select asp-for="@Model.Source.Id" asp-items="@Model.Sources"></select>
 								<p></p>
-
-								<label asp-for="Category.Name">Name of category</label>
-								<select asp-for="Category.Id" 
-									asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name"))">
-								</select>*@
 
 								<br /><br />
 								<a asp-controller="Admin" asp-action="GetArticlesOnAdminPanel" class="btn btn-info">Cancel</a>
@@ -65,3 +58,8 @@
 		</div>
 	</div>
 </div>
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}

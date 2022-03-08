@@ -494,11 +494,8 @@ article .content-article blockquote {
   padding-left: 0;
 }
 article .content-article blockquote p {
-  font-family: "Crimson Text", Arial, sans-serif;
-  font-size: 27px;
+  font-size: 14px;
   font-style: italic;
-  line-height: 1.5;
-  color: #000;
 }
 article .content-article blockquote p cite {
   padding-top: 20px;

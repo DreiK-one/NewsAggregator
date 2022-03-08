@@ -1,4 +1,6 @@
-﻿namespace NewsAggregator.App.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NewsAggregator.App.Models
 {
     public class BaseModel
     {

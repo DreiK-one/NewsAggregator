@@ -59,11 +59,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _categoryService.CreateAsync(_mapper.Map<CategoryDto>(model));
+                    if (model != null)
+                    {
+                        await _categoryService.CreateAsync(_mapper.Map<CategoryDto>(model));
+                    }
+                    return RedirectToAction("Index", "Category");
                 }
-                return RedirectToAction("Index", "Category");
+                  
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -94,15 +99,18 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                var delete = await _categoryService.DeleteAsync(model.Id);
-
-                if (delete == null)
+                if (ModelState.IsValid)
                 {
-                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteCategory method");
-                    return BadRequest();
+                    var delete = await _categoryService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteCategory method");
+                        return BadRequest();
+                    }
+                    return RedirectToAction("Index", "Category");
                 }
-
-                return RedirectToAction("Index", "Category");
+                   
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -133,11 +141,16 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _categoryService.UpdateAsync(_mapper.Map<CategoryDto>(model));
+                    if (model != null)
+                    {
+                        await _categoryService.UpdateAsync(_mapper.Map<CategoryDto>(model));
+                    }
+                    return RedirectToAction("Index", "Category");
                 }
-                return RedirectToAction("Index", "Category");
+
+                return View(model);      
             }
             catch (Exception ex)
             {
@@ -146,7 +159,6 @@ namespace NewsAggregator.App.Controllers
             }
         }
 
-        [HttpGet]
         public async Task<IActionResult> ShowCategoryWithNews(string name)
         {
             try
