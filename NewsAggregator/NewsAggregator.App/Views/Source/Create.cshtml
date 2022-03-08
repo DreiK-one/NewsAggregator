@@ -14,18 +14,21 @@
 							<h1>Creation of source</h1>
 							<form asp-controller="Source" asp-action="CreateSource" method="post">
 								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div>
-								<input asp-for="Id" type="hidden" value="@Guid.NewGuid()" />
+								<input type="hidden" asp-for="Id" value="@Guid.NewGuid()" />
 
 								<label asp-for="Name">Name</label>
 								<input asp-for="Name" type="text" />
+								<span asp-validation-for="Name"></span>
 								<p></p>
 
 								<label asp-for="BaseUrl">BaseUrl</label>
 								<input asp-for="BaseUrl" type="text" />
+								<span asp-validation-for="BaseUrl"></span>
 								<p></p>
 
 								<label asp-for="RssUrl">RssUrl</label>
 								<input asp-for="RssUrl" type="text" />
+								<span asp-validation-for="RssUrl"></span>
 								<p></p>
 
 								<br /><br />

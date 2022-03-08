@@ -21,22 +21,27 @@
 	
 								<label asp-for="Title">Title</label>
 								<input asp-for="Title" type="text" />
+								<span asp-validation-for="Title"></span>
 								<p></p>
 
 								<label asp-for="Description">Description</label>
 								<input asp-for="Description" type="text" />
+								<span asp-validation-for="Description"></span>
 								<p></p>
 
 								<label asp-for="Body">Body</label>
 								<input asp-for="Body" type="text" />
+								<span asp-validation-for="Body"></span>
 								<p></p>
 
 								<label asp-for="Image">Path for Image</label>
 								<input asp-for="Image" type="text" />
+								<span asp-validation-for="Image"></span>
 								<p></p>
 
 								<label asp-for="SourceUrl">Url of article</label>
 								<input asp-for="SourceUrl" type="text" />
+								<span asp-validation-for="SourceUrl"></span>
 								<p></p>
 
 								<label asp-for="Category.Id">Name of category:</label>

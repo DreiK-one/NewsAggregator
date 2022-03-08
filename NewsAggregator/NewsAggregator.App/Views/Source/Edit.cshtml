@@ -18,14 +18,17 @@
 
 								<label asp-for="Name">Name of source</label>
 								<input asp-for="Name" type="text" value="@Model.Name"/>
+								<span asp-validation-for="Name"></span>
 								<p></p>
 
 								<label asp-for="BaseUrl">BaseUrl</label>
 								<input asp-for="BaseUrl" type="text" value="@Model.BaseUrl"/>
+								<span asp-validation-for="BaseUrl"></span>
 								<p></p>
 
 								<label asp-for="RssUrl">RssUrl</label>
 								<input asp-for="RssUrl" type="text" value="@Model.RssUrl"/>
+								<span asp-validation-for="RssUrl"></span>
 								<p></p>
 
 								<br /><br />

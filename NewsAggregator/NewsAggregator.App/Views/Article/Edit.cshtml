@@ -19,22 +19,27 @@
 	
 								<label asp-for="Title">Title</label>
 								<textarea asp-for="Title" type="text">@Model.Title</textarea>
+								<span asp-validation-for="Title"></span>
 								<p></p>
 
 								<label asp-for="Description">Description</label>
 								<textarea asp-for="Description" type="text">@Model.Description</textarea>
+								<span asp-validation-for="Description"></span>
 								<p></p>
 
 								<label asp-for="Body">Body</label>
 								<textarea asp-for="Body" type="text">@Model.Body</textarea>
+								<span asp-validation-for="Body"></span>
 								<p></p>
 
 								<label asp-for="Image">Path for Image</label>
 								<textarea asp-for="Image" type="text">@Model.Image</textarea>
+								<span asp-validation-for="Image"></span>
 								<p></p>
 
 								<label asp-for="SourceUrl">Url of article</label>
 								<textarea asp-for="SourceUrl" type="text">@Model.SourceUrl</textarea>
+								<span asp-validation-for="SourceUrl"></span>
 								<p></p>
 
 								<label asp-for="Category.Id">Name of category:</label>
