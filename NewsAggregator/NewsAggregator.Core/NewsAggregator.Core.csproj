@@ -10,4 +10,8 @@
     <ProjectReference Include="..\NewsAggregator.Data\NewsAggregator.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validation\" />
+  </ItemGroup>
+
 </Project>
