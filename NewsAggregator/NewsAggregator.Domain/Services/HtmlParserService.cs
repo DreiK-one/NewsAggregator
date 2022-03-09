@@ -227,6 +227,11 @@ namespace NewsAggregator.Domain.Services
                 {
                     bodyNode.RemoveChildren(figureNode);
                 }
+                var hrefNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[@class='twitter-container']");
+                if (hrefNode != null)
+                {
+                    bodyNode.RemoveChildren(hrefNode);
+                }
                 var text = bodyNode.InnerHtml.Trim();
                 
                 var model = new NewArticleDto()
