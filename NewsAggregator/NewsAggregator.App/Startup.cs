@@ -1,8 +1,10 @@
-﻿using Hangfire;
+﻿using FluentValidation.AspNetCore;
+using Hangfire;
 using Hangfire.SqlServer;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.App.Validation;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
@@ -65,7 +67,14 @@ namespace NewsAggregator.App
                     }));
             services.AddHangfireServer();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<ArticleValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<RoleValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<CategoryValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<SourceValidator>();
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
