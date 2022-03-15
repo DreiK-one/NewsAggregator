@@ -112,7 +112,7 @@ namespace NewsAggregator.App
 
             var rssService = serviceProvider.GetRequiredService<IRssService>();
             RecurringJob.AddOrUpdate("Aggregate news",
-                () => rssService.GetNewsFromSources(),
+                () => rssService.GetNewsFromSourcesAsync(),
                 "*/10 * * * *");
         }
     }

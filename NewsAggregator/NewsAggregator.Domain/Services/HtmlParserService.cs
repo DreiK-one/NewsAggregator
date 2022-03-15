@@ -274,7 +274,7 @@ namespace NewsAggregator.Domain.Services
                 var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//section[contains(@class, 'Entry__content')]/p");
                 var description = descriptionNode.FirstChild.InnerText.Trim();
 
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='flex flex-col text-xs']/time");
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'flex')]/time");
                 if (dateNode == null)
                 {
                     dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'flex text-center')]/time");

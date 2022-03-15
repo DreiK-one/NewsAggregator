@@ -11,16 +11,19 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<AdminController> _logger;
         private readonly IRssService _rssService;
         private readonly IArticleService _articleService;
+        private readonly IConfiguration _configuration;
 
         public AdminController(ILogger<AdminController> logger,
             IRssService rssService,
-            IArticleService articleService, 
-            IMapper mapper)
+            IArticleService articleService,
+            IMapper mapper, 
+            IConfiguration configuration)
         {
             _logger = logger;
             _rssService = rssService;
             _articleService = articleService;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -40,7 +43,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                await _rssService.GetNewsFromSources();
+                await _rssService.GetNewsFromSourcesAsync();
 
                 return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
             }
@@ -51,13 +54,26 @@ namespace NewsAggregator.App.Controllers
             }
         }
 
-        public async Task<IActionResult> GetArticlesOnAdminPanel()
+        public async Task<IActionResult> GetArticlesOnAdminPanel(int page = 1)
         {
             try
             {
-                var model = (await _articleService.GetAllNewsAsync())
+                var pageSize = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
+
+                var pageAmount = Convert.ToInt32(Math.Ceiling((double)
+                    (await _articleService.GetAllNewsAsync()).Count() / pageSize));
+
+                var articles = (await _articleService.GetNewsByPageAsync(page - 1))
                 .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
+                .OrderByDescending(article => article.CreationDate)
                 .ToList();
+
+                var model = new ArticlesByPagesViewModel()
+                {
+                    NewsList = articles,
+                    PageAmount = pageAmount
+                };
 
                 return View("ArticlesOnAdminPanel", model);
             }

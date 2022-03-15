@@ -775,8 +775,15 @@ figure figcaption {
   z-index: 10;
 }
 .pagination > li > a:hover {
-  color: #F73859 !important;
-  background: #e6e6e6 !important;
+    cursor: pointer;
+    z-index: 19;
+    background: #f96982 !important;
+    -webkit-box-shadow: 4px 11px 35px -14px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 4px 11px 35px -14px rgba(0, 0, 0, 0.5);
+    -ms-box-shadow: 4px 11px 35px -14px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 4px 11px 35px -14px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 11px 35px -14px rgba(0, 0, 0, 0.5);
+    color: #fff !important;
 }
 .pagination > li.disabled > a {
   background: none;

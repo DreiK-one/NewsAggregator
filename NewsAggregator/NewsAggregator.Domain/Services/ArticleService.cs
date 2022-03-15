@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
@@ -19,15 +20,17 @@ namespace NewsAggregator.Domain.Services
         private readonly IMapper _mapper;
         private readonly ILogger<ArticleService> _logger;
         private readonly IUnitOfWork _unitOfWork;
-        
+        private readonly IConfiguration _configuration;
 
-        public ArticleService(IMapper mapper, 
+        public ArticleService(IMapper mapper,
             ILogger<ArticleService> logger,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork, 
+            IConfiguration configuration)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
         }
 
         public async Task<IEnumerable<ArticleDto>> GetAllNewsAsync()
@@ -36,6 +39,26 @@ namespace NewsAggregator.Domain.Services
             {
                 return await _unitOfWork.Articles.Get()
                     .OrderByDescending(article => article.CreationDate)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetNewsByPageAsync(int page)
+        {
+            try
+            {
+                var pageSize = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
+                return await _unitOfWork.Articles.Get()
+                    .OrderByDescending(article => article.CreationDate)
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToListAsync();
             }

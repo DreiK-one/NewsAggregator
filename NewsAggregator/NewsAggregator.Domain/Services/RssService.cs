@@ -52,7 +52,7 @@ namespace NewsAggregator.Domain.Services
             }            
         }
 
-        public async Task<bool> GetNewsFromSources()
+        public async Task<bool> GetNewsFromSourcesAsync()
         {
             try
             {
