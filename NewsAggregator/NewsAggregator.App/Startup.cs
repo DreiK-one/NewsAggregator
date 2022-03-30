@@ -10,6 +10,7 @@ using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace NewsAggregator.App
 {
@@ -40,6 +41,7 @@ namespace NewsAggregator.App
             services.AddScoped<IBaseRepository<Source>, SourceRepository>();
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
+            services.AddScoped<IBaseRepository<UserRole>, UserRoleRepository>();
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -49,6 +51,7 @@ namespace NewsAggregator.App
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRssService, RssService>();
             services.AddScoped<IHtmlParserService, HtmlParserService>();
+            services.AddScoped<IAccountService, AccountService>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -66,6 +69,14 @@ namespace NewsAggregator.App
                         DisableGlobalLocks = true
                     }));
             services.AddHangfireServer();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(opt => 
+                {
+                    opt.LoginPath = "/account/login";
+                });
+
+            services.AddAuthorization();
 
             services.AddControllersWithViews()
                 .AddFluentValidation(fv =>
@@ -92,13 +103,11 @@ namespace NewsAggregator.App
             }
 
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

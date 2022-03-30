@@ -16,6 +16,7 @@ namespace NewsAggregator.Core.Interfaces.Data
         IBaseRepository<Source> Sources { get; }
         IBaseRepository<User> Users { get; }
         IBaseRepository<UserActivity> UserActivities { get; }
+        IBaseRepository<UserRole> UserRoles { get; }
 
         Task<int> Save();
     }

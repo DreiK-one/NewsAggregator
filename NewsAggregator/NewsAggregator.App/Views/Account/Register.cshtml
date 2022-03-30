@@ -1,0 +1,50 @@
+﻿@model AccountRegisterModel
+
+@{
+	ViewData["Title"] = "Registration";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<ul id="gtco-post-list">
+					<li class="entry animate-box" data-animate-effect="fadeIn">
+						<div class="entry-desc">
+							<h1>Registration</h1>
+							<form asp-controller="Account" asp-action="Register" asp-antiforgery="true" method="post">
+
+								<label asp-for="Email">Email</label>
+								<input asp-for="Email" type="email" />
+								<span asp-validation-for="Email"></span>
+								<p></p>
+
+								<label asp-for="Password">Password</label>
+								<input asp-for="Password" type="password" autocomplete="current-password" aria-required="true"/>
+								<span asp-validation-for="Password"></span>
+								<p></p>
+
+								<label asp-for="ConfirmPassword">ConfirmPassword</label>
+								<input asp-for="ConfirmPassword" type="password" aria-required="true"/>
+								<span asp-validation-for="ConfirmPassword"></span>
+								<p></p>
+
+								<a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">Have account already?</a>
+								<p></p>
+
+								<br /><br />
+								<a asp-controller="Home" asp-action="Index" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-success">Register</button>
+							</form>
+						</div>
+					</li>
+				</ul>	
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}
