@@ -16,5 +16,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<RoleDto> GetRoleAsync(Guid Id);
         Task<Guid> GetRoleIdByNameAsync(string name);
         Task<Guid> CreateRole(string name);
+        Task<string> GetRoleNameByIdAsync(Guid id);
     }
 }

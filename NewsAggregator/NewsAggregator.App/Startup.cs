@@ -74,6 +74,7 @@ namespace NewsAggregator.App
                 .AddCookie(opt => 
                 {
                     opt.LoginPath = "/account/login";
+                    opt.AccessDeniedPath = "/access-denied";
                 });
 
             services.AddAuthorization();

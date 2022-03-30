@@ -138,6 +138,11 @@ namespace NewsAggregator.Domain.Services
             return id;
         }
 
+        public async Task<string> GetRoleNameByIdAsync(Guid id)
+        {
+            return (await _unitOfWork.Roles.GetById(id)).Name;
+        }
+
         public async Task<Guid> CreateRole(string name)
         {
             var id = Guid.NewGuid();
@@ -149,5 +154,7 @@ namespace NewsAggregator.Domain.Services
             await _unitOfWork.Save();
             return id;
         }
+
+        
     }
 }

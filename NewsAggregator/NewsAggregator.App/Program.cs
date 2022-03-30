@@ -18,7 +18,7 @@ namespace NewsAggregator.App
                 webBuilder.UseStartup<Startup>();
             });
 
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -26,21 +26,8 @@ namespace NewsAggregator.App
                 .Enrich.FromLogContext()
                 .CreateBootstrapLogger();
 
-            try
-            {
-                Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().MigrateDatabase().Run();
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            Log.Information("Starting web host");
+            CreateHostBuilder(args).Build().MigrateDatabase().Run();
         }
     }
 }

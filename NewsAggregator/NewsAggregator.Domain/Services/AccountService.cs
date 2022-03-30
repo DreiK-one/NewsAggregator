@@ -35,9 +35,20 @@ namespace NewsAggregator.Domain.Services
         public async Task<bool> CheckUserWithThatEmailIsExistAsync(string email)
         {
             string normalizedEmail = email.ToUpperInvariant();
+
             return await _unitOfWork.Users.Get()
-                .AnyAsync(user => user.NormalizedEmail
-                .Equals(normalizedEmail));
+                .AnyAsync(user => 
+                    user.NormalizedEmail
+                       .Equals(normalizedEmail));
+        }
+
+        public async Task<Guid?> GetUserIdByEmailAsync(string email)
+        {
+            string normalizedEmail = email.ToUpperInvariant();
+
+            return (await (await _unitOfWork.Users.FindBy(user =>
+                user.NormalizedEmail != null && user.NormalizedEmail
+                    .Equals(normalizedEmail))).FirstOrDefaultAsync())?.Id;
         }
 
         public async Task<Guid> CreateUserAsync(string email)
@@ -51,7 +62,6 @@ namespace NewsAggregator.Domain.Services
                 RegistrationDate = DateTime.Now 
             });
             await _unitOfWork.Save();
-
             return id;
         }
 
@@ -72,13 +82,19 @@ namespace NewsAggregator.Domain.Services
             return await _unitOfWork.Save();
         }
 
-        public async Task<Guid?> GetUserIdByEmailAsync(string email)
+        public async Task<IEnumerable<string>> GetRolesAsync(Guid userId)
         {
-            string normalizedEmail = email.ToUpperInvariant();
+            var userRoleIds = (await _unitOfWork.Users
+                .GetByIdWithIncludes(userId, user => user.UserRoles))
+                .UserRoles.Select(role => role.RoleId);
 
-            return (await (await _unitOfWork.Users.FindBy(user => 
-                user.NormalizedEmail != null && user.NormalizedEmail
-                    .Equals(normalizedEmail))).FirstOrDefaultAsync())?.Id;
+            var names = new List<string>();
+            foreach (var userRoleId in userRoleIds)
+            {
+                names.Add(await _roleService.GetRoleNameByIdAsync(userRoleId));
+            }
+
+            return names;
         }
 
         public async Task<int> SetPasswordAsync(Guid userId, string password)
