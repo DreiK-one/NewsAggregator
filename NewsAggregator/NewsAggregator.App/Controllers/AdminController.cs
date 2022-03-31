@@ -85,5 +85,19 @@ namespace NewsAggregator.App.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        [Route("/hangfire")]
+        public async Task<IActionResult> Hangfire()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
     }
 }
