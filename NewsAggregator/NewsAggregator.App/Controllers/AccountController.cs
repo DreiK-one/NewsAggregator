@@ -13,17 +13,14 @@ namespace NewsAggregator.App.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<AccountController> _logger;
         private readonly IAccountService _accountService;
-        private readonly IRoleService _roleService;
 
         public AccountController(IMapper mapper,
             ILogger<AccountController> logger,
-            IAccountService accountService, 
-            IRoleService roleService)
+            IAccountService accountService)
         {
             _mapper = mapper;
             _logger = logger;
             _accountService = accountService;
-            _roleService = roleService;
         }
 
         [HttpGet]

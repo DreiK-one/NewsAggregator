@@ -76,7 +76,7 @@ namespace NewsAggregator.Domain.Services
                 }
                 else
                 {
-                    return null;
+                    throw new NullReferenceException();
                 }
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace NewsAggregator.Domain.Services
                 }
                 else
                 {
-                    return null;
+                    throw new NullReferenceException();
                 }
             }
             catch (Exception ex)
