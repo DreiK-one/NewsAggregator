@@ -11,6 +11,7 @@ using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using NewsAggregator.App.Filters;
 
 namespace NewsAggregator.App
 {
@@ -118,7 +119,10 @@ namespace NewsAggregator.App
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new HangfireAuthorizationFilter() }
+            });
 
             var rssService = serviceProvider.GetRequiredService<IRssService>();
             RecurringJob.AddOrUpdate("Aggregate news",
