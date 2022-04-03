@@ -112,6 +112,19 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LogoutConfirm()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
         [Route("access-denied")]
         public async Task<IActionResult> AccessDenied()
         {
