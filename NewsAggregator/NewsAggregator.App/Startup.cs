@@ -74,8 +74,8 @@ namespace NewsAggregator.App
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(opt => 
                 {
-                    opt.LoginPath = "/account/login";
                     opt.AccessDeniedPath = "/access-denied";
+                    opt.LoginPath = "/account/login";
                 });
 
             services.AddAuthorization();
@@ -99,7 +99,7 @@ namespace NewsAggregator.App
     
             if (!env.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/error/500");
                 
                 app.UseHsts();
             }
