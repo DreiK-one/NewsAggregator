@@ -15,15 +15,34 @@ namespace NewsAggregator.App.Controllers
         }
 
         [Route("500")]
-        public IActionResult AppError()
+        public IActionResult Error500()
         {
             var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
             _telemetryClient.TrackException(exceptionHandlerPathFeature.Error);
             _telemetryClient.TrackEvent("Error.ServerError", new Dictionary<string, string>
             {
                 ["originalPath"] = exceptionHandlerPathFeature.Path,
                 ["error"] = exceptionHandlerPathFeature.Error.Message
             });
+
+            return View();
+        }
+
+        [Route("404")]
+        public IActionResult Error404()
+        {
+            string originalPath = "unknown";
+            if (HttpContext.Items.ContainsKey("originalPath"))
+            {
+                originalPath = HttpContext.Items["originalPath"] as string;
+            }
+
+            _telemetryClient.TrackEvent("Error.PageNotFound", new Dictionary<string, string>
+            {
+                ["originalPath"] = originalPath
+            });
+
             return View();
         }
     }

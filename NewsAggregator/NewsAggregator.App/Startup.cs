@@ -12,6 +12,7 @@ using NewsAggregator.Domain.Services;
 using Serilog;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using NewsAggregator.App.Filters;
+using Microsoft.ApplicationInsights;
 
 namespace NewsAggregator.App
 {
@@ -53,6 +54,8 @@ namespace NewsAggregator.App
             services.AddScoped<IRssService, RssService>();
             services.AddScoped<IHtmlParserService, HtmlParserService>();
             services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<TelemetryClient>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -97,15 +100,34 @@ namespace NewsAggregator.App
                 configure.MessageTemplate = "HTTP {RequestMethod} {RequestPath} ({UserId}) responded {StatusCode} in {Elapsed:0.0000}ms";
             });
     
-            if (!env.IsDevelopment())
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+
+                app.UseHsts();
+            }
+            else
             {
                 app.UseExceptionHandler("/error/500");
-                
+
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            app.UseStaticFiles(); 
+            
+            app.Use(async (ctx, next) =>
+            {
+                await next();
+
+                if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted)
+                {
+                    string originalPath = ctx.Request.Path.Value;
+                    ctx.Items["originalPath"] = originalPath;
+                    ctx.Request.Path = "/error/404";
+                    await next();
+                }
+            });
 
             app.UseRouting();
 

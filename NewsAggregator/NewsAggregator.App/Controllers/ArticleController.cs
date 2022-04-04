@@ -38,7 +38,8 @@ namespace NewsAggregator.App.Controllers
                 if (article == null)
                 {
                     _logger.LogWarning($"{DateTime.Now}: Model is null in ReadArticle method");
-                    return BadRequest();
+                    return RedirectToAction("Error404", "Error");
+
                 }
 
                 var model = _mapper.Map<ReadArticleViewModel>(article);

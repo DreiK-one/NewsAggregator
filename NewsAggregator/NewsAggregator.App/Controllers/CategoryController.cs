@@ -164,6 +164,10 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var category = await _categoryService.GetCategoryByNameWithArticlesAsync(name);
+                if (category == null)
+                {
+                    return RedirectToAction("Error404", "Error");
+                }
                 var model = _mapper.Map<CategoryWithArticlesViewModel>(category);
 
                 return View(model);
