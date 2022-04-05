@@ -8,13 +8,12 @@ namespace NewsAggregator.App.Validation
         public AccountLoginValidator()
         {
             RuleFor(account => account.Email)
-               .NotNull().WithMessage("Email is required");
+               .NotNull().WithMessage("Email is required")
+               .EmailAddress().WithMessage("Invalid email format");
 
 
             RuleFor(account => account.Password)
                 .NotNull().WithMessage("Password is required");
-                //.Must(HasValidPassword)
-                //.WithMessage("Incorrect password");
         }
     }
 }
