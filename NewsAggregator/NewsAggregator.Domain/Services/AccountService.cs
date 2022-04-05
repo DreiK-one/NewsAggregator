@@ -59,7 +59,7 @@ namespace NewsAggregator.Domain.Services
                 Id = id, 
                 Email = email,
                 NormalizedEmail = email.ToUpperInvariant(),
-                RegistrationDate = DateTime.Now 
+                RegistrationDate = DateTime.Now
             });
             await _unitOfWork.Save();
             return id;
@@ -135,6 +135,15 @@ namespace NewsAggregator.Domain.Services
             var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{salt}_{password}"));
             var hashedPassword = Encoding.UTF8.GetString(sha1Data);
             return hashedPassword;
+        }
+
+        public bool ValidateIsEmailExists(string email)
+        {
+            string normalizedEmail = email.ToUpperInvariant();
+
+            return _unitOfWork.Users.Get().Any(user =>
+                    user.NormalizedEmail
+                       .Equals(normalizedEmail));
         }
     }
 }

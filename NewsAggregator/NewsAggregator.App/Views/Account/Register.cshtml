@@ -14,6 +14,8 @@
 							<h1>Registration</h1>
 							<form asp-controller="Account" asp-action="Register" asp-antiforgery="true" method="post">
 
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+
 								<label asp-for="Email">Email</label>
 								<input asp-for="Email" type="email" />
 								<span asp-validation-for="Email"></span>
@@ -24,12 +26,12 @@
 								<span asp-validation-for="Password"></span>
 								<p></p>
 
-								<label asp-for="ConfirmPassword">ConfirmPassword</label>
+								<label asp-for="ConfirmPassword">Confirm password</label>
 								<input asp-for="ConfirmPassword" type="password" aria-required="true"/>
 								<span asp-validation-for="ConfirmPassword"></span>
 								<p></p>
 
-								<a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">Have account already?</a>
+								<a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">Have account already? Log in!</a>
 								<p></p>
 
 								<br /><br />

@@ -90,7 +90,7 @@ namespace NewsAggregator.App
                     fv.RegisterValidatorsFromAssemblyContaining<RoleValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<CategoryValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<SourceValidator>();
-                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                    fv.RegisterValidatorsFromAssemblyContaining<AccountRegisterValidator>();
                 });
         }
 

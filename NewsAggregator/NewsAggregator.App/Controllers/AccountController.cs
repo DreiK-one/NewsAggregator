@@ -62,7 +62,7 @@ namespace NewsAggregator.App.Controllers
 
                 return Redirect(model.ReturnUrl ?? "/");
             }
-            return BadRequest();
+            return View(model);
         }
 
         [HttpGet]

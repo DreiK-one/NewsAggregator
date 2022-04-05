@@ -16,7 +16,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<int> SetPasswordAsync(Guid userId, string password);
         Task<bool> CheckPassword(string email, string password);
         Task<Guid?> GetUserIdByEmailAsync(string email);
-
-
+        bool ValidateIsEmailExists(string email);
     }
 }
