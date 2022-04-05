@@ -104,7 +104,6 @@ namespace NewsAggregator.App
             {
                 app.UseDeveloperExceptionPage();
 
-                app.UseHsts();
             }
             else
             {
@@ -132,18 +131,22 @@ namespace NewsAggregator.App
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
+
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[]
+                {
+                    new HangfireAuthorizationFilter()
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            {
-                Authorization = new[] { new HangfireAuthorizationFilter() }
             });
 
             var rssService = serviceProvider.GetRequiredService<IRssService>();

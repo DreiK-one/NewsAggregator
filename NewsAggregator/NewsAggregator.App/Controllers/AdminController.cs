@@ -91,7 +91,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                return View();
+                return View("/hangfire");
             }
             catch (Exception ex)
             {

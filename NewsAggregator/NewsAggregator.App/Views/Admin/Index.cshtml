@@ -41,7 +41,7 @@
 					<form asp-controller="Admin" asp-action="GetNewsFromSources" method="post">
 						<div class="entry-desc">
 							<button type="submit" class="btn btn-danger"><h2>Update news manually</h2></button>
-							<a href="/hangfire" class="btn btn-success"><h2>Go to Hangfire</h2></a>
+							<a asp-controller="Admin" asp-action="Hangfire" class="btn btn-success"><h2>Go to Hangfire</h2></a>
 						</div>
 					</form>
 
