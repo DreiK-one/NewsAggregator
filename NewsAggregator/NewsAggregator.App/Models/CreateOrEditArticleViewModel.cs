@@ -10,7 +10,7 @@ namespace NewsAggregator.App.Models
         public string SourceUrl { get; set; }
         public string Image { get; set; }
         public DateTime CreationDate { get; set; }
-        public float? Coefficient { get; set; }
+        public float Coefficient { get; set; }
 
         public CategoryModel Category { get; set; }
         public SourceModel Source { get; set; }

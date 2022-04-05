@@ -39,9 +39,10 @@ namespace NewsAggregator.App.Mappers
                 .ForPath(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category.Id))
                 .ReverseMap();
 
+            CreateMap<CreateOrEditArticleDto, DeleteArticleViewModel>()
+                .ReverseMap();
+
             CreateMap<Article, CreateOrEditArticleDto>().ReverseMap();
-
-
 
             CreateMap<AllNewsOnHomeScreenViewModel, CreateOrEditArticleViewModel>()
                 .ForPath(dest => dest.Source.Id, opt => opt.MapFrom(src => src.SourceId))

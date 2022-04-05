@@ -90,6 +90,7 @@ namespace NewsAggregator.App
                     fv.RegisterValidatorsFromAssemblyContaining<RoleValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<CategoryValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<SourceValidator>();
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 });
         }
 
@@ -104,6 +105,7 @@ namespace NewsAggregator.App
             {
                 app.UseDeveloperExceptionPage();
 
+                app.UseHsts();
             }
             else
             {
@@ -113,8 +115,8 @@ namespace NewsAggregator.App
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles(); 
-            
+            app.UseStaticFiles();
+
             app.Use(async (ctx, next) =>
             {
                 await next();

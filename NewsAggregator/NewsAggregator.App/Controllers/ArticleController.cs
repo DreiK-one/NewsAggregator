@@ -102,6 +102,7 @@ namespace NewsAggregator.App.Controllers
                 return BadRequest();
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -187,7 +188,7 @@ namespace NewsAggregator.App.Controllers
                     return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
 
-                return View(model);    
+                return View(model);
             }
             catch (Exception ex)
             {

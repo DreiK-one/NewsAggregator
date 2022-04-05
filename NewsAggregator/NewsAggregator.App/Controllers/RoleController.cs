@@ -109,8 +109,8 @@ namespace NewsAggregator.App.Controllers
                     }
                     return RedirectToAction("Index", "Role");
                 }
-                 
-                return View(model); 
+
+                return View(model);
             }
             catch (Exception ex)
             {

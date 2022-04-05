@@ -109,7 +109,7 @@ namespace NewsAggregator.App.Controllers
                     }
                     return RedirectToAction("Index", "Category");
                 }
-                   
+
                 return View(model);
             }
             catch (Exception ex)
