@@ -91,6 +91,7 @@ namespace NewsAggregator.App
                     fv.RegisterValidatorsFromAssemblyContaining<CategoryValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<SourceValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<AccountRegisterValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<AccountLoginValidator>();
                 });
         }
 

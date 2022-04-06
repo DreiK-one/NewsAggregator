@@ -13,7 +13,8 @@ namespace NewsAggregator.App.Validation
 
 
             RuleFor(account => account.Password)
-                .NotNull().WithMessage("Password is required");
+                .NotNull().WithMessage("Password is required")
+                .MinimumLength(8).WithMessage("Minimum length of password is 8");
         }
     }
 }
