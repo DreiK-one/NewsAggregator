@@ -63,7 +63,7 @@ namespace NewsAggregator.App.Controllers
                 return Redirect(model.ReturnUrl ?? "/");
             }
 
-            return View("IncorrectPassword", model);
+            return View("IncorrectPassword", model); 
         }
 
         [HttpGet]

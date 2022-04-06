@@ -53,6 +53,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             try
@@ -80,6 +81,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateArticle(CreateOrEditArticleViewModel model)
         {
@@ -104,6 +106,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -132,6 +135,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditArticle(CreateOrEditArticleViewModel model)
         {
@@ -156,6 +160,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -172,6 +177,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteArticle(DeleteArticleViewModel model)
         {

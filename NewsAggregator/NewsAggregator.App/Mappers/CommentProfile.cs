@@ -16,6 +16,10 @@ namespace NewsAggregator.App.Mappers
             CreateMap<CommentModel, ReadArticleViewModel>();
 
             CreateMap<CommentModel, UserViewModel>();
+
+
+            CreateMap<Comment, CreateOrEditCommentDto>().ReverseMap();
+            CreateMap<CreateOrEditCommentDto, CommentViewModel>().ReverseMap();
         }
     }
 }

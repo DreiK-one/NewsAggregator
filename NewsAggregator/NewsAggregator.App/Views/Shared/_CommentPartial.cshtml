@@ -1,0 +1,19 @@
+﻿@model CommentViewModel
+
+@if (!User.Identity.IsAuthenticated)
+{
+	<h3><a asp-controller="Account" asp-action="Login">Log in to leave the comments</a></h3>
+}
+else
+{
+	<form asp-controller="Comment" asp-action="CreateComment" method="post">
+		<label>Write a comment</label>
+		<input asp-for="Id" type="hidden" value="@Guid.NewGuid()">
+		<input asp-for="CreationDate" type="hidden" value="@DateTime.Now">
+		<input asp-for="UserId" type="hidden" >
+		<input asp-for="ArticleId" type="hidden">
+		<textarea asp-for="Text" type="text" class="form-control" rows="3" id="block"></textarea>
+		<button type="submit" class="btn btn-success">Post</button>
+	</form>
+}
+

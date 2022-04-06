@@ -1,27 +1,59 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.App.Models;
+using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Interfaces;
+using System.Security.Claims;
 
 namespace NewsAggregator.App.Controllers
 {
     public class CommentController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<CommentController> _logger;
+        private readonly ICommentService _commentService;
+        private readonly IAccountService _accountService;
 
-        public CommentController(ILogger<CommentController> logger)
+
+        public CommentController(IMapper mapper,
+            ILogger<CommentController> logger,
+            ICommentService commentService, 
+            IAccountService accountService)
         {
+            _mapper = mapper;
             _logger = logger;
+            _commentService = commentService;
+            _accountService = accountService;
         }
 
-        public IActionResult Index()
+        [HttpPost]
+        public async Task<IActionResult> CreateComment(CommentViewModel model)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                return View();
+                return BadRequest();
             }
-            catch (Exception ex)
+
+            if (model != null)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new { ex.Message });
+                var principal = HttpContext.User;
+                if (principal != null)
+                {
+                    foreach(var claim in principal.Claims)
+                    {
+                        var claimsId = claim.Value;
+
+                        var userid = await _accountService.GetUserIdByEmailAsync(claimsId);
+                        model.UserId = userid;
+
+                        await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
+                        return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
+                    }
+                }
+                
             }
+
+            return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
         }
     }
 }

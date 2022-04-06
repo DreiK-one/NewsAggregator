@@ -2168,4 +2168,13 @@ input[type="checkbox"].input-validation-error {
     color: #b94a48;
 }
 
+#block {
+    resize: none;
+    margin-bottom: 5px;
+}
+
+.comment-date{
+    font-size: small;
+}
+
 /*# sourceMappingURL=style.css.map */

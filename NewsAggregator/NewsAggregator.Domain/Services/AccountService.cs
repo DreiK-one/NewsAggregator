@@ -6,6 +6,7 @@ using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -141,9 +142,8 @@ namespace NewsAggregator.Domain.Services
         {
             string normalizedEmail = email.ToUpperInvariant();
 
-            return _unitOfWork.Users.Get().Any(user =>
-                    user.NormalizedEmail
-                       .Equals(normalizedEmail));
+            return _unitOfWork.Users.Get()
+                .Any(user => user.NormalizedEmail.Equals(normalizedEmail));
         }
     }
 }

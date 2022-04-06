@@ -9,6 +9,6 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface ICommentService
     {
-       
+        Task<int?> CreateAsync(CreateOrEditCommentDto commentDto);
     }
 }
