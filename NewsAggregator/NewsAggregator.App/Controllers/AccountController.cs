@@ -46,12 +46,14 @@ namespace NewsAggregator.App.Controllers
                 var userId = (await _accountService.GetUserIdByEmailAsync(model.Email))
                     .GetValueOrDefault();
 
+                var userNickname = await _accountService.GetUserNicknameByIdAsync(userId);
+
                 var roleClaims = (await _accountService.GetRolesAsync(userId))
                     .Select(roleName => new Claim(ClaimTypes.Role, roleName));
 
                 var claims = new List<Claim>() 
                 { 
-                    new Claim(ClaimTypes.Name, model.Email)
+                    new Claim(ClaimTypes.Name, userNickname)
                 };
                 claims.AddRange(roleClaims);
 
@@ -88,13 +90,13 @@ namespace NewsAggregator.App.Controllers
             {
                 if (!await _accountService.CheckUserWithThatEmailIsExistAsync(model.Email))
                 {
-                    var userId = await _accountService.CreateUserAsync(model.Email);
+                    var userId = await _accountService.CreateUserAsync(model.Email, model.Nickname);
                     await _accountService.SetRoleAsync(userId, "User");
                     await _accountService.SetPasswordAsync(userId, model.Password);
 
                     var claims = new List<Claim>()
                     {
-                        new Claim(ClaimTypes.Name, model.Email),
+                        new Claim(ClaimTypes.Name, model.Nickname),
                         new Claim(ClaimTypes.Role, "User")
                     };
                     var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");

@@ -15,9 +15,10 @@ namespace NewsAggregator.Data.Configuration
                     Id = Guid.NewGuid(),
                     Email = "123@mail.ru",
                     PasswordHash = "123",
-                    FirstName = "Ted",
-                    LastName = "Jackson",
-                    RegistrationDate = DateTime.Now
+                    RegistrationDate = DateTime.Now,
+                    NormalizedEmail = "123@MAIL.RU",
+                    Nickname = "Tom",
+                    NormalizedNickname = "TOM"
                 });
         }
     }

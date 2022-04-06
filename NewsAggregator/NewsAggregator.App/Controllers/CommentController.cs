@@ -43,7 +43,7 @@ namespace NewsAggregator.App.Controllers
                     {
                         var claimsId = claim.Value;
 
-                        var userid = await _accountService.GetUserIdByEmailAsync(claimsId);
+                        var userid = await _accountService.GetUserIdByNicknameAsync(claimsId);
                         model.UserId = userid;
 
                         await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
@@ -53,7 +53,7 @@ namespace NewsAggregator.App.Controllers
                 
             }
 
-            return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
+            return Redirect($"~/Article/ReadArticle/{model?.ArticleId}");
         }
     }
 }

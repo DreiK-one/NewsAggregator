@@ -53,7 +53,7 @@
 
 								@foreach(var comment in Model.Comments)
 								{
-									<h3><a asp-controller="User" asp-action="Details" asp-route-id="@comment.User.Id">@comment.User.Email</a>
+									<h3><a asp-controller="User" asp-action="Details" asp-route-id="@comment.User.Id">@comment.User.Nickname</a>
 										<span class="comment-date">@comment.CreationDate</span>
 									</h3>
 									<div class="descriptiomo-nalonvevons">

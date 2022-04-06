@@ -52,7 +52,21 @@ namespace NewsAggregator.Domain.Services
                     .Equals(normalizedEmail))).FirstOrDefaultAsync())?.Id;
         }
 
-        public async Task<Guid> CreateUserAsync(string email)
+        public async Task<Guid?> GetUserIdByNicknameAsync(string nickname)
+        {
+            string normalizedNickname = nickname.ToUpperInvariant();
+
+            return (await (await _unitOfWork.Users.FindBy(user =>
+                user.NormalizedNickname != null && user.NormalizedNickname
+                    .Equals(normalizedNickname))).FirstOrDefaultAsync())?.Id;
+        }
+
+        public async Task<string?> GetUserNicknameByIdAsync(Guid id)
+        {
+            return (await _unitOfWork.Users.GetById(id)).Nickname;
+        }
+
+        public async Task<Guid> CreateUserAsync(string email, string nickname)
         {
             var id = Guid.NewGuid();
             await _unitOfWork.Users.Add(new User 
@@ -60,6 +74,8 @@ namespace NewsAggregator.Domain.Services
                 Id = id, 
                 Email = email,
                 NormalizedEmail = email.ToUpperInvariant(),
+                Nickname = nickname,
+                NormalizedNickname = nickname.ToUpperInvariant(),
                 RegistrationDate = DateTime.Now
             });
             await _unitOfWork.Save();
@@ -144,6 +160,14 @@ namespace NewsAggregator.Domain.Services
 
             return _unitOfWork.Users.Get()
                 .Any(user => user.NormalizedEmail.Equals(normalizedEmail));
+        }
+
+        public bool ValidateIsNicknameExists(string nickname)
+        {
+            string normalizedNickname = nickname.ToUpperInvariant();
+
+            return _unitOfWork.Users.Get()
+                .Any(user => user.NormalizedNickname.Equals(normalizedNickname));
         }
     }
 }

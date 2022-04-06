@@ -17,6 +17,11 @@ namespace NewsAggregator.App.Validation
                 .EmailAddress().WithMessage("Invalid email format")
                 .Must(CheckIsEmailExists).WithMessage("This email is already exists");
 
+            RuleFor(account => account.Nickname)
+                .NotNull().WithMessage("Nickname is required")
+                .MinimumLength(4).WithMessage("Minimum length of password is 4")
+                .Must(CheckIsNicknameExists).WithMessage("This nickname is already exists");
+
             RuleFor(account => account.Password)
                 .NotNull().WithMessage("Password is required")
                 .MinimumLength(8).WithMessage("Minimum length of password is 8")
@@ -61,6 +66,12 @@ namespace NewsAggregator.App.Validation
         private bool CheckIsEmailExists(string email)
         {
             var result = _accountService.ValidateIsEmailExists(email);
+            return !result;
+        }
+
+        private bool CheckIsNicknameExists(string nickname)
+        {
+            var result = _accountService.ValidateIsNicknameExists(nickname);
             return !result;
         }
     }
