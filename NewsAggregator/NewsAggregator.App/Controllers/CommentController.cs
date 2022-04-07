@@ -27,33 +27,37 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateComment(CommentViewModel model)
+        public async Task<IActionResult> CreateComment(CommentModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
-            }
-
-            if (model != null)
-            {
-                var principal = HttpContext.User;
-                if (principal != null)
+                if (!ModelState.IsValid)
                 {
-                    foreach(var claim in principal.Claims)
+                    return BadRequest();
+                }
+
+                if (model != null)
+                {
+                    var principal = HttpContext.User;
+                    if (principal != null)
                     {
-                        var claimsId = claim.Value;
+                        foreach (var claim in principal.Claims)
+                        {
+                            model.UserId = await _accountService.GetUserIdByNicknameAsync(claim.Value);
+                            await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
 
-                        var userid = await _accountService.GetUserIdByNicknameAsync(claimsId);
-                        model.UserId = userid;
-
-                        await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
-                        return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
+                            return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
+                        }
                     }
                 }
-                
-            }
 
-            return Redirect($"~/Article/ReadArticle/{model?.ArticleId}");
+                return Redirect($"~/Article/ReadArticle/{model?.ArticleId}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
         }
     }
 }

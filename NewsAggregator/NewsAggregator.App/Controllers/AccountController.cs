@@ -26,79 +26,46 @@ namespace NewsAggregator.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string? returnUrl)
         {
-            if (!string.IsNullOrEmpty(returnUrl))
+            try
             {
-                var model = new AccountLoginModel
+                if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    ReturnUrl = returnUrl
-                };
-                return View(model);
+                    var model = new AccountLoginModel
+                    {
+                        ReturnUrl = returnUrl
+                    };
+                    return View(model);
+                }
+                return View();
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(AccountLoginModel model)
         {
-            if (await _accountService.CheckPassword(model.Email, model.Password))
+            try
             {
-                var userId = (await _accountService.GetUserIdByEmailAsync(model.Email))
-                    .GetValueOrDefault();
-
-                var userNickname = await _accountService.GetUserNicknameByIdAsync(userId);
-
-                var roleClaims = (await _accountService.GetRolesAsync(userId))
-                    .Select(roleName => new Claim(ClaimTypes.Role, roleName));
-
-                var claims = new List<Claim>() 
-                { 
-                    new Claim(ClaimTypes.Name, userNickname)
-                };
-                claims.AddRange(roleClaims);
-
-                var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                return Redirect(model.ReturnUrl ?? "/");
-            }
-
-            return View("IncorrectPassword", model); 
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Register(string? returnUrl)
-        {
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                var model = new AccountRegisterModel
+                if (await _accountService.CheckPassword(model.Email, model.Password))
                 {
-                    ReturnUrl = returnUrl
-                };
-                return View(model);
-            }
+                    var userId = (await _accountService.GetUserIdByEmailAsync(model.Email))
+                        .GetValueOrDefault();
 
-            return View();
-        }
+                    var userNickname = await _accountService.GetUserNicknameByIdAsync(userId);
 
-        [HttpPost]
-        public async Task<IActionResult> Register(AccountRegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (!await _accountService.CheckUserWithThatEmailIsExistAsync(model.Email))
-                {
-                    var userId = await _accountService.CreateUserAsync(model.Email, model.Nickname);
-                    await _accountService.SetRoleAsync(userId, "User");
-                    await _accountService.SetPasswordAsync(userId, model.Password);
+                    var roleClaims = (await _accountService.GetRolesAsync(userId))
+                        .Select(roleName => new Claim(ClaimTypes.Role, roleName));
 
                     var claims = new List<Claim>()
-                    {
-                        new Claim(ClaimTypes.Name, model.Nickname),
-                        new Claim(ClaimTypes.Role, "User")
-                    };
+                {
+                    new Claim(ClaimTypes.Name, userNickname)
+                };
+                    claims.AddRange(roleClaims);
+
                     var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -106,32 +73,120 @@ namespace NewsAggregator.App.Controllers
 
                     return Redirect(model.ReturnUrl ?? "/");
                 }
-                else
-                {
-                    ModelState.TryAddModelError("UserAlreadyExists", "User is already exist!");
-                }
+
+                return View("IncorrectPassword", model);
             }
-            return View(model);
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            } 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Register(string? returnUrl)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(returnUrl))
+                {
+                    var model = new AccountRegisterModel
+                    {
+                        ReturnUrl = returnUrl
+                    };
+                    return View(model);
+                }
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(AccountRegisterModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (!await _accountService.CheckUserWithThatEmailIsExistAsync(model.Email))
+                    {
+                        var userId = await _accountService.CreateUserAsync(model.Email, model.Nickname);
+                        await _accountService.SetRoleAsync(userId, "User");
+                        await _accountService.SetPasswordAsync(userId, model.Password);
+
+                        var claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name, model.Nickname),
+                        new Claim(ClaimTypes.Role, "User")
+                    };
+                        var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(claimsIdentity));
+
+                        return Redirect(model.ReturnUrl ?? "/");
+                    }
+                    else
+                    {
+                        ModelState.TryAddModelError("UserAlreadyExists", "User is already exist!");
+                    }
+                }
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            } 
         }
 
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }  
         }
 
         [HttpPost]
         public async Task<IActionResult> LogoutConfirm()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
 
         [HttpGet]
         [Route("access-denied")]
         public async Task<IActionResult> AccessDenied()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
         }
     }
 }
