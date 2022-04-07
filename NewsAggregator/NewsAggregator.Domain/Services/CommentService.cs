@@ -28,6 +28,20 @@ namespace NewsAggregator.Domain.Services
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<CreateOrEditCommentDto> GetCommentAsync(Guid Id)
+        {
+            try
+            {
+                var comment = await _unitOfWork.Comments.GetById(Id);
+                return _mapper.Map<CreateOrEditCommentDto>(comment);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<int?> CreateAsync(CreateOrEditCommentDto commentDto)
         {
             try
@@ -35,6 +49,48 @@ namespace NewsAggregator.Domain.Services
                 if (commentDto != null)
                 {
                     await _unitOfWork.Comments.Add(_mapper.Map<Comment>(commentDto));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<int?> UpdateAsync(CreateOrEditCommentDto commentDto)
+        {
+            try
+            {
+                if (commentDto != null)
+                {
+                    await _unitOfWork.Comments.Update(_mapper.Map<Comment>(commentDto));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<int?> DeleteAsync(Guid modelId)
+        {
+            try
+            {
+                if (await _unitOfWork.Comments.GetById(modelId) != null)
+                {
+                    await _unitOfWork.Comments.Remove(modelId);
                     return await _unitOfWork.Save();
                 }
                 else

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
@@ -13,17 +14,20 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<CommentController> _logger;
         private readonly ICommentService _commentService;
         private readonly IAccountService _accountService;
+        private readonly IArticleService _articleService;
 
 
         public CommentController(IMapper mapper,
             ILogger<CommentController> logger,
-            ICommentService commentService, 
-            IAccountService accountService)
+            ICommentService commentService,
+            IAccountService accountService, 
+            IArticleService articleService)
         {
             _mapper = mapper;
             _logger = logger;
             _commentService = commentService;
             _accountService = accountService;
+            _articleService = articleService;
         }
 
         [HttpPost]
@@ -56,6 +60,51 @@ namespace NewsAggregator.App.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(Guid id, string returnUrl)
+        {
+            try
+            {
+                var comment = await _commentService.GetCommentAsync(id);
+                var model = _mapper.Map<DeleteCommentViewModel>(comment);
+                model.ReturnUrl = returnUrl;
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteComment(DeleteCommentViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var delete = await _commentService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteComment method");
+                        return BadRequest();
+                    }
+                    return Redirect(model.ReturnUrl ?? "/");
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
         }

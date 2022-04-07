@@ -1,0 +1,68 @@
+﻿@model CreateOrEditArticleViewModel
+
+@{
+	ViewData["Title"] = "Edit article";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<ul id="gtco-post-list">
+					<li class="entry animate-box" data-animate-effect="fadeIn">
+						<div class="entry-desc">
+							<h1>Editing of article</h1>
+							<form asp-controller="Article" asp-action="EditArticle" method="post">
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+								<input asp-for="Id" type="hidden" value="@Model.Id" />
+								<input asp-for="CreationDate" type="hidden" value="@Model.CreationDate" />
+	
+								<label asp-for="Title">Title</label>
+								<textarea asp-for="Title" type="text">@Model.Title</textarea>
+								<span asp-validation-for="Title"></span>
+								<p></p>
+
+								<label asp-for="Description">Description</label>
+								<textarea asp-for="Description" type="text">@Model.Description</textarea>
+								<span asp-validation-for="Description"></span>
+								<p></p>
+
+								<label asp-for="Body">Body</label>
+								<textarea asp-for="Body" type="text">@Model.Body</textarea>
+								<span asp-validation-for="Body"></span>
+								<p></p>
+
+								<label asp-for="Image">Path for Image</label>
+								<textarea asp-for="Image" type="text">@Model.Image</textarea>
+								<span asp-validation-for="Image"></span>
+								<p></p>
+
+								<label asp-for="SourceUrl">Url of article</label>
+								<textarea asp-for="SourceUrl" type="text">@Model.SourceUrl</textarea>
+								<span asp-validation-for="SourceUrl"></span>
+								<p></p>
+
+								<label asp-for="Category.Id">Name of category:</label>
+								<select asp-for="@Model.Category.Id" asp-items="@Model.Categories"></select>
+								<p></p>
+
+								<label asp-for="Source.Id">Name of article source:</label>
+								<select asp-for="@Model.Source.Id" asp-items="@Model.Sources"></select>
+								<p></p>
+
+								<br /><br />
+								<a asp-controller="Admin" asp-action="GetArticlesOnAdminPanel" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-success">Save changes</button>
+							</form>
+						</div>
+					</li>
+				</ul>	
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}
