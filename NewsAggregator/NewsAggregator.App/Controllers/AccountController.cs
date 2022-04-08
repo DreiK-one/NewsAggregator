@@ -61,9 +61,9 @@ namespace NewsAggregator.App.Controllers
                         .Select(roleName => new Claim(ClaimTypes.Role, roleName));
 
                     var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, userNickname)
-                };
+                    {
+                        new Claim(ClaimTypes.Name, userNickname)
+                    };
                     claims.AddRange(roleClaims);
 
                     var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");

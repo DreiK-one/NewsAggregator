@@ -7,7 +7,7 @@
 else
 {
 	<form asp-controller="Comment" asp-action="CreateComment" method="post">
-		<label>Write a comment</label>
+		
 		<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
 
 		<input asp-for="Id" type="hidden" value="@Guid.NewGuid()">
@@ -15,10 +15,13 @@ else
 		<input asp-for="UserId" type="hidden" >
 		<input asp-for="ArticleId" type="hidden">
 
-		<textarea asp-for="Text" type="text" class="form-control" rows="3" id="block"></textarea>
+		<label asp-for="Text">Write a comment: </label>
 		<span asp-validation-for="Text"></span>
+		<textarea asp-for="Text" type="text" class="form-control" rows="3" id="block"></textarea>
+		
 
 		<button type="submit" class="btn btn-success">Post</button>
 	</form>
 }
+
 
