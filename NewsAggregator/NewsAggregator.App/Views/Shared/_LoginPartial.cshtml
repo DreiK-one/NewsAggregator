@@ -2,6 +2,10 @@
 {
     <li><a asp-controller="User" asp-action="Details" class="log"><b>Welcome, @User.Identity.Name</b></a></li>
     <li><a asp-controller="Account" asp-action="Logout"><b>Log out</b></a></li>
+    if (User.IsInRole("Admin"))
+    {
+        <li><a asp-controller="Admin" asp-action="Index"><b>Admin panel</b></a></li>
+    }
 }
 else
 {
