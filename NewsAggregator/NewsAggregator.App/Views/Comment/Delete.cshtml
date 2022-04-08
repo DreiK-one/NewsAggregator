@@ -15,6 +15,7 @@
 							<form asp-controller="Comment" asp-action="DeleteComment" method="post">
 								<h2 class="card-title">Do you really want to delete this comment?
 								<input type="hidden" asp-for="Id" />
+								<input type="hidden" asp-for="ReturnUrl"/>
 								<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@Model.ReturnUrl" class="btn btn-info">Cancel</a>
 								<button type="submit" class="btn btn-danger">Delete</button>
 								</h2>

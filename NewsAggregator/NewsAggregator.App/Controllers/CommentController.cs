@@ -66,7 +66,7 @@ namespace NewsAggregator.App.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(Guid id, string returnUrl)
+        public async Task<IActionResult> Delete(Guid id, Guid returnUrl)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace NewsAggregator.App.Controllers
                         _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteComment method");
                         return BadRequest();
                     }
-                    return Redirect(model.ReturnUrl ?? "/");
+                    return Redirect($"~/Article/ReadArticle/{model.ReturnUrl}");
                 }
 
                 return View(model);
