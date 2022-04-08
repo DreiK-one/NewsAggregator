@@ -108,5 +108,48 @@ namespace NewsAggregator.App.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(Guid id, Guid returnUrl)
+        {
+            try
+            {
+                var comment = await _commentService.GetCommentAsync(id);
+                var model = _mapper.Map<CommentModel>(comment);
+                model.ReturnUrl = returnUrl;
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditComment(CommentModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model != null)
+                    {
+                        await _commentService.UpdateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
+                    }
+                    return Redirect($"~/Article/ReadArticle/{model.ReturnUrl}");
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
     }
 }
