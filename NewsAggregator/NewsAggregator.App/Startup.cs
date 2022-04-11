@@ -79,6 +79,9 @@ namespace NewsAggregator.App
                 {
                     opt.AccessDeniedPath = "/access-denied";
                     opt.LoginPath = "/account/login";
+                    opt.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+                    opt.SlidingExpiration = true;
+                    opt.Cookie.Name = "NewsAggregator.Session";
                 });
 
             services.AddAuthorization();

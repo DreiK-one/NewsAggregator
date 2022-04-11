@@ -84,7 +84,7 @@ namespace NewsAggregator.App.Controllers
                     Pager = pager
                 };
 
-                return View(model);
+                return View("ArticlesOnAdminPanel", model);
             }
             catch (Exception ex)
             {

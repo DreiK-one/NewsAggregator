@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
@@ -21,6 +22,7 @@ namespace NewsAggregator.App.Controllers
             _userService = userService;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -62,6 +64,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -78,6 +81,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(UserViewModel model)
         {

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
@@ -22,6 +23,7 @@ namespace NewsAggregator.App.Controllers
             _categoryService = categoryService;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -39,6 +41,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             try
@@ -54,6 +57,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateCategory(CategoryModel model)
         {
@@ -78,6 +82,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -94,6 +99,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteCategory(DeleteCategoryViewModel model)
         {
@@ -120,6 +126,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Guid id)
         {
             try
@@ -136,6 +143,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditCategory(CategoryModel model)
         {

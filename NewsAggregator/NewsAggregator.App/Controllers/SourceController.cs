@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
@@ -6,6 +7,7 @@ using NewsAggregator.Core.Interfaces;
 
 namespace NewsAggregator.App.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class SourceController : Controller
     {
         private readonly IMapper _mapper;
