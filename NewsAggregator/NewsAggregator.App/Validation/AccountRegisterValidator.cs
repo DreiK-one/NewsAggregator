@@ -15,12 +15,16 @@ namespace NewsAggregator.App.Validation
             RuleFor(account => account.Email)
                 .NotNull().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Invalid email format")
-                .Must(CheckIsEmailExists).WithMessage("This email is already exists");
+                .Must(CheckIsEmailExists).WithMessage("This email is already exists")
+                .Must(CheckIsNicknameOrEmailContainsAdminWord)
+                    .WithMessage("Email can't contain word \"admin\"");
 
             RuleFor(account => account.Nickname)
                 .NotNull().WithMessage("Nickname is required")
                 .MinimumLength(4).WithMessage("Minimum length of password is 4")
-                .Must(CheckIsNicknameExists).WithMessage("This nickname is already exists");
+                .Must(CheckIsNicknameExists).WithMessage("This nickname is already exists")
+                .Must(CheckIsNicknameOrEmailContainsAdminWord)
+                    .WithMessage("Nickname can't contain word \"admin\""); ;
 
             RuleFor(account => account.Password)
                 .NotNull().WithMessage("Password is required")
@@ -73,6 +77,15 @@ namespace NewsAggregator.App.Validation
         {
             var result = _accountService.ValidateIsNicknameExists(nickname);
             return !result;
+        }
+
+        private bool CheckIsNicknameOrEmailContainsAdminWord(string adminWord)
+        {
+            if (adminWord.ToLowerInvariant().Contains("admin"))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
