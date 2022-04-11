@@ -15,6 +15,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<int?> DeleteAsync(Guid id);
         Task<Guid> GetCategoryByUrl(string url);
         Task<CategoryDto> GetCategoryAsync(Guid Id);
-        Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name); //
+        Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name); 
     }
 }

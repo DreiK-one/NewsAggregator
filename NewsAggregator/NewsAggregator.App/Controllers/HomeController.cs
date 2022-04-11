@@ -33,21 +33,28 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
+                if (page < 1)
+                {
+                    page = 1;
+                }
+
                 var pageSize = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
 
-                var pageAmount = Convert.ToInt32(Math.Ceiling((double)
+                var articles = (await _articleService.GetNewsByPageAsync(page - 1))
+                    .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
+                    .OrderByDescending(article => article.CreationDate)
+                    .ToList();
+
+                var articlesCount = Convert.ToInt32(Math.Ceiling((double)
                     (await _articleService.GetAllNewsAsync()).Count() / pageSize));
 
-                var articles = (await _articleService.GetNewsByPageAsync(page - 1))
-                .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
-                .OrderByDescending(article => article.CreationDate)
-                .ToList();
+                var pager = new Pager(articlesCount, page, pageSize);
 
                 var model = new ArticlesByPagesViewModel()
                 {
                     NewsList = articles,
-                    PageAmount = pageAmount
+                    Pager = pager
                 };
 
                 return View(model);
