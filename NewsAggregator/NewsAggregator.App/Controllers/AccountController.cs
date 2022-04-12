@@ -188,5 +188,19 @@ namespace NewsAggregator.App.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Manage()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
     }
 }
