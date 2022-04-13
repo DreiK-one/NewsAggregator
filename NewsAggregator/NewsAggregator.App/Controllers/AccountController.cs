@@ -5,6 +5,7 @@ using NewsAggregator.Core.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NewsAggregator.App.Controllers
 {
@@ -190,6 +191,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Manage()
         {
             try
@@ -208,7 +210,12 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                return View();
+                var nickname = HttpContext.User.Claims.FirstOrDefault().Value;
+                var model = new ChangeEmailViewModel
+                {
+                    UserId = await _accountService.GetUserIdByNicknameAsync(nickname)
+                };
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -218,11 +225,20 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeEmailConfirm()
+        public async Task<IActionResult> ChangeEmailConfirm(ChangeEmailViewModel model)
         {
             try
             {
-                return View();
+                if (ModelState.IsValid)
+                {
+                    if (model != null)
+                    {
+                        await _accountService.UpdateEmail(model.UserId, model.NewEmail);
+                        return Redirect(nameof(ChangesApplied));
+                    }
+                }
+
+                return View(nameof(ChangeEmail), model);
             }
             catch (Exception ex)
             {
@@ -264,7 +280,12 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                return View();
+                var nickname = HttpContext.User.Claims.FirstOrDefault().Value;
+                var model = new ChangeNicknameViewModel
+                {
+                    UserId = await _accountService.GetUserIdByNicknameAsync(nickname)
+                };
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -274,7 +295,33 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeNicknameConfirm()
+        public async Task<IActionResult> ChangeNicknameConfirm(ChangeNicknameViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var currentName = await _accountService.GetUserNicknameByIdAsync(model.UserId);
+
+                    if (currentName.ToUpperInvariant().Equals(model.CurrentNickname))
+                    {
+                        await _accountService.UpdateNickname(model.UserId, model.NewNickname);
+                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                        return RedirectToAction(nameof(ChangesApplied));
+                    }
+                    return View("IncorrectCurrentNickname", model);
+                }
+
+                return View(nameof(ChangeNickname), model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> ChangesApplied()
         {
             try
             {

@@ -7,85 +7,39 @@ namespace NewsAggregator.App.Validation
 {
     public class AccountRegisterValidator : AbstractValidator<AccountRegisterModel>
     {
-        private readonly IAccountService _accountService;
-        public AccountRegisterValidator(IAccountService accountService)
+        private readonly IValidationMethods _validationMethods;
+        public AccountRegisterValidator(IValidationMethods validationMethods)
         {
-            _accountService = accountService;
+            _validationMethods = validationMethods;
 
             RuleFor(account => account.Email)
                 .NotNull().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Invalid email format")
-                .Must(CheckIsEmailExists).WithMessage("This email is already exists")
-                .Must(CheckIsNicknameOrEmailContainsAdminWord)
+                .Must(_validationMethods.CheckIsEmailExists).WithMessage("This email is already exists")
+                .Must(_validationMethods.CheckIsNicknameOrEmailContainsAdminWord)
                     .WithMessage("Email can't contain word \"admin\"");
 
             RuleFor(account => account.Nickname)
                 .NotNull().WithMessage("Nickname is required")
-                .MinimumLength(4).WithMessage("Minimum length of password is 4")
-                .Must(CheckIsNicknameExists).WithMessage("This nickname is already exists")
-                .Must(CheckIsNicknameOrEmailContainsAdminWord)
+                .MinimumLength(4).WithMessage("Minimum length of nickname is 4")
+                .Must(_validationMethods.CheckIsNicknameExists).WithMessage("This nickname is already exists")
+                .Must(_validationMethods.CheckIsNicknameOrEmailContainsAdminWord)
                     .WithMessage("Nickname can't contain word \"admin\""); ;
 
             RuleFor(account => account.Password)
                 .NotNull().WithMessage("Password is required")
                 .MinimumLength(8).WithMessage("Minimum length of password is 8")
-                .Must(HasLowerCase)
+                .Must(_validationMethods.HasLowerCase)
                     .WithMessage("Password must contain at least one lowercase letter")
-                .Must(HasUpperCase)
+                .Must(_validationMethods.HasUpperCase)
                     .WithMessage("Password must contain at least one uppercase letter")
-                .Must(HasDigit)
+                .Must(_validationMethods.HasDigit)
                     .WithMessage("Password must contain at least one digit")
-                .Must(HasSymbol)
+                .Must(_validationMethods.HasSymbol)
                     .WithMessage("Password must contain at least one spacial symbol");
 
             RuleFor(account => account.ConfirmPassword)
                 .Equal(account => account.Password).WithMessage("Passwords do not match");
-            
-        }
-
-        private bool HasLowerCase(string pw)
-        {
-            var lowercase = new Regex("[a-z]+");
-            return lowercase.IsMatch(pw);
-        }
-
-        private bool HasUpperCase(string pw)
-        {
-            var uppercase = new Regex("[A-Z]+");
-            return uppercase.IsMatch(pw);
-        }
-
-        private bool HasSymbol(string pw)
-        {
-            var symbol = new Regex("(\\W)+");
-            return symbol.IsMatch(pw);
-        }
-
-        private bool HasDigit(string pw)
-        {
-            var digit = new Regex("(\\d)+");
-            return digit.IsMatch(pw);
-        }
-
-        private bool CheckIsEmailExists(string email)
-        {
-            var result = _accountService.ValidateIsEmailExists(email);
-            return !result;
-        }
-
-        private bool CheckIsNicknameExists(string nickname)
-        {
-            var result = _accountService.ValidateIsNicknameExists(nickname);
-            return !result;
-        }
-
-        private bool CheckIsNicknameOrEmailContainsAdminWord(string adminWord)
-        {
-            if (adminWord.ToLowerInvariant().Contains("admin"))
-            {
-                return false;
-            }
-            return true;
         }
     }
 }

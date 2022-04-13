@@ -37,7 +37,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                string normalizedEmail = email.ToUpperInvariant();
+                var normalizedEmail = email.ToUpperInvariant();
 
                 return await _unitOfWork.Users.Get()
                     .AnyAsync(user =>
@@ -68,7 +68,7 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<Guid?> GetUserIdByNicknameAsync(string nickname)
+        public async Task<Guid> GetUserIdByNicknameAsync(string nickname)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace NewsAggregator.Domain.Services
 
                 return (await (await _unitOfWork.Users.FindBy(user =>
                     user.NormalizedNickname != null && user.NormalizedNickname
-                        .Equals(normalizedNickname))).FirstOrDefaultAsync())?.Id;
+                        .Equals(normalizedNickname))).FirstOrDefaultAsync()).Id;
             }
             catch (Exception ex)
             {
@@ -234,11 +234,49 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<int> UpdateEmail(Guid userId, string email)
+        {
+            await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
+            {
+                new PatchModel
+                {
+                    PropertyName = "Email",
+                    PropertyValue = email
+                },
+
+                new PatchModel
+                {
+                    PropertyName = "NormalizedEmail",
+                    PropertyValue = email.ToUpperInvariant()
+                }
+            });
+            return await _unitOfWork.Save();
+        }
+
+        public async Task<int> UpdateNickname(Guid userId, string nickname)
+        {
+            await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
+            {
+                new PatchModel
+                {
+                    PropertyName = "Nickname",
+                    PropertyValue = nickname
+                },
+
+                new PatchModel
+                {
+                    PropertyName = "NormalizedNickname",
+                    PropertyValue = nickname.ToUpperInvariant()
+                }
+            });
+            return await _unitOfWork.Save();
+        }
+
         public bool ValidateIsEmailExists(string email)
         {
             try
             {
-                string normalizedEmail = email.ToUpperInvariant();
+                var normalizedEmail = email.ToUpperInvariant();
 
                 return _unitOfWork.Users.Get()
                     .Any(user => user.NormalizedEmail.Equals(normalizedEmail));
@@ -254,7 +292,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                string normalizedNickname = nickname.ToUpperInvariant();
+                var normalizedNickname = nickname.ToUpperInvariant();
 
                 return _unitOfWork.Users.Get()
                     .Any(user => user.NormalizedNickname.Equals(normalizedNickname));

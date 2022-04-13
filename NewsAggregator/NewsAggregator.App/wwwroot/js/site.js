@@ -3,8 +3,12 @@
 
 // Write your JavaScript code.
 
-function fade() {
-    let message = document.getElementById("incorrect");
+function fadePassMessage() {
+    let message = document.getElementById("incorrectPass");
     message.innerText = "";
 }
 
+function fadeNickMessage() {
+    let message = document.getElementById("incorrectNick");
+    message.innerText = "";
+}

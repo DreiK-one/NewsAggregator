@@ -33,6 +33,7 @@ namespace NewsAggregator.App
             services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
 
             // Add services to the container.
+            
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
@@ -54,6 +55,8 @@ namespace NewsAggregator.App
             services.AddScoped<IRssService, RssService>();
             services.AddScoped<IHtmlParserService, HtmlParserService>();
             services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<IValidationMethods, ValidationMethods>();
 
             services.AddScoped<TelemetryClient>();
 
@@ -96,6 +99,8 @@ namespace NewsAggregator.App
                     fv.RegisterValidatorsFromAssemblyContaining<AccountRegisterValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<AccountLoginValidator>();
                     fv.RegisterValidatorsFromAssemblyContaining<CommentValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<ChangeEmailValidator>();
+                    fv.RegisterValidatorsFromAssemblyContaining<ChangeNicknameValidator>();
                 });
         }
 

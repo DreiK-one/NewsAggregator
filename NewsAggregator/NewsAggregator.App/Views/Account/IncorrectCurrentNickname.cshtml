@@ -19,8 +19,9 @@
 								<input asp-for="UserId" type="hidden"/>
 	
 								<label asp-for="CurrentNickname">Current nickname</label>
-								<input asp-for="CurrentNickname" type="text" />
+								<input asp-for="CurrentNickname" type="text" onclick="fadeNickMessage()"/>
 								<span asp-validation-for="CurrentNickname"></span>
+								<span class="field-validation-error" id="incorrectNick">The nickname you entered is different from your real name</span>
 								<p></p>
 
 								<label asp-for="NewNickname">New nickname</label>

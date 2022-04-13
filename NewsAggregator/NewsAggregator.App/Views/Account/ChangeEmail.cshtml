@@ -18,18 +18,18 @@
 
 								<input asp-for="UserId" type="hidden"/>
 	
-								<label asp-for="OldEmail">Old email</label>
-								<input asp-for="OldEmail" type="text" />
-								<span asp-validation-for="OldEmail"></span>
+								<label asp-for="CurrentEmail">Old email</label>
+								<input asp-for="CurrentEmail" type="email" />
+								<span asp-validation-for="CurrentEmail"></span>
 								<p></p>
 
 								<label asp-for="NewEmail">New email</label>
-								<input asp-for="NewEmail" type="text" />
+								<input asp-for="NewEmail" type="email" />
 								<span asp-validation-for="NewEmail"></span>
 								<p></p>
 
 								<label asp-for="ConfirmEmail">Confirm new email</label>
-								<input asp-for="ConfirmEmail" type="text" />
+								<input asp-for="ConfirmEmail" type="email" />
 								<span asp-validation-for="ConfirmEmail"></span>
 								<p></p>
 
