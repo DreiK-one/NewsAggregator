@@ -120,10 +120,10 @@ namespace NewsAggregator.App.Controllers
                         await _accountService.SetPasswordAsync(userId, model.Password);
 
                         var claims = new List<Claim>()
-                    {
-                        new Claim(ClaimTypes.Name, model.Nickname),
-                        new Claim(ClaimTypes.Role, "User")
-                    };
+                        {
+                            new Claim(ClaimTypes.Name, model.Nickname),
+                            new Claim(ClaimTypes.Role, "User")
+                        };
                         var claimsIdentity = new ClaimsIdentity(claims, authenticationType: "Cookies");
 
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
@@ -191,6 +191,90 @@ namespace NewsAggregator.App.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Manage()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeEmail()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeEmailConfirm()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangePassword()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordConfirm()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeNickname()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeNicknameConfirm()
         {
             try
             {

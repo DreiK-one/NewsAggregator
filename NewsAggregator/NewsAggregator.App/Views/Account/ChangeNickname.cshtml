@@ -1,0 +1,51 @@
+﻿@model ChangeNicknameViewModel
+
+@{
+	ViewData["Title"] = "Changing nickname";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<ul id="gtco-post-list">
+					<li class="entry animate-box" data-animate-effect="fadeIn">
+						<div class="entry-desc">
+							<h1>Changing nickname</h1>
+							<form asp-controller="Account" asp-action="ChangeNicknameConfirm" method="post">
+
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+
+								<input asp-for="UserId" type="hidden"/>
+	
+								<label asp-for="OldNickname">Old nickname</label>
+								<input asp-for="OldNickname" type="text" />
+								<span asp-validation-for="OldNickname"></span>
+								<p></p>
+
+								<label asp-for="NewNickname">New nickname</label>
+								<input asp-for="NewNickname" type="text" />
+								<span asp-validation-for="NewNickname"></span>
+								<p></p>
+
+								<label asp-for="NewNickname">Confirm new nickname</label>
+								<input asp-for="NewNickname" type="text" />
+								<span asp-validation-for="NewNickname"></span>
+								<p></p>
+
+								<br /><br />
+								<a asp-controller="Account" asp-action="Manage" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-success">Change</button>
+							</form>
+						</div>
+					</li>
+				</ul>	
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
+}
