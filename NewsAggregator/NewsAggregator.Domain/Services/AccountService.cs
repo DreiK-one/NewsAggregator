@@ -191,7 +191,7 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<bool> CheckPassword(string email, string password)
+        public async Task<bool> CheckPasswordByEmailAsync(string email, string password)
         {
             try
             {
@@ -216,6 +216,29 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             } 
+        }
+
+        public async Task<bool> CheckPasswordByIdAsync(Guid id, string password)
+        {
+            try
+            {
+                var userPasswordHash = (await _unitOfWork.Users.GetById(id)).PasswordHash;
+                if (!string.IsNullOrEmpty(userPasswordHash))
+                {
+                    var enteredPasswordHash = GetPasswordHash(password, _configuration["ApplicationVariables:Salt"]);
+
+                    if (userPasswordHash.Equals(enteredPasswordHash))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         private string GetPasswordHash(string password, string salt)

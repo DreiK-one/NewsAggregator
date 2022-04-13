@@ -51,7 +51,7 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (await _accountService.CheckPassword(model.Email, model.Password))
+                if (await _accountService.CheckPasswordByEmailAsync(model.Email, model.Password))
                 {
                     var userId = (await _accountService.GetUserIdByEmailAsync(model.Email))
                         .GetValueOrDefault();
@@ -147,6 +147,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             try
@@ -161,6 +162,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> LogoutConfirm()
         {
             try
@@ -206,6 +208,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> ChangeEmail()
         {
             try
@@ -225,6 +228,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ChangeEmailConfirm(ChangeEmailViewModel model)
         {
             try
@@ -248,11 +252,17 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> ChangePassword()
         {
             try
             {
-                return View();
+                var nickname = HttpContext.User.Claims.FirstOrDefault().Value;
+                var model = new ChangePasswordViewModel
+                {
+                    UserId = await _accountService.GetUserIdByNicknameAsync(nickname)
+                };
+                return View(model);
             }
             catch (Exception ex)
             {
@@ -262,20 +272,32 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangePasswordConfirm()
+        [Authorize]
+        public async Task<IActionResult> ChangePasswordConfirm(ChangePasswordViewModel model)
         {
             try
             {
-                return View();
+                if (ModelState.IsValid)
+                {
+                    if (await _accountService.CheckPasswordByIdAsync(model.UserId, model.CurrentPassword))
+                    {
+                        await _accountService.SetPasswordAsync(model.UserId, model.NewPassword);
+                        return Redirect(nameof(ChangesApplied));
+                    }
+                    return View("IncorrectCurrentPassword", model);
+                }
+
+                return View(nameof(ChangePassword), model);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest();
+                return RedirectToAction("Error500");
             }
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> ChangeNickname()
         {
             try
@@ -295,6 +317,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> ChangeNicknameConfirm(ChangeNicknameViewModel model)
         {
             try
@@ -321,6 +344,7 @@ namespace NewsAggregator.App.Controllers
             }
         }
 
+        [Authorize]
         public async Task<IActionResult> ChangesApplied()
         {
             try
