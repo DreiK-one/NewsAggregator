@@ -4,34 +4,49 @@
 	ViewData["Title"] = "All users";
 }
 
-@*TO DO!*@
-
-
 <div id="gtco-main">
 	<div class="container">
 		<div class="row row-pb-md">
 			<div class="col-md-12">
 				<table class="table">
+					<tr>
+						<th>Nickname</th>
+						<th>Email</th>
+						<th>Date of registration</th>
+						<th>Info about comments</th>
+						<th>Role</th>
+						<th>Actions</th>
+					</tr>
 					@foreach (var user in Model)
 					{
 						<tr>
 							<td>
-								<h2 class="card-title">@user.Nickname</h2>
+								<h4 class="card-title">@user.Nickname</h4>
 							</td>
 							<td>
-								<h2 class="card-title">@user.Email</h2>
+								<h4 class="card-title">@user.Email</h4>
 							</td>
 							<td>
-								<h2 class="card-title">@user.RegistrationDate</h2>
+								<h4 class="card-title">@user.RegistrationDate.ToString("dd.mm.yyyy, HH:mm")</h4>
 							</td>
 							<td>
-								<h2 class="card-title">user.UserActivity</h2>
+								@foreach (var comment in user.Comments)
+								{
+									<h4 class="card-title">
+										@comment.CreationDate.ToString("dd.mm.yyyy, HH:mm")<br> Text: @comment.Text<br> 
+										<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@comment.ArticleId">Go to article</a>
+									</h4>
+								}
 							</td>
 							<td>
-								<h2 class="card-title">user.Articles => with all comments</h2>
-							</td>
-							<td>
-								<h2 class="card-title">user.Role</h2>
+								<h2 class="card-title">
+									@foreach (var roles in user.UserRoles)
+									{
+										<h4 class="card-title">
+										@roles.Role.Name<br>
+										</h4>
+									}
+								</h2>
 							</td>
 							<td>
 								<a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="post-meta btn btn-danger">Delete</a>

@@ -12,5 +12,9 @@ namespace NewsAggregator.Core.DTOs
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
         public UserDto User { get; set; }
+
+        public ArticleDto Article { get; set; }
+
+
     }
 }

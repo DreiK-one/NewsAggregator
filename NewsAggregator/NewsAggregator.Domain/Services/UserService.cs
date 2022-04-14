@@ -35,7 +35,6 @@ namespace NewsAggregator.Domain.Services
                 return await _unitOfWork.Users.Get()
                 .Include(userRoles => userRoles.UserRoles)
                 .ThenInclude(role => role.Role)
-                .Include(userActivity => userActivity.UserActivities)
                 .Include(comments => comments.Comments)
                 .ThenInclude(articles => articles.Article)
                 .Select(users => _mapper.Map<UserDto>(users))

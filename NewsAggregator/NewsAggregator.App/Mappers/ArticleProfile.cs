@@ -17,6 +17,8 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<ArticleDto, CreateOrEditArticleViewModel>();
 
+            CreateMap<ArticleDto, CommentDto>();
+
             CreateMap<ArticleDto, DeleteArticleViewModel>();
 
             CreateMap<ArticleDto, ReadArticleViewModel>();
@@ -33,6 +35,8 @@ namespace NewsAggregator.App.Mappers
             CreateMap<ArticleDto, ArticleModel>();
 
             CreateMap<ArticleModel, CategoryWithArticlesViewModel>();
+
+            CreateMap<ArticleModel, CommentViewModel>();
 
             CreateMap<CreateOrEditArticleViewModel, CreateOrEditArticleDto>()
                 .ForPath(dest => dest.SourceId, opt => opt.MapFrom(src => src.Source.Id))
