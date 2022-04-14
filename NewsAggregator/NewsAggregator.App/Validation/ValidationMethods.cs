@@ -39,20 +39,34 @@ namespace NewsAggregator.App.Validation
 
         public bool CheckIsEmailExists(string email)
         {
-            var result = _accountService.ValidateIsEmailExists(email);
-            return !result;
+            if (email != null)
+            {
+                var result = _accountService.ValidateIsEmailExists(email);
+                return !result;
+            }
+            return false;
         }
 
         public bool CheckIsEmailDoesntExists(string email)
         {
-            var result = _accountService.ValidateIsEmailExists(email);
-            return result;
+            if (email != null)
+            {
+                var result = _accountService.ValidateIsEmailExists(email);
+                return result;
+            }
+            return false;
         }
+            
 
         public bool CheckIsNicknameExists(string nickname)
         {
-            var result = _accountService.ValidateIsNicknameExists(nickname);
-            return !result;
+            if (nickname!= null)
+            {
+                var result = _accountService.ValidateIsNicknameExists(nickname);
+                return !result;
+            }
+            return false;
+                
         }
 
         public bool CheckIsNicknameOrEmailContainsAdminWord(string adminWord)

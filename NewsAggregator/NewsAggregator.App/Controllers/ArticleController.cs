@@ -177,18 +177,13 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                var delete = await _articleService.DeleteAsync(model.Id);
+                if (delete == null)
                 {
-                    var delete = await _articleService.DeleteAsync(model.Id);
-                    if (delete == null)
-                    {
-                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteArticle method");
-                        return BadRequest();
-                    }
-                    return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
+                    _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteArticle method");
+                    return BadRequest();
                 }
-
-                return View(model);
+                return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
             }
             catch (Exception ex)
             {

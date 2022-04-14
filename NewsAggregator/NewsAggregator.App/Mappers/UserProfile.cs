@@ -15,12 +15,15 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<UserDto, UserViewModel>();
 
-            CreateMap<UserDto, CreateOrEditUserViewModel>();
-
-            CreateMap<CreateOrEditUserViewModel, CreateOrEditUserDto>();
+            CreateMap<UserDto, EditUserViewModel>();
 
             CreateMap<CreateOrEditUserDto, User>();
 
+            CreateMap<DeleteUserViewModel, UserDto>().ReverseMap();
+
+            CreateMap<EditUserViewModel, CreateOrEditUserDto>();
+
+            CreateMap<CreateUserViewModel, CreateOrEditUserDto>();
         }
     }
 }

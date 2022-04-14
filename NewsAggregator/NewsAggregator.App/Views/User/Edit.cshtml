@@ -1,4 +1,4 @@
-﻿@model CreateOrEditUserViewModel
+﻿@model EditUserViewModel
 
 @{
 	ViewData["Title"] = "Edit user";
@@ -11,7 +11,7 @@
 				<ul id="gtco-post-list">
 					<li class="entry animate-box" data-animate-effect="fadeIn">
 						<div class="entry-desc">
-							<h1>Editing of user data</h1>
+							<h1>Editing of user</h1>
 								<table class="table">
 									<tr>
 										<th>Nickname</th>
@@ -25,13 +25,13 @@
 									<tr>
 										<td>
 											<input asp-for="Nickname" type="text" value="@Model.Nickname" />
-											<span asp-validation-for="Nickname"></span>
 											<p></p>
+											<span asp-validation-for="Nickname"></span>
 										</td>
 										<td>
 											<input asp-for="Email" type="text" value="@Model.Email" />
-											<span asp-validation-for="Email"></span>
 											<p></p>
+											<span asp-validation-for="Email"></span>
 										</td>
 										<td>
 											<select asp-for="RoleId" asp-items="@Model.Roles"></select>
@@ -45,7 +45,6 @@
 										</td>
 									</tr>
 										</form>
-			
 								</table>
 						</div>
 					</li>

@@ -15,7 +15,7 @@ namespace NewsAggregator.App.Mappers
 
             CreateMap<UserRoleModel, UserViewModel>().ReverseMap();
 
-            CreateMap<CreateOrEditUserViewModel, UserRoleDto>()
+            CreateMap<EditUserViewModel, UserRoleDto>()
                 .ForPath(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
         }
     }

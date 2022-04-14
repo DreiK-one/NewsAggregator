@@ -17,13 +17,14 @@ namespace NewsAggregator.App.Controllers
 
         public UserController(IMapper mapper,
             ILogger<UserController> logger,
-            IUserService userService, 
+            IUserService userService,
             IRoleService roleService)
         {
             _mapper = mapper;
             _logger = logger;
             _userService = userService;
             _roleService = roleService;
+ 
         }
 
         [Authorize(Roles = "Admin")]
@@ -79,7 +80,7 @@ namespace NewsAggregator.App.Controllers
                     .Select(role => _mapper.Map<RoleModel>(role))
                     .ToList();
 
-                var model = _mapper.Map<CreateOrEditUserViewModel>(user);
+                var model = _mapper.Map<EditUserViewModel>(user);
                 model.Roles = roles.Select(role => new SelectListItem(role.Name, role.Id.ToString()));
                 model.RoleId = await _roleService.GetRoleIdByUserIdAsync(id);
 
@@ -95,19 +96,116 @@ namespace NewsAggregator.App.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(CreateOrEditUserViewModel model)
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
         {
             try
             {
-                if (model != null)
+                if (ModelState.IsValid)
                 {
-                    await _roleService.ChangeUserRole(_mapper.Map<UserRoleDto>(model));
+                    if (model != null)
+                    {
+                        await _roleService.ChangeUserRole(_mapper.Map<UserRoleDto>(model));
 
-                    await _userService.UpdateAsync(_mapper.Map<CreateOrEditUserDto>(model));
+                        await _userService.UpdateAsync(_mapper.Map<CreateOrEditUserDto>(model));
+                        return RedirectToAction("Index", "User");
+                    }
+                    
+                }
+
+                return View(nameof(Edit), model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                var article = await _userService.GetUserByIdAsync(id);
+                var model = _mapper.Map<DeleteUserViewModel>(article);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(DeleteUserViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var delete = await _userService.DeleteAsync(model.Id);
+                    if (delete == null)
+                    {
+                        _logger.LogWarning($"{DateTime.Now}: Model is null in DeleteUser method");
+                        return BadRequest();
+                    }
                     return RedirectToAction("Index", "User");
                 }
 
                 return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create()
+        {
+            try
+            {
+                var roles = (await _roleService.GetAllRolesAsync())
+                    .Select(role => _mapper.Map<RoleModel>(role))
+                    .ToList();
+
+                var model = new CreateUserViewModel
+                {
+                    Roles = roles.Select(role => new SelectListItem(role.Name, role.Id.ToString()))
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model != null)
+                    {
+                        await _userService.CreateAsync(_mapper.Map<CreateOrEditUserDto>(model));
+                        return RedirectToAction("Index", "User");
+                    }
+                }
+
+                return View(nameof(Create), model);
             }
             catch (Exception ex)
             {

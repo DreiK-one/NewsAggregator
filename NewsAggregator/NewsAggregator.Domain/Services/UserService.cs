@@ -19,14 +19,17 @@ namespace NewsAggregator.Domain.Services
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountService _accountService;
 
-        public UserService(IMapper mapper, 
-            ILogger<UserService> logger, 
-            IUnitOfWork unitOfWork)
+        public UserService(IMapper mapper,
+            ILogger<UserService> logger,
+            IUnitOfWork unitOfWork, 
+            IAccountService accountService)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _accountService = accountService;
         }
 
         public async Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync()
@@ -116,6 +119,44 @@ namespace NewsAggregator.Domain.Services
                 {
                     await _unitOfWork.Users.Remove(id);
                     return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<int?> CreateAsync(CreateOrEditUserDto userDto)
+        {
+            try
+            {
+                if (userDto != null)
+                {
+                    await _unitOfWork.UserRoles.Add(new UserRole
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = userDto.Id,
+                        RoleId = userDto.RoleId
+                    });
+
+                    await _unitOfWork.Users.Add(new User
+                    {
+                        Id = userDto.Id,
+                        Email = userDto.Email,
+                        NormalizedEmail = userDto.Email.ToUpperInvariant(),
+                        Nickname = userDto.Nickname,
+                        NormalizedNickname = userDto.Nickname.ToUpperInvariant(),
+                        RegistrationDate = userDto.RegistrationDate,
+                    });
+                    await _unitOfWork.Save();
+
+                   return await _accountService.SetPasswordAsync(userDto.Id, userDto.PasswordHash);
                 }
                 else
                 {

@@ -1,5 +1,29 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DeleteUserViewModel
+
 @{
+	ViewData["Title"] = "Delete user";
 }
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<h1>Delete user</h1>
+							<form asp-controller="User" asp-action="DeleteUser" method="post">
+								<h2 class="card-title">Do you really want to delete this user?
+								<input type="hidden" asp-for="Id" />
+								<a asp-controller="User" asp-action="Index" class="btn btn-info">Cancel</a>
+								<button type="submit" class="btn btn-danger">Delete</button>
+								</h2>
+								<br /><br /><br /><br />				
+							</form>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
