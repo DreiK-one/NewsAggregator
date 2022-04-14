@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -64,13 +65,35 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<int?> UpdateAsync(UserDto userDto)
+        public async Task<int?> UpdateAsync(CreateOrEditUserDto userDto)
         {
             try
             {
                 if (userDto != null)
                 {
-                    await _unitOfWork.Users.Update(_mapper.Map<User>(userDto));
+                    await _unitOfWork.Users.PatchAsync(userDto.Id, new List<PatchModel>
+                    {
+                        new PatchModel
+                        {
+                            PropertyName = "Email",
+                            PropertyValue = userDto.Email
+                        },
+                        new PatchModel
+                        {
+                            PropertyName = "NormalizedEmail",
+                            PropertyValue = userDto.Email.ToUpperInvariant()
+                        },
+                        new PatchModel
+                        {
+                            PropertyName = "Nickname",
+                            PropertyValue = userDto.Nickname
+                        },
+                        new PatchModel
+                        {
+                            PropertyName = "NormalizedNickname",
+                            PropertyValue = userDto.Nickname.ToUpperInvariant()
+                        },
+                    });
                     return await _unitOfWork.Save();
                 }
                 else

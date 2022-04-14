@@ -9,13 +9,18 @@ namespace NewsAggregator.App.Mappers
     {
         public UserProfile()
         {
-            CreateMap<User, UserDto>()
-                .ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
 
-            CreateMap<UserDto, UserModel>();
+            CreateMap<UserDto, UserModel>().ReverseMap();
 
             CreateMap<UserDto, UserViewModel>();
-                
+
+            CreateMap<UserDto, CreateOrEditUserViewModel>();
+
+            CreateMap<CreateOrEditUserViewModel, CreateOrEditUserDto>();
+
+            CreateMap<CreateOrEditUserDto, User>();
+
         }
     }
 }

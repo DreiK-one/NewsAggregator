@@ -9,11 +9,14 @@ namespace NewsAggregator.App.Mappers
     {
         public UserRoleProfile()
         {
-            CreateMap<UserRole, UserRoleDto>();
+            CreateMap<UserRole, UserRoleDto>().ReverseMap();
 
-            CreateMap<UserRoleDto, UserRoleModel>();
+            CreateMap<UserRoleDto, UserRoleModel>().ReverseMap();
 
-            CreateMap<UserRoleModel, UserViewModel>();
+            CreateMap<UserRoleModel, UserViewModel>().ReverseMap();
+
+            CreateMap<CreateOrEditUserViewModel, UserRoleDto>()
+                .ForPath(dest => dest.UserId, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

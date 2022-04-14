@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -35,6 +36,22 @@ namespace NewsAggregator.Domain.Services
                 return await _unitOfWork.Roles.Get()
                 .Select(role => _mapper.Map<RoleDto>(role))
                 .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<Guid> GetRoleIdByUserIdAsync(Guid id)
+        {
+            try
+            {
+                return await _unitOfWork.UserRoles.Get()
+                    .Where(userId => userId.UserId.Equals(id))
+                    .Select(roleId => roleId.RoleId)
+                    .FirstOrDefaultAsync();
             }
             catch (Exception ex)
             {
@@ -115,11 +132,11 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<RoleDto> GetRoleAsync(Guid Id)
+        public async Task<RoleDto> GetRoleAsync(Guid id)
         {
             try
             {
-                var role = await _unitOfWork.Roles.GetById(Id);
+                var role = await _unitOfWork.Roles.GetById(id);
                 return _mapper.Map<RoleDto>(role);
             }
             catch (Exception ex)
@@ -155,6 +172,50 @@ namespace NewsAggregator.Domain.Services
             return id;
         }
 
-        
+        public async Task<int?> ChangeUserRole(UserRoleDto dto)
+        {
+            try
+            {
+                if (dto != null)
+                {
+                    var userRoleId = FindUserRoleIdByUserId(dto.UserId);
+                    dto.Id = userRoleId;
+
+                    await _unitOfWork.UserRoles.PatchAsync(dto.Id, new List<PatchModel>
+                    {
+                        new PatchModel
+                        {
+                            PropertyName = "RoleId",
+                            PropertyValue = dto.RoleId
+                        }
+                    });
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public Guid FindUserRoleIdByUserId(Guid id)
+        {
+            try
+            {
+                return (_unitOfWork.UserRoles.Get()
+                          .Where(userId => userId.UserId.Equals(id))
+                          .FirstOrDefault()).Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

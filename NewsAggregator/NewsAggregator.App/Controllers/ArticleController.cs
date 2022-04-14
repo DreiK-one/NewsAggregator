@@ -87,15 +87,12 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (model != null)
                 {
-                    if (model != null)
-                    {
-                        await _articleService.CreateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
-                    }
+                    await _articleService.CreateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
                     return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
-                
+                    
                 return View(model);
             }
             catch (Exception ex)
@@ -118,8 +115,8 @@ namespace NewsAggregator.App.Controllers
                     .ToList();
 
                 var categories = (await _categoryService.GetAllCategoriesAsync())
-                .Select(category => _mapper.Map<CategoryModel>(category))
-                .ToList();
+                    .Select(category => _mapper.Map<CategoryModel>(category))
+                    .ToList();
 
                 var model = _mapper.Map<CreateOrEditArticleViewModel>(article);
                 model.Categories = categories.Select(category => new SelectListItem(category.Name, category.Id.ToString()));
@@ -141,12 +138,9 @@ namespace NewsAggregator.App.Controllers
         {
             try
             {
-                if (ModelState.IsValid)
+                if (model != null)
                 {
-                    if (model != null)
-                    {
-                        await _articleService.UpdateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
-                    }
+                    await _articleService.UpdateAsync(_mapper.Map<CreateOrEditArticleDto>(model));
                     return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
                 }
 

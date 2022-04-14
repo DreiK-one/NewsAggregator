@@ -1,5 +1,61 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model CreateOrEditUserViewModel
+
 @{
+	ViewData["Title"] = "Edit user";
+}
+
+<div id="gtco-main">
+	<div class="container">
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<ul id="gtco-post-list">
+					<li class="entry animate-box" data-animate-effect="fadeIn">
+						<div class="entry-desc">
+							<h1>Editing of user data</h1>
+								<table class="table">
+									<tr>
+										<th>Nickname</th>
+										<th>Email</th>
+										<th>Role</th>
+									</tr>
+								
+										<form asp-controller="User" asp-action="EditUser" method="post">
+											<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+											<input asp-for="Id" type="hidden" value="@Model.Id" />
+									<tr>
+										<td>
+											<input asp-for="Nickname" type="text" value="@Model.Nickname" />
+											<span asp-validation-for="Nickname"></span>
+											<p></p>
+										</td>
+										<td>
+											<input asp-for="Email" type="text" value="@Model.Email" />
+											<span asp-validation-for="Email"></span>
+											<p></p>
+										</td>
+										<td>
+											<select asp-for="RoleId" asp-items="@Model.Roles"></select>
+											<br /><br /><br /><br /><br /><br />
+										</td>
+									</tr>	
+									<tr>
+										<td>
+											<a asp-controller="User" asp-action="Index" class="btn btn-info">Back to the users menegement</a>
+											<button type="submit" class="btn btn-success">Save changes</button>
+										</td>
+									</tr>
+										</form>
+			
+								</table>
+						</div>
+					</li>
+				</ul>	
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+{
+	@await Html.PartialAsync("_ValidationScriptsPartial")
 }

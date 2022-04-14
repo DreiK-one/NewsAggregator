@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
@@ -12,14 +13,17 @@ namespace NewsAggregator.App.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
-        public UserController(IMapper mapper, 
-            ILogger<UserController> logger, 
-            IUserService userService)
+        public UserController(IMapper mapper,
+            ILogger<UserController> logger,
+            IUserService userService, 
+            IRoleService roleService)
         {
             _mapper = mapper;
             _logger = logger;
             _userService = userService;
+            _roleService = roleService;
         }
 
         [Authorize(Roles = "Admin")]
@@ -70,7 +74,15 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var user = await _userService.GetUserByIdAsync(id);
-                var model = _mapper.Map<UserViewModel>(user);
+
+                var roles = (await _roleService.GetAllRolesAsync())
+                    .Select(role => _mapper.Map<RoleModel>(role))
+                    .ToList();
+
+                var model = _mapper.Map<CreateOrEditUserViewModel>(user);
+                model.Roles = roles.Select(role => new SelectListItem(role.Name, role.Id.ToString()));
+                model.RoleId = await _roleService.GetRoleIdByUserIdAsync(id);
+
                 return View(model);
             }
             catch (Exception ex)
@@ -83,19 +95,18 @@ namespace NewsAggregator.App.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditUser(UserViewModel model)
+        public async Task<IActionResult> EditUser(CreateOrEditUserViewModel model)
         {
             try
             {
-                if (ModelState.IsValid)
+                if (model != null)
                 {
-                    if (model != null)
-                    {
-                        await _userService.UpdateAsync(_mapper.Map<UserDto>(model));
-                    }
+                    await _roleService.ChangeUserRole(_mapper.Map<UserRoleDto>(model));
+
+                    await _userService.UpdateAsync(_mapper.Map<CreateOrEditUserDto>(model));
                     return RedirectToAction("Index", "User");
                 }
-                  
+
                 return View(model);
             }
             catch (Exception ex)

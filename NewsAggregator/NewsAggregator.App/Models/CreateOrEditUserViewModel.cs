@@ -1,22 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using NewsAggregator.Core.DTOs;
-using NewsAggregator.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewsAggregator.App.Models
 {
-    public class UserViewModel
+    public class CreateOrEditUserViewModel : BaseModel
     {
-        public Guid Id { get; set; }
         public string Email { get; set; }
+        public string? NormalizedEmail { get; set; }
         public string Nickname { get; set; }
+        public string NormalizedNickname { get; set; }
         public DateTime RegistrationDate { get; set; }
+        public Guid RoleId { get; set; }
 
         public List<CommentModel> Comments { get; set; }
         public List<UserRoleModel> UserRoles { get; set; }
+
+        public IEnumerable<SelectListItem> Roles { get; set; }
     }
 }

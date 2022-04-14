@@ -11,7 +11,7 @@ namespace NewsAggregator.Core.Interfaces
     {
         Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync();
         Task<UserDto> GetUserByIdAsync(Guid id);
-        Task<int?> UpdateAsync(UserDto userDto);
+        Task<int?> UpdateAsync(CreateOrEditUserDto userDto);
         Task<int?> DeleteAsync(Guid id);
     }
 }
