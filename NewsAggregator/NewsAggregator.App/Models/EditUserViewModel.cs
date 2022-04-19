@@ -10,9 +10,6 @@ namespace NewsAggregator.App.Models
         public DateTime RegistrationDate { get; set; }
         public Guid RoleId { get; set; }
 
-        public List<CommentModel>? Comments { get; set; }
-        public List<UserRoleModel>? UserRoles { get; set; }
-
         public IEnumerable<SelectListItem>? Roles { get; set; }
     }
 }

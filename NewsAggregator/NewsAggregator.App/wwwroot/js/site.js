@@ -1,5 +1,5 @@
 ﻿function fadePassMessage() {
-    let message = document.getElementzById("incorrectPass");
+    let message = document.getElementById("incorrectPass");
     message.innerText = "";
 }
 

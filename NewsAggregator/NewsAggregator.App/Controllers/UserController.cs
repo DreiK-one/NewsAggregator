@@ -108,16 +108,20 @@ namespace NewsAggregator.App.Controllers
 
                         await _userService.UpdateAsync(_mapper.Map<CreateOrEditUserDto>(model));
                         return RedirectToAction("Index", "User");
-                    }
-                    
+                    }  
                 }
+
+                var roles = (await _roleService.GetAllRolesAsync())
+                    .Select(role => _mapper.Map<RoleModel>(role))
+                    .ToList();
+                model.Roles = roles.Select(role => new SelectListItem(role.Name, role.Id.ToString()));
 
                 return View(nameof(Edit), model);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new { ex.Message });
+                return BadRequest();
             }
         }
 
@@ -204,6 +208,11 @@ namespace NewsAggregator.App.Controllers
                         return RedirectToAction("Index", "User");
                     }
                 }
+                var roles = (await _roleService.GetAllRolesAsync())
+                    .Select(role => _mapper.Map<RoleModel>(role))
+                    .ToList();
+
+                model.Roles = roles.Select(role => new SelectListItem(role.Name, role.Id.ToString()));
 
                 return View(nameof(Create), model);
             }

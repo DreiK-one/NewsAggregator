@@ -12,40 +12,29 @@
 					<li class="entry animate-box" data-animate-effect="fadeIn">
 						<div class="entry-desc">
 							<h1>Editing of user</h1>
-								<table class="table">
-									<tr>
-										<th>Nickname</th>
-										<th>Email</th>
-										<th>Role</th>
-									</tr>
-								
-										<form asp-controller="User" asp-action="EditUser" method="post">
-											<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
-											<input asp-for="Id" type="hidden" value="@Model.Id" />
-									<tr>
-										<td>
-											<input asp-for="Nickname" type="text" value="@Model.Nickname" />
-											<p></p>
-											<span asp-validation-for="Nickname"></span>
-										</td>
-										<td>
-											<input asp-for="Email" type="text" value="@Model.Email" />
-											<p></p>
-											<span asp-validation-for="Email"></span>
-										</td>
-										<td>
-											<select asp-for="RoleId" asp-items="@Model.Roles"></select>
-											<br /><br /><br /><br /><br /><br />
-										</td>
-									</tr>	
-									<tr>
-										<td>
-											<a asp-controller="User" asp-action="Index" class="btn btn-info">Back to the users menegement</a>
-											<button type="submit" class="btn btn-success">Save changes</button>
-										</td>
-									</tr>
-										</form>
-								</table>
+							<form asp-controller="User" asp-action="EditUser" method="post">
+								<div class="validation-summary-errors" asp-validation-summary="ModelOnly"></div> 
+								<input asp-for="Id" type="hidden" value="@Model.Id" />
+								<input asp-for="RegistrationDate" type="hidden" value="@Model.RegistrationDate" />
+
+								<label asp-for="Nickname">Nickname:</label>
+								<input asp-for="Nickname" type="text" value="@Model.Nickname" />
+								<span asp-validation-for="Nickname"></span>
+								<p></p>
+
+								<label asp-for="Email">Email:</label>
+								<input asp-for="Email" type="text" value="@Model.Email" />
+								<span asp-validation-for="Email"></span>
+								<p></p>
+
+								<label asp-for="RoleId">Role:</label>
+								<select asp-for="RoleId" asp-items="@Model.Roles"></select>
+								<p></p>
+
+								<br /><br />
+								<a asp-controller="User" asp-action="Index" class="btn btn-info">Back to the users menegement</a>
+								<button type="submit" class="btn btn-success">Save changes</button>
+							</form>
 						</div>
 					</li>
 				</ul>	

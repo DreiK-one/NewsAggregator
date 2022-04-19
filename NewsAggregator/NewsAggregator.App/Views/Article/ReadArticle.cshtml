@@ -64,6 +64,10 @@
 										<a asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-returnurl="@Model.Id" class="post-meta-left btn btn-info">Edit</a>
 										<a asp-controller="Comment" asp-action="Delete" asp-route-id="@comment.Id" asp-route-returnurl="@Model.Id" class="post-meta-right btn btn-danger">Delete</a>
 									}
+									@if (User.IsInRole("Moderator"))
+									{
+										<a asp-controller="Comment" asp-action="Edit" asp-route-id="@comment.Id" asp-route-returnurl="@Model.Id" class="post-meta-left btn btn-info">Edit</a>
+									}
 								}
 							</div>
 						</div>

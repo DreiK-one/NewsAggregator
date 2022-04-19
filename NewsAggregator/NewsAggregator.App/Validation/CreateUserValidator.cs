@@ -1,34 +1,29 @@
 ﻿using FluentValidation;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.Interfaces;
-using System.Text.RegularExpressions;
 
 namespace NewsAggregator.App.Validation
 {
-    public class AccountRegisterValidator : AbstractValidator<AccountRegisterModel>
+    public class CreateUserValidator : AbstractValidator<CreateUserViewModel>
     {
         private readonly IValidationMethods _validationMethods;
-        public AccountRegisterValidator(IValidationMethods validationMethods)
+        public CreateUserValidator(IValidationMethods validationMethods)
         {
             _validationMethods = validationMethods;
 
-            RuleFor(account => account.Email)
-                .NotNull().WithMessage("Email is required")
-                .EmailAddress().WithMessage("Invalid email format")
-                .Must(_validationMethods.CheckIsEmailExists)
-                    .WithMessage("This email is already exists")
-                .Must(_validationMethods.CheckIsNicknameOrEmailContainsAdminWord)
-                    .WithMessage("Email can't contain word \"admin\"");
-
-            RuleFor(account => account.Nickname)
+            RuleFor(user => user.Nickname)
                 .NotNull().WithMessage("Nickname is required")
                 .MinimumLength(4).WithMessage("Minimum length of nickname is 4")
                 .Must(_validationMethods.CheckIsNicknameExists)
-                    .WithMessage("This nickname is already exists")
-                .Must(_validationMethods.CheckIsNicknameOrEmailContainsAdminWord)
-                    .WithMessage("Nickname can't contain word \"admin\""); ;
+                    .WithMessage("This nickname is already exists");
 
-            RuleFor(account => account.Password)
+            RuleFor(user => user.Email)
+                .NotNull().WithMessage("Email is required")
+                .EmailAddress().WithMessage("Invalid email format")
+                .Must(_validationMethods.CheckIsEmailExists)
+                    .WithMessage("This email is already exists");
+
+            RuleFor(user => user.Password)
                 .NotNull().WithMessage("Password is required")
                 .MinimumLength(8).WithMessage("Minimum length of password is 8")
                 .Must(_validationMethods.HasLowerCase)
@@ -40,7 +35,7 @@ namespace NewsAggregator.App.Validation
                 .Must(_validationMethods.HasSymbol)
                     .WithMessage("Password must contain at least one spacial symbol");
 
-            RuleFor(account => account.ConfirmPassword)
+            RuleFor(user => user.ConfirmPassword)
                 .Equal(account => account.Password).WithMessage("Passwords do not match");
         }
     }

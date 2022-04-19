@@ -110,7 +110,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Moderator")]
         public async Task<IActionResult> Edit(Guid id, Guid returnUrl)
         {
             try
@@ -128,7 +128,7 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Moderator")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditComment(CommentModel model)
         {

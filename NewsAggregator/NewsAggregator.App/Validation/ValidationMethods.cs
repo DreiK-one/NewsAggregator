@@ -55,8 +55,7 @@ namespace NewsAggregator.App.Validation
                 return result;
             }
             return false;
-        }
-            
+        }         
 
         public bool CheckIsNicknameExists(string nickname)
         {
@@ -65,8 +64,7 @@ namespace NewsAggregator.App.Validation
                 var result = _accountService.ValidateIsNicknameExists(nickname);
                 return !result;
             }
-            return false;
-                
+            return false;    
         }
 
         public bool CheckIsNicknameOrEmailContainsAdminWord(string adminWord)
