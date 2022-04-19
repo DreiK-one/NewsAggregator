@@ -166,8 +166,7 @@ namespace NewsAggregator.Domain.Services
                     Title = title,
                     Description = description,
                     Body = text,
-                    CreationDate = DateTime.Now,   //todo date from source article
-                    //Coefficient = ??,             
+                    CreationDate = DateTime.Now,         
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
@@ -240,8 +239,7 @@ namespace NewsAggregator.Domain.Services
                     Title = title,
                     Description = description,
                     Body = text,
-                    CreationDate = DateTime.Now,   //todo date from source article
-                    //Coefficient = ??,            
+                    CreationDate = DateTime.Now,         
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
@@ -319,8 +317,7 @@ namespace NewsAggregator.Domain.Services
                     Title = title,
                     Description = description,
                     Body = text,
-                    CreationDate = DateTime.Now,   //todo date from source article
-                    //Coefficient = ??,            
+                    CreationDate = DateTime.Now,  
                     SourceUrl = url,
                     CategoryId = await _categoryService.GetCategoryByUrl(url),
                     SourceId = await _sourceService.GetSourceByUrl(url),
