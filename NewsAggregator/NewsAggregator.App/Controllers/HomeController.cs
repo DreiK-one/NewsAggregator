@@ -70,7 +70,7 @@ namespace NewsAggregator.App.Controllers
 
         public async Task<IActionResult> Test()
         {
-            var test = await _rateService.GetJsonFromTexterra();
+            var test = await _rateService.GetRatingForNews();
             return View();
         }
     }

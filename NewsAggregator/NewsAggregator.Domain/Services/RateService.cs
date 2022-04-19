@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,11 @@ namespace NewsAggregator.Domain.Services
             {
                 var article = await _articleService.GetArticleWithoutRating();
 
-                var body = CleanText(article.Body);
-                var descrtiption = CleanText(article.Description);
-                var title = CleanText(article.Title);
+                var body = CleanTextFromSymbols(article.Body);
+                var descrtiption = CleanTextFromSymbols(article.Description);
+                var title = CleanTextFromSymbols(article.Title);
 
                 var fullText = string.Concat(body, " ", descrtiption, " ", title);
-
                 var result = Regex.Replace(fullText, "(<[^>]+>)", "");
 
                 return result;
@@ -53,7 +53,7 @@ namespace NewsAggregator.Domain.Services
             }  
         }
 
-        public string CleanText(string text)
+        public string CleanTextFromSymbols(string text)
         {
             var result = text.Replace("<p>", "").Replace("</p>", "")
                     .Replace("<em>", "").Replace("</em>", "")
@@ -84,8 +84,10 @@ namespace NewsAggregator.Domain.Services
                     var response = await httpClient.SendAsync(request);
 
                     var responseString = await response.Content.ReadAsStringAsync();
+         
+                    var result = responseString.Substring(1, responseString.Length - 2);
 
-                    return responseString;
+                    return result;
                 }
             }
             catch (Exception ex)
@@ -97,7 +99,47 @@ namespace NewsAggregator.Domain.Services
 
         public async Task<float?> GetRatingForNews()
         {
-            throw new NotImplementedException();
+            var unratedArticle = await GetJsonFromTexterra();
+            var fileWithRatedWords = File.ReadAllText("Words.json");
+
+            Dictionary<string, float?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, float?>>(fileWithRatedWords);
+            Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
+
+            //float? rating = 0f;
+            //int count = 0;
+            //foreach (var ratedword in ratedWordsDictionary)
+            //{
+            //    foreach (var unratedword in deserializedArticles.Annotations.Lemma)
+            //    {
+            //        if (ratedword.Key.Contains(unratedword.Value))
+            //        {
+            //            rating += ratedword.Value;
+            //            count++;
+            //        }
+            //    }
+            //}
+
+            //return (rating / count);
+
+            return null; // Think about compare of 2 dictionary
+        }
+
+        public class Lemma
+        {
+            public int Start { get; set; }
+            public int End { get; set; }
+            public string Value { get; set; }
+        }
+
+        public class Annotations
+        {
+            public List<Lemma> Lemma { get; set; }
+        }
+
+        public class Root
+        {
+            public string Text { get; set; }
+            public Annotations Annotations { get; set; }
         }
     }
 }

@@ -9,7 +9,7 @@ namespace NewsAggregator.Core.Interfaces
     public interface IRateService
     {
         Task<string?> GetCleanTextOfArticle();
-        string CleanText(string text);
+        string CleanTextFromSymbols(string text);
         Task<string?> GetJsonFromTexterra();
         Task<float?> GetRatingForNews();
     }
