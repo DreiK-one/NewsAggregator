@@ -17,16 +17,18 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IArticleService _articleService;
         private readonly IConfiguration _configuration;
+        private readonly IRateService _rateService;
 
         public HomeController(IMapper mapper,
             ILogger<HomeController> logger,
-            IArticleService articleService, 
-            IConfiguration configuration)
+            IArticleService articleService,
+            IConfiguration configuration, IRateService rateService)
         {
             _mapper = mapper;
             _logger = logger;
             _articleService = articleService;
             _configuration = configuration;
+            _rateService = rateService;
         }
 
         public async Task<IActionResult> Index(int page = 1)
@@ -64,6 +66,12 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
-        }  
+        }
+
+        public async Task<IActionResult> Test()
+        {
+            var test = await _rateService.GetJsonFromTexterra();
+            return View();
+        }
     }
 }

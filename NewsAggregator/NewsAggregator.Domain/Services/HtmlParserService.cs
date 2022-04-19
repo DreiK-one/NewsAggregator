@@ -158,6 +158,16 @@ namespace NewsAggregator.Domain.Services
                 {
                     bodyNode.RemoveChild(titleInText);
                 }
+                var iframe = bodyNode.SelectNodes("//div[@class='news-text']/iframe");
+                if (iframe != null)
+                {
+                    bodyNode.RemoveChildren(iframe);
+                }
+                var div = bodyNode.SelectNodes("//div[@class='news-text']/div");
+                if (div != null)
+                {
+                    bodyNode.RemoveChildren(div);
+                }
                 var text = bodyNode.InnerHtml.Trim();
 
                 var model = new NewArticleDto()

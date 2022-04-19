@@ -180,5 +180,14 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }        
         }
+
+        public async Task<ArticleDto> GetArticleWithoutRating()
+        {
+            var article = await _unitOfWork.Articles.Get()
+                .Where(article => article.Coefficient.Equals(null))
+                .Take(1).FirstOrDefaultAsync();
+
+            return _mapper.Map<ArticleDto>(article);
+        }
     }
 }

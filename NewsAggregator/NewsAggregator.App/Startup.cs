@@ -55,6 +55,7 @@ namespace NewsAggregator.App
             services.AddScoped<IRssService, RssService>();
             services.AddScoped<IHtmlParserService, HtmlParserService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IRateService, RateService>();
 
             services.AddScoped<IValidationMethods, ValidationMethods>();
 

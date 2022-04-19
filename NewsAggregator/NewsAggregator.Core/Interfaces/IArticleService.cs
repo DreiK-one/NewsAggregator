@@ -17,5 +17,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<int?> DeleteAsync(Guid modelId);
         Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id);
         Task<List<string>> GetAllExistingArticleUrls();
+        Task<ArticleDto> GetArticleWithoutRating();
     }
 }
