@@ -12,6 +12,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<string?> GetCleanTextOfArticle(ArticleDto dto);
         Task<string> CleanTextFromSymbols(string text);
         Task<string?> GetJsonFromTexterra(string? newsText);
-        Task<float?> GetRatingForNews();
+        Task<ArticleDto> GetRatingForNews();
     }
 }

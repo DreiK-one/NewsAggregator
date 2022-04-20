@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Data;
 using NewsAggregator.Domain.Services.DeserializationEntities;
 using Newtonsoft.Json;
 using System;
@@ -33,29 +34,43 @@ namespace NewsAggregator.Domain.Services
             _articleService = articleService;
         }
 
-        public async Task<float?> GetRatingForNews()
+        public async Task<ArticleDto> GetRatingForNews()
         {
-            var article = await _articleService.GetArticleWithoutRating();
-            var cleantext = await GetCleanTextOfArticle(article);
-            var unratedArticle = await GetJsonFromTexterra(cleantext);
-            var fileWithRatedWords = File.ReadAllText("Words.json");
-
-            Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
-            Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
-
-            int? rating = 0;
-            float? count = deserializedArticles.Annotations.Lemma.Count;
-
-            foreach (var unratedword in deserializedArticles.Annotations.Lemma)
+            try
             {
-                if (ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
-                {
-                    rating += ratedWordsDictionary[unratedword.Value].Value;
-                }
-            }
-            var result = (rating / count);
+                var article = await _articleService.GetArticleWithoutRating();
+                var cleantext = await GetCleanTextOfArticle(article);
+                var unratedArticle = await GetJsonFromTexterra(cleantext);
+                var fileWithRatedWords = File.ReadAllText("Words.json");
 
-            return result;
+                Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
+                Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
+
+                int summuryRating = 0;
+                float count = deserializedArticles.Annotations.Lemma.Count;
+
+                foreach (var unratedword in deserializedArticles.Annotations.Lemma)
+                {
+                    if (ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
+                    {
+                        summuryRating += ratedWordsDictionary[unratedword.Value].Value;
+                    }
+                }
+                var rating = (summuryRating / count);
+
+                var ratedArticle = new ArticleDto
+                {
+                    Id = article.Id,
+                    Coefficient = rating
+                };
+
+                return ratedArticle;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<string?> GetCleanTextOfArticle(ArticleDto dto)
@@ -118,6 +133,34 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
-        }   
+        }
+
+        public async Task<int?> RateArticle(ArticleDto dto)
+        {
+            try
+            {
+                if (dto != null)
+                {
+                    await _unitOfWork.Articles.PatchAsync(dto.Id, new List<PatchModel>
+                    {
+                        new PatchModel
+                        {
+                            PropertyName = "Coefficient",
+                            PropertyValue = dto.Coefficient
+                        }
+                    });
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }
