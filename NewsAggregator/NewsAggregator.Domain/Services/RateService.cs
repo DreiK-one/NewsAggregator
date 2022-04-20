@@ -58,7 +58,7 @@ namespace NewsAggregator.Domain.Services
                         count++;
                     }
                 }
-                var rating = (summuryRating / count * 100);
+                var rating = (summuryRating / count);
 
                 var ratedArticle = new ArticleDto
                 {
