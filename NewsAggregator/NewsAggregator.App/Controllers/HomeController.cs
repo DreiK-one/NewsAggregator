@@ -67,11 +67,5 @@ namespace NewsAggregator.App.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
-
-        public async Task<IActionResult> Test()
-        {
-            var test = await _rateService.GetRatingForNews();
-            return View();
-        }
     }
 }

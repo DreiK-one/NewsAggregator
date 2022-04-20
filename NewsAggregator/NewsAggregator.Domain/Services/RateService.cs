@@ -39,6 +39,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var article = await _articleService.GetArticleWithoutRating();
+
                 var cleantext = await GetCleanTextOfArticle(article);
                 var unratedArticle = await GetJsonFromTexterra(cleantext);
                 var fileWithRatedWords = File.ReadAllText("Words.json");
@@ -64,7 +65,7 @@ namespace NewsAggregator.Domain.Services
                     Coefficient = rating
                 };
 
-                return ratedArticle;
+                return ratedArticle; 
             }
             catch (Exception ex)
             {
@@ -95,11 +96,19 @@ namespace NewsAggregator.Domain.Services
 
         public async Task<string> CleanTextFromSymbols(string text)
         {
-            var result = text.Replace("<p>", "").Replace("</p>", "")
+            try
+            {
+                var result = text.Replace("<p>", "").Replace("</p>", "")
                     .Replace("<em>", "").Replace("</em>", "")
                     .Replace("&quot;", "").Replace("\"", "")
                     .Replace("«", "").Replace("»", "").Replace("\n", "");
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<string?> GetJsonFromTexterra(string? newsText)
@@ -135,18 +144,19 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<int?> RateArticle(ArticleDto dto)
+        public async Task<int?> RateArticle()
         {
             try
             {
-                if (dto != null)
+                var ratedArticle = GetRatingForNews().Result;
+                if (ratedArticle != null)
                 {
-                    await _unitOfWork.Articles.PatchAsync(dto.Id, new List<PatchModel>
+                    await _unitOfWork.Articles.PatchAsync(ratedArticle.Id, new List<PatchModel>
                     {
                         new PatchModel
                         {
                             PropertyName = "Coefficient",
-                            PropertyValue = dto.Coefficient
+                            PropertyValue = ratedArticle.Coefficient
                         }
                     });
                     return await _unitOfWork.Save();

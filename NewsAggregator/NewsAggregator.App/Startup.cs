@@ -169,6 +169,11 @@ namespace NewsAggregator.App
             RecurringJob.AddOrUpdate("Aggregate news",
                 () => rssService.GetNewsFromSourcesAsync(),
                 "*/10 * * * *");
+
+            var rateService = serviceProvider.GetRequiredService<IRateService>();
+            RecurringJob.AddOrUpdate("Rate news",
+                () => rateService.RateArticle(),
+                "*/2 * * * *");
         }
     }
 }
