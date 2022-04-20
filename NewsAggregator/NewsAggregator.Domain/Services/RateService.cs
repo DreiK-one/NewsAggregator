@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Domain.Services.DeserializationEntities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -102,44 +103,22 @@ namespace NewsAggregator.Domain.Services
             var unratedArticle = await GetJsonFromTexterra();
             var fileWithRatedWords = File.ReadAllText("Words.json");
 
-            Dictionary<string, float?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, float?>>(fileWithRatedWords);
+            Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
             Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
 
-            //float? rating = 0f;
-            //int count = 0;
-            //foreach (var ratedword in ratedWordsDictionary)
-            //{
-            //    foreach (var unratedword in deserializedArticles.Annotations.Lemma)
-            //    {
-            //        if (ratedword.Key.Contains(unratedword.Value))
-            //        {
-            //            rating += ratedword.Value;
-            //            count++;
-            //        }
-            //    }
-            //}
+            int? rating = 0;
+            float? count = deserializedArticles.Annotations.Lemma.Count;
 
-            //return (rating / count);
+            foreach (var unratedword in deserializedArticles.Annotations.Lemma)
+            {
+                if(ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
+                {
+                    rating += ratedWordsDictionary[unratedword.Value].Value;
+                }
+            }   
+            var result = (rating / count);
 
-            return null; // Think about compare of 2 dictionary
-        }
-
-        public class Lemma
-        {
-            public int Start { get; set; }
-            public int End { get; set; }
-            public string Value { get; set; }
-        }
-
-        public class Annotations
-        {
-            public List<Lemma> Lemma { get; set; }
-        }
-
-        public class Root
-        {
-            public string Text { get; set; }
-            public Annotations Annotations { get; set; }
+            return result;
         }
     }
 }
