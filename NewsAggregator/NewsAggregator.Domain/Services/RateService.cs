@@ -48,16 +48,17 @@ namespace NewsAggregator.Domain.Services
                 Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
 
                 int summuryRating = 0;
-                float count = deserializedArticles.Annotations.Lemma.Count;
+                float count = 0;
 
                 foreach (var unratedword in deserializedArticles.Annotations.Lemma)
                 {
                     if (ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
                     {
                         summuryRating += ratedWordsDictionary[unratedword.Value].Value;
+                        count++;
                     }
                 }
-                var rating = (summuryRating / count);
+                var rating = (summuryRating / count * 100);
 
                 var ratedArticle = new ArticleDto
                 {
