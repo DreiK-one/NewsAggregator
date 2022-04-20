@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewsAggregator.Core.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,9 @@ namespace NewsAggregator.Core.Interfaces
 {
     public interface IRateService
     {
-        Task<string?> GetCleanTextOfArticle();
-        string CleanTextFromSymbols(string text);
-        Task<string?> GetJsonFromTexterra();
+        Task<string?> GetCleanTextOfArticle(ArticleDto dto);
+        Task<string> CleanTextFromSymbols(string text);
+        Task<string?> GetJsonFromTexterra(string? newsText);
         Task<float?> GetRatingForNews();
     }
 }

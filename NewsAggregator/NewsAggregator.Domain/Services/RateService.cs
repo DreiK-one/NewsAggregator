@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Domain.Services.DeserializationEntities;
@@ -32,20 +33,43 @@ namespace NewsAggregator.Domain.Services
             _articleService = articleService;
         }
 
-        public async Task<string?> GetCleanTextOfArticle()
+        public async Task<float?> GetRatingForNews()
+        {
+            var article = await _articleService.GetArticleWithoutRating();
+            var cleantext = await GetCleanTextOfArticle(article);
+            var unratedArticle = await GetJsonFromTexterra(cleantext);
+            var fileWithRatedWords = File.ReadAllText("Words.json");
+
+            Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
+            Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
+
+            int? rating = 0;
+            float? count = deserializedArticles.Annotations.Lemma.Count;
+
+            foreach (var unratedword in deserializedArticles.Annotations.Lemma)
+            {
+                if (ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
+                {
+                    rating += ratedWordsDictionary[unratedword.Value].Value;
+                }
+            }
+            var result = (rating / count);
+
+            return result;
+        }
+
+        public async Task<string?> GetCleanTextOfArticle(ArticleDto dto)
         {
             try
             {
-                var article = await _articleService.GetArticleWithoutRating();
-
-                var body = CleanTextFromSymbols(article.Body);
-                var descrtiption = CleanTextFromSymbols(article.Description);
-                var title = CleanTextFromSymbols(article.Title);
+                var body = await CleanTextFromSymbols(dto.Body);
+                var descrtiption = await CleanTextFromSymbols(dto.Description);
+                var title = await CleanTextFromSymbols(dto.Title);
 
                 var fullText = string.Concat(body, " ", descrtiption, " ", title);
                 var result = Regex.Replace(fullText, "(<[^>]+>)", "");
 
-                return result;
+                return result; 
             }
             catch (Exception ex)
             {
@@ -54,7 +78,7 @@ namespace NewsAggregator.Domain.Services
             }  
         }
 
-        public string CleanTextFromSymbols(string text)
+        public async Task<string> CleanTextFromSymbols(string text)
         {
             var result = text.Replace("<p>", "").Replace("</p>", "")
                     .Replace("<em>", "").Replace("</em>", "")
@@ -63,12 +87,10 @@ namespace NewsAggregator.Domain.Services
             return result;
         }
 
-        public async Task<string?> GetJsonFromTexterra()
+        public async Task<string?> GetJsonFromTexterra(string? newsText)
         {
             try
             {
-                var newsText = await GetCleanTextOfArticle();
-
                 using (var httpClient = new HttpClient())
                 {
                     httpClient.DefaultRequestHeaders
@@ -96,29 +118,6 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
-        }
-
-        public async Task<float?> GetRatingForNews()
-        {
-            var unratedArticle = await GetJsonFromTexterra();
-            var fileWithRatedWords = File.ReadAllText("Words.json");
-
-            Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
-            Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
-
-            int? rating = 0;
-            float? count = deserializedArticles.Annotations.Lemma.Count;
-
-            foreach (var unratedword in deserializedArticles.Annotations.Lemma)
-            {
-                if(ratedWordsDictionary.ContainsKey(unratedword.Value) && unratedword.Value != "")
-                {
-                    rating += ratedWordsDictionary[unratedword.Value].Value;
-                }
-            }   
-            var result = (rating / count);
-
-            return result;
-        }
+        }   
     }
 }
