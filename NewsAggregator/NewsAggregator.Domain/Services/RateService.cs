@@ -85,9 +85,10 @@ namespace NewsAggregator.Domain.Services
                 var title = await CleanTextFromSymbols(dto.Title);
 
                 var fullText = string.Concat(body, " ", descrtiption, " ", title);
-                var result = Regex.Replace(fullText, "(<[^>]+>)", "");
+                var textWithoutTags = Regex.Replace(fullText, "(<[^>]+>)", "");
+                var result = Regex.Replace(textWithoutTags, @"[^0-9a-zA-Zа-яА-Я:,.; ]+", "");
 
-                return result; 
+                return result.Trim(); 
             }
             catch (Exception ex)
             {
@@ -103,7 +104,11 @@ namespace NewsAggregator.Domain.Services
                 var result = text.Replace("<p>", "").Replace("</p>", "")
                     .Replace("<em>", "").Replace("</em>", "")
                     .Replace("&quot;", "").Replace("\"", "")
-                    .Replace("«", "").Replace("»", "").Replace("\n", "");
+                    .Replace("«", "").Replace("»", "").Replace("\n", "")
+                    .Replace("  ", "").Replace("<br/>", "")
+                    .Replace("<br>", "").Replace("\t", "")
+                    .Replace(Environment.NewLine, " ")
+                    .Replace("\r\n", "");
                 return result;
             }
             catch (Exception ex)

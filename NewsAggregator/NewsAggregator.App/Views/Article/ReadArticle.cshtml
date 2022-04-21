@@ -17,6 +17,21 @@
 								<div class=rating__value>@Model.Coefficient.ToString("0.0", CultureInfo.GetCultureInfo("en-US"))</div>
 							</div>
 						}
+						else if(User.IsInRole("Admin"))
+						{
+							<div class="col-lg-3 animate-box">
+								<div class="gtco-highlight right">
+									@if (Model.Coefficient <= 0)
+									{
+										<h4>Rating: @Model.Coefficient.ToString("0.0", CultureInfo.GetCultureInfo("en-US"))</h4>
+									}
+									else
+									{
+										<h4>Temporarily unrated</h4>
+									}
+								</div>
+							</div>
+						}
 
 						<p>Source: @Model.SourceName.Name,  Date: @Model.CreationDate</p>
 						<p>Link: <a href="@Model.SourceUrl">@Model.SourceUrl</a></p>
