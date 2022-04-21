@@ -9,6 +9,8 @@
         public string Image { get; set; }
         public DateTime CreationDate { get; set; }
 
+        public float Coefficient { get; set; }
+
         public SourceModel SourceName { get; set; }
         public List<CommentViewModel> Comments { get; set; }
     }

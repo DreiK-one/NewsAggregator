@@ -8,6 +8,15 @@
 			<div class="col-md-12">
 				<article class="mt-negative">
 					<div class="text-left content-article">
+						@if (Model.Coefficient > 0)
+						{
+							<div class=rating>
+								<div class=rating__body>
+									<div class=rating__active></div>
+								</div>
+								<div class=rating__value>@Model.Coefficient.ToString("0.0", CultureInfo.GetCultureInfo("en-US"))</div>
+							</div>
+						}
 
 						<p>Source: @Model.SourceName.Name,  Date: @Model.CreationDate</p>
 						<p>Link: <a href="@Model.SourceUrl">@Model.SourceUrl</a></p>
