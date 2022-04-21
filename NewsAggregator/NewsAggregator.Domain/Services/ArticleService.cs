@@ -69,6 +69,44 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync()
+        {
+            try
+            {
+                return await _unitOfWork.Articles.Get()
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetNewsByRatingByPageAsync(int page)
+        {
+            try
+            {
+                var pageSize = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
+                return await _unitOfWork.Articles.Get()
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate)
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<CreateOrEditArticleDto> GetArticleAsync(Guid Id)
         {
             try

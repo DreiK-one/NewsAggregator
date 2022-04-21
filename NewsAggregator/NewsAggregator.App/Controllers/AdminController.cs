@@ -69,9 +69,9 @@ namespace NewsAggregator.App.Controllers
                     _configuration["ApplicationVariables:PageSize"]);
 
                 var articles = (await _articleService.GetNewsByPageAsync(page - 1))
-                .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
-                .OrderByDescending(article => article.CreationDate)
-                .ToList();
+                    .Select(article => _mapper.Map<AllNewsOnHomeScreenViewModel>(article))
+                    .OrderByDescending(article => article.CreationDate)
+                    .ToList();
 
                 var articlesCount = Convert.ToInt32(Math.Ceiling((double)
                     (await _articleService.GetAllNewsAsync()).Count() / pageSize));

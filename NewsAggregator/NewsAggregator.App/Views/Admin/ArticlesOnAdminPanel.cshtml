@@ -5,29 +5,29 @@
 }
 <div id="gtco-main">
 	<div class="container">
-			<div class="row row-pb-md">
-				<div class="col-md-12">
-					<a asp-controller="Admin" asp-action="Index" class="btn btn-info">Back to Admin panel</a>
-					<a asp-controller="Article" asp-action="Create" class="btn btn-success">Create article</a>
-					<br /><br />
-					<ul id="gtco-post-list">	
-						@foreach(var article in Model.NewsList)
-						{
-							<li class="one-third entry animate-box" data-animate-effect="fadeIn">
-									<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id">
-										<div class="entry-img" style="@article.Image"></div>
-										<div class="entry-desc">
-											<h3>@Html.Raw(article.Title)</h3>
-											<p>@Html.Raw(article.Description)</p>
-										</div>
-									</a>
-								<a asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id" class="post-meta-left btn btn-info">Edit</a>
-								<a asp-controller="Article" asp-action="Delete" asp-route-id="@article.Id" class="post-meta-right btn btn-danger">Delete</a>
-							</li>
-						}
-					</ul>	
-				</div>
+		<div class="row row-pb-md">
+			<div class="col-md-12">
+				<a asp-controller="Admin" asp-action="Index" class="btn btn-info">Back to Admin panel</a>
+				<a asp-controller="Article" asp-action="Create" class="btn btn-success">Create article</a>
+				<br /><br />
+				<ul id="gtco-post-list">	
+					@foreach(var article in Model.NewsList)
+					{
+						<li class="one-third entry animate-box" data-animate-effect="fadeIn">
+							<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id">
+								<div class="entry-img" style="@article.Image"></div>
+								<div class="entry-desc">
+									<h3>@Html.Raw(article.Title)</h3>
+									<p>@Html.Raw(article.Description)</p>
+								</div>
+							</a>
+							<a asp-controller="Article" asp-action="Edit" asp-route-id="@article.Id" class="post-meta-left btn btn-info">Edit</a>
+							<a asp-controller="Article" asp-action="Delete" asp-route-id="@article.Id" class="post-meta-right btn btn-danger">Delete</a>
+						</li>
+					}
+				</ul>	
 			</div>
-			@await Html.PartialAsync("PaginationPartial", Model.Pager)
+		</div>
+		@await Html.PartialAsync("_AdminPaginationPartial", Model.Pager)
 	</div>
 </div>

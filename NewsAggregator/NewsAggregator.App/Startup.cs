@@ -173,7 +173,7 @@ namespace NewsAggregator.App
             var rateService = serviceProvider.GetRequiredService<IRateService>();
             RecurringJob.AddOrUpdate("Rate news",
                 () => rateService.RateArticle(),
-                "*/2 * * * *");
+                "*/1 * * * *");
         }
     }
 }
