@@ -200,5 +200,20 @@ namespace NewsAggregator.App.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        //public async Task<IActionResult> BestRatedArticleByDay()
+        //{
+        //    try
+        //    {
+        //        var article = await _articleService.BestArticleOfTheDay();
+        //        var model = _mapper.Map<ReadArticleViewModel>(article);
+        //        return View("ReadArticle", model);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+        //        return StatusCode(500, new { ex.Message });
+        //    }
+        //}
     }
 }

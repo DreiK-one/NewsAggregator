@@ -16,6 +16,21 @@
 						<li class="one-third entry animate-box" data-animate-effect="fadeIn">
 							<a asp-controller="Article" asp-action="ReadArticle" asp-route-id="@article.Id">
 								<div class="entry-img" style="@article.Image"></div>
+								@if (article.Coefficient > 0f)
+								{
+									<div class=rating>
+											<div class=rating__body>
+												<div class=rating__active></div>
+											</div>
+										<div class=rating__value>@article.Coefficient.ToString("0.0", CultureInfo.GetCultureInfo("en-US"))</div>
+									</div>
+								}
+								else
+								{
+									<div class="negative">
+										Negative rating: @article.Coefficient.ToString("0.0", CultureInfo.GetCultureInfo("en-US"))
+									</div>
+								}
 								<div class="entry-desc">
 									<h3>@Html.Raw(article.Title)</h3>
 									<p>@Html.Raw(article.Description)</p>

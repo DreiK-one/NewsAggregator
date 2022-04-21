@@ -172,6 +172,11 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 var category = await _categoryService.GetCategoryByNameWithArticlesAsync(name);
+                if (User.IsInRole("Admin"))
+                {
+                    category = await _categoryService.GetCategoryByNameWithArticlesForAdminAsync(name);
+                }
+
                 if (category == null)
                 {
                     return RedirectToAction("Error404", "Error");

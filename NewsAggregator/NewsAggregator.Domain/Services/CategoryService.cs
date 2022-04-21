@@ -150,6 +150,25 @@ namespace NewsAggregator.Domain.Services
                 var category = await _unitOfWork.Categories.Get()
                 .Where(category => category.Name.Equals(name))
                 .Include(article => article.Articles
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate))
+                .FirstOrDefaultAsync();
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw; ;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesForAdminAsync(string name)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get()
+                .Where(category => category.Name.Equals(name))
+                .Include(article => article.Articles
                     .OrderByDescending(article => article.CreationDate))
                 .FirstOrDefaultAsync();
                 return _mapper.Map<CategoryWithArticlesDto>(category);

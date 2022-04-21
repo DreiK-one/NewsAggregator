@@ -227,5 +227,16 @@ namespace NewsAggregator.Domain.Services
 
             return _mapper.Map<ArticleDto>(article);
         }
+
+        //public async Task<ArticleDto> BestArticleOfTheDay()
+        //{
+        //    var maxCoef = await _unitOfWork.Articles.Get()
+        //        .Where(article => article.CreationDate.ToString("HH:mm:ss")
+        //            .Contains(DateTime.Now.ToString("HH:mm:ss")))
+        //        .MaxAsync(article => article.Coefficient);
+        //    var article = await _unitOfWork.Articles.FindBy(article => article.Coefficient == maxCoef);
+
+        //    return _mapper.Map<ArticleDto>(article);
+        //}
     }
 }
