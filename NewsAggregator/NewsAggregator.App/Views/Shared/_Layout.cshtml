@@ -76,8 +76,10 @@
 							<a href="#"><img src="~/images/img_1.jpg" class="img-responsive"></a>
 						</div>
 						<div class="post-copy">
-							<h4><a href="#">Best of the day</a></h4>
-							<a href="#" class="post-meta"><span class="date-posted">article.CreationDate</span></a>
+							<a asp-controller="Article" asp-action="BestOfDayArticle" class="post-meta">
+							<h4>Best of the day</h4>
+							<span class="date-posted">article.CreationDate</span>
+							</a>
 						</div>
 					</div>
 				</div>

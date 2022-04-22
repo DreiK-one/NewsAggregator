@@ -221,22 +221,67 @@ namespace NewsAggregator.Domain.Services
 
         public async Task<ArticleDto> GetArticleWithoutRating()
         {
-            var article = await _unitOfWork.Articles.Get()
-                .Where(article => article.Coefficient.Equals(null))
-                .Take(1).FirstOrDefaultAsync();
+            try
+            {
+                var article = await _unitOfWork.Articles.Get()
+                    .Where(article => article.Coefficient.Equals(null))
+                    .Take(1).FirstOrDefaultAsync();
 
-            return _mapper.Map<ArticleDto>(article);
+                return _mapper.Map<ArticleDto>(article);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
-        //public async Task<ArticleDto> BestArticleOfTheDay()
-        //{
-        //    var maxCoef = await _unitOfWork.Articles.Get()
-        //        .Where(article => article.CreationDate.ToString("HH:mm:ss")
-        //            .Contains(DateTime.Now.ToString("HH:mm:ss")))
-        //        .MaxAsync(article => article.Coefficient);
-        //    var article = await _unitOfWork.Articles.FindBy(article => article.Coefficient == maxCoef);
+        public async Task<ArticleDto> MostRatedArticleByPeriodOfTime(float? maxCoef)
+        {
+            try
+            {
+                var article = await _unitOfWork.Articles.Get()
+                    .Where(article => article.Coefficient.Equals(maxCoef))
+                    .Include(source => source.Source)
+                    .Include(comments => comments.Comments)
+                        .ThenInclude(user => user.User)
+                    .FirstOrDefaultAsync();
 
-        //    return _mapper.Map<ArticleDto>(article);
-        //}
+                return _mapper.Map<ArticleDto>(article);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<float?> MaxCoefOfToday()
+        {
+            try
+            {
+                var maxCoef = await _unitOfWork.Articles.Get()
+                .Where(article => article.CreationDate.Date
+                    .Equals(DateTime.Today.Date))
+                    .MaxAsync(article => article.Coefficient);
+
+                return maxCoef;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public Task<float?> MaxCoefOfTheMonth()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<float?> MaxCoefOfAllTime()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

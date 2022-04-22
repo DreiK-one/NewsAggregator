@@ -20,6 +20,10 @@ namespace NewsAggregator.Core.Interfaces
         Task<ArticleDto> GetArticleWithoutRating();
         Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync();
         Task<IEnumerable<ArticleDto>> GetNewsByRatingByPageAsync(int page);
-        //Task<ArticleDto> BestArticleOfTheDay();
+        Task<ArticleDto> MostRatedArticleByPeriodOfTime(float? maxCoef);
+
+        Task<float?> MaxCoefOfToday();
+        Task<float?> MaxCoefOfTheMonth();
+        Task<float?> MaxCoefOfAllTime();
     }
 }

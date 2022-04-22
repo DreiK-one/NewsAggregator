@@ -201,19 +201,20 @@ namespace NewsAggregator.App.Controllers
             }
         }
 
-        //public async Task<IActionResult> BestRatedArticleByDay()
-        //{
-        //    try
-        //    {
-        //        var article = await _articleService.BestArticleOfTheDay();
-        //        var model = _mapper.Map<ReadArticleViewModel>(article);
-        //        return View("ReadArticle", model);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
-        //        return StatusCode(500, new { ex.Message });
-        //    }
-        //}
+        public async Task<IActionResult> BestOfDayArticle()
+        {
+            try
+            {
+                var coef = await _articleService.MaxCoefOfToday();
+                var article = await _articleService.MostRatedArticleByPeriodOfTime(coef);
+                var model = _mapper.Map<ReadArticleViewModel>(article);
+                return View("ReadArticle", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
     }
 }
