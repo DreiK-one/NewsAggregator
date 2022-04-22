@@ -216,5 +216,37 @@ namespace NewsAggregator.App.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        public async Task<IActionResult> BestOfMonthArticle()
+        {
+            try
+            {
+                var coef = await _articleService.MaxCoefOfTheMonth();
+                var article = await _articleService.MostRatedArticleByPeriodOfTime(coef);
+                var model = _mapper.Map<ReadArticleViewModel>(article);
+                return View("ReadArticle", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
+
+        public async Task<IActionResult> BestOfAllTimeArticle()
+        {
+            try
+            {
+                var coef = await _articleService.MaxCoefOfAllTime();
+                var article = await _articleService.MostRatedArticleByPeriodOfTime(coef);
+                var model = _mapper.Map<ReadArticleViewModel>(article);
+                return View("ReadArticle", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
     }
 }
