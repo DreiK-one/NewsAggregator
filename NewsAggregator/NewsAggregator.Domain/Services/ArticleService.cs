@@ -274,14 +274,38 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public Task<float?> MaxCoefOfTheMonth()
+        public async Task<float?> MaxCoefOfTheMonth()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var maxCoef = await _unitOfWork.Articles.Get()
+                .Where(article => article.CreationDate.Date.Month
+                    .Equals(DateTime.Today.Date.Month))
+                    .MaxAsync(article => article.Coefficient);
+
+                return maxCoef;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
-        public Task<float?> MaxCoefOfAllTime()
+        public async Task<float?> MaxCoefOfAllTime()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var maxCoef = await _unitOfWork.Articles.Get()
+                    .MaxAsync(article => article.Coefficient);
+
+                return maxCoef;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }
