@@ -24,27 +24,27 @@ namespace NewsAggregator.WebAPI
             services.AddDbContext<NewsAggregatorContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            //services.AddScoped<IArticleRepository, ArticleRepository>();
-            //services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
-            //services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
-            //services.AddScoped<IBaseRepository<Role>, RoleRepository>();
-            //services.AddScoped<IBaseRepository<Source>, SourceRepository>();
-            //services.AddScoped<IBaseRepository<User>, UserRepository>();
-            //services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
-            //services.AddScoped<IBaseRepository<UserRole>, UserRoleRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
+            services.AddScoped<IBaseRepository<Category>, CategoryRepository>();
+            services.AddScoped<IBaseRepository<Comment>, CommentRepository>();
+            services.AddScoped<IBaseRepository<Role>, RoleRepository>();
+            services.AddScoped<IBaseRepository<Source>, SourceRepository>();
+            services.AddScoped<IBaseRepository<User>, UserRepository>();
+            services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
+            services.AddScoped<IBaseRepository<UserRole>, UserRoleRepository>();
 
-            //services.AddScoped<IArticleService, ArticleService>();
-            //services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddScoped<ICommentService, CommentService>();
-            //services.AddScoped<IRoleService, RoleService>();
-            //services.AddScoped<ISourceService, SourceService>();
-            //services.AddScoped<IUserService, UserService>();
-            //services.AddScoped<IRssService, RssService>();
-            //services.AddScoped<IHtmlParserService, HtmlParserService>();
-            //services.AddScoped<IAccountService, AccountService>();
-            //services.AddScoped<IRateService, RateService>();
+            services.AddScoped<IArticleService, ArticleService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<ISourceService, SourceService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRssService, RssService>();
+            services.AddScoped<IHtmlParserService, HtmlParserService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IRateService, RateService>();
 
             //services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
             //        GetArticleByPageQueryHandler>();
