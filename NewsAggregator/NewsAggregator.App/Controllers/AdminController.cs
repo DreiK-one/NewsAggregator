@@ -93,6 +93,7 @@ namespace NewsAggregator.App.Controllers
             }
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("/hangfire")]
         public async Task<IActionResult> Hangfire()
         {

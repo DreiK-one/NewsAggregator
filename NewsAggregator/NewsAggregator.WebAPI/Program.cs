@@ -22,7 +22,7 @@ namespace NewsAggregator.WebAPI
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .WriteTo.Console()
+                .WriteTo.File(@"D:\Games\C#\Web\NewsAggregator\testLogs\Seq\LogAPI.log")
                 .Enrich.FromLogContext()
                 .CreateBootstrapLogger();
 

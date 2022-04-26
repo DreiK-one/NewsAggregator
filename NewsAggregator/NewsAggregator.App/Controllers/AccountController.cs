@@ -176,8 +176,9 @@ namespace NewsAggregator.App.Controllers
                 return BadRequest();
             }
         }
-
+        
         [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("access-denied")]
         public async Task<IActionResult> AccessDenied()
         {

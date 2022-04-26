@@ -14,6 +14,7 @@ namespace NewsAggregator.App.Controllers
             _telemetryClient = telemetryClient;
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("500")]
         public IActionResult Error500()
         {
@@ -29,6 +30,7 @@ namespace NewsAggregator.App.Controllers
             return View();
         }
 
+        [ApiExplorerSettings(IgnoreApi = true)]
         [Route("404")]
         public IActionResult Error404()
         {

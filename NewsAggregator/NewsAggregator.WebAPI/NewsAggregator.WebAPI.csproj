@@ -17,6 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
@@ -26,10 +27,6 @@
     <ProjectReference Include="..\NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj" />
     <ProjectReference Include="..\NewsAggregator.Data\NewsAggregator.Data.csproj" />
     <ProjectReference Include="..\NewsAggregator.Domain\NewsAggregator.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
