@@ -14,20 +14,17 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<CommentController> _logger;
         private readonly ICommentService _commentService;
         private readonly IAccountService _accountService;
-        private readonly IArticleService _articleService;
 
 
         public CommentController(IMapper mapper,
             ILogger<CommentController> logger,
             ICommentService commentService,
-            IAccountService accountService, 
-            IArticleService articleService)
+            IAccountService accountService)
         {
             _mapper = mapper;
             _logger = logger;
             _commentService = commentService;
             _accountService = accountService;
-            _articleService = articleService;
         }
 
         [HttpPost]

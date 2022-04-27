@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 
@@ -9,50 +11,44 @@ namespace NewsAggregator.WebAPI.Controllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<ArticlesController> _logger;
         private readonly ICommentService _commentService;
 
         public CommentsController(ICommentService commentService,
-            ILogger<ArticlesController> logger)
+            ILogger<ArticlesController> logger, 
+            IMapper mapper)
         {
             _commentService = commentService;
             _logger = logger;
+            _mapper = mapper;
         }
 
-        //[HttpPost]
-        //public async Task<IActionResult> GetByName(CreateCommentRequest request)
-        //{
-        //    try
-        //    {
-        //        if (!ModelState.IsValid)
-        //        {
-        //            return BadRequest();
-        //        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateCommentRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
 
-        //        if (request != null)
-        //        {
-        //            var principal = HttpContext.User;
-        //            if (principal != null)
-        //            {
-        //                foreach (var claim in principal.Claims)
-        //                {
-        //                    model.UserId = await _accountService.GetUserIdByNicknameAsync(claim.Value);
-        //                    await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(model));
-
-        //                    return Redirect($"~/Article/ReadArticle/{model.ArticleId}");
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return NoContent();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-        //        throw;
-        //    }
-        //}
+                if (request != null)
+                {
+                    await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
+                    return Ok(request);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }
