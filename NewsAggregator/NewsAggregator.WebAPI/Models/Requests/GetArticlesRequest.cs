@@ -1,6 +1,6 @@
 ﻿namespace NewsAggregator.WebAPI.Models.Requests
 {
-    public class GetArticleRequest
+    public class GetArticlesRequest
     {
         public string CategoryName { get; set; }
         public string StartDate { get; set; }

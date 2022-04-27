@@ -18,7 +18,8 @@ namespace NewsAggregator.Core.Interfaces.Data
         public Task<T> GetByIdWithIncludes(Guid id, params Expression<Func<T, object>>[] includes);
         public IQueryable<T> Get();
 
-        public Task<IQueryable<T>> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
+        public Task<IQueryable<T>> FindBy(Expression<Func<T, bool>> predicate, 
+            params Expression<Func<T, object>>[] includes);
 
         public Task Update(T obj);
 
@@ -27,7 +28,5 @@ namespace NewsAggregator.Core.Interfaces.Data
         public Task Remove(Guid id);
 
         public void Dispose();
-
-        IQueryable<T> FindWithSpecificationPattern(ISpecification<T> specification = null);
     }
 }

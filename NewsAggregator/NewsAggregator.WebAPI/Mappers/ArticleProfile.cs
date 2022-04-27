@@ -26,10 +26,12 @@ namespace NewsAggregator.WebAPI.Mappers
 
             CreateMap<Article, CreateOrEditArticleDto>().ReverseMap();
 
-            CreateMap<GetArticleRequest, RequestArticleDto>();
+            CreateMap<GetArticlesRequest, RequestArticleDto>();
 
             CreateMap<RequestArticleDto, ArticleDto>()
-                .ForMember(dest => dest.Coefficient, opt => opt.MapFrom(src => src.Rating));
+                .ForMember(dest => dest.Coefficient, opt => opt.MapFrom(src => src.Rating))
+                .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.CreationDate, opt => opt.MapFrom(src => src.EndDate));
         }
     }
 }

@@ -308,15 +308,5 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
-
-        public async Task<List<ArticleDto>?> GetArticlesBySpecification(RequestArticleDto request)
-        {
-            var specification = new ArticleSpec(request.Rating);
-
-            var articles = await _unitOfWork.Articles
-                .FindWithSpecificationPattern(specification)
-                .ToListAsync();
-            return _mapper.Map<List<ArticleDto>>(articles);
-        }
     }
 }

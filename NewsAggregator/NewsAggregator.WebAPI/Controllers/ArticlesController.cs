@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Specifications;
 using NewsAggregator.WebAPI.Models.Requests;
 
 namespace NewsAggregator.WebAPI.Controllers
@@ -16,7 +17,7 @@ namespace NewsAggregator.WebAPI.Controllers
         private readonly IArticleService _articleService;
 
         public ArticlesController(IArticleService articleService,
-            ILogger<ArticlesController> logger, 
+            ILogger<ArticlesController> logger,
             IMapper mapper)
         {
             _articleService = articleService;
@@ -53,18 +54,30 @@ namespace NewsAggregator.WebAPI.Controllers
 
         //Think about specification
 
-        [HttpPost("specify")]
-        public async Task<IActionResult> Get(GetArticleRequest request)
+        [HttpGet]
+        public async Task<IActionResult> Get(GetArticlesRequest request)
         {
             try
             {
-                var articles = await _articleService.GetArticlesBySpecification(_mapper.Map<RequestArticleDto>(request));
-                return Ok(articles);
+                if (request == null)
+                {
+                    return BadRequest();
+                }
+                var spec = new CategorySpec(_mapper.Map<RequestArticleDto>(request));
+                var articles = await _articleService.GetAllNewsAsync();
+                if (articles != null)
+                {
+                    return Ok(articles);
+                }
+                else
+                {
+                    return NoContent();
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
+                return BadRequest();
             }
         }
     }
