@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.Interfaces;
+using NewsAggregator.WebAPI.Models.Requests;
 
 namespace NewsAggregator.WebAPI.Controllers
 {
@@ -23,12 +24,12 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
-                if (Guid.Empty == id)
+                if (id == Guid.Empty)
                 {
                     return BadRequest();
                 }
 
-                var article = await _articleService.GetArticleAsync(id);
+                var article = await _articleService.GetArticleWithAllNavigationProperties(id);
                 if (article != null)
                 {
                     return Ok(article);
@@ -45,18 +46,22 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
-            {
-                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
-            }
-        }
+        //Think about specification
+
+        //[HttpGet]
+        //public async Task<IActionResult> Get(GetArticleRequest request)
+        //{
+        //    try
+        //    {
+
+        //        var articles = await _articleService.GetAllNewsAsync();
+        //        return Ok(articles);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+        //        throw;
+        //    }
+        //}
     }
 }

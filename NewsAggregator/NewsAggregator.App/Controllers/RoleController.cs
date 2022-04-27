@@ -41,7 +41,6 @@ namespace NewsAggregator.App.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             try
