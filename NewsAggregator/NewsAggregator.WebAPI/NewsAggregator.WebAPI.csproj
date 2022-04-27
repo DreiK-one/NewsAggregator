@@ -31,6 +31,8 @@
 
   <ItemGroup>
     <Folder Include="Models\Responses\" />
+    <Folder Include="Tools\Interfaces\" />
+    <Folder Include="Tools\Specifications\" />
   </ItemGroup>
 
 </Project>

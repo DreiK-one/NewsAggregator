@@ -27,5 +27,7 @@ namespace NewsAggregator.Core.Interfaces.Data
         public Task Remove(Guid id);
 
         public void Dispose();
+
+        IQueryable<T> FindWithSpecificationPattern(ISpecification<T> specification = null);
     }
 }

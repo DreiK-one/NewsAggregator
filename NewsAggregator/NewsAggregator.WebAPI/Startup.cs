@@ -6,6 +6,10 @@ using NewsAggregator.Data.Entities;
 using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using NewsAggregator.WebAPI.Validators;
+using Hangfire;
+using Hangfire.SqlServer;
 
 namespace NewsAggregator.WebAPI
 {
@@ -53,6 +57,21 @@ namespace NewsAggregator.WebAPI
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("HangfireConnection"),
+                    new SqlServerStorageOptions
+                    {
+                        CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                        SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                        QueuePollInterval = TimeSpan.Zero,
+                        UseRecommendedIsolationLevel = true,
+                        DisableGlobalLocks = true
+                    }));
+            services.AddHangfireServer();
+
             //services.AddAuthentication(options =>
             //{
             //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -75,7 +94,10 @@ namespace NewsAggregator.WebAPI
 
             //services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
-            services.AddControllers();
+            services.AddControllers().AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<CommentValidator>();
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -83,7 +105,7 @@ namespace NewsAggregator.WebAPI
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -105,6 +127,16 @@ namespace NewsAggregator.WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            var rssService = serviceProvider.GetRequiredService<IRssService>();
+            RecurringJob.AddOrUpdate("Aggregate news",
+                () => rssService.GetNewsFromSourcesAsync(),
+                "*/10 * * * *");
+
+            var rateService = serviceProvider.GetRequiredService<IRateService>();
+            RecurringJob.AddOrUpdate("Rate news",
+                () => rateService.RateArticle(),
+                "*/1 * * * *");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data.Entities;
+using NewsAggregator.WebAPI.Models.Requests;
 using System.ServiceModel.Syndication;
 
 namespace NewsAggregator.WebAPI.Mappers
@@ -24,6 +25,11 @@ namespace NewsAggregator.WebAPI.Mappers
             CreateMap<NewArticleDto, Article>();
 
             CreateMap<Article, CreateOrEditArticleDto>().ReverseMap();
+
+            CreateMap<GetArticleRequest, RequestArticleDto>();
+
+            CreateMap<RequestArticleDto, ArticleDto>()
+                .ForMember(dest => dest.Coefficient, opt => opt.MapFrom(src => src.Rating));
         }
     }
 }

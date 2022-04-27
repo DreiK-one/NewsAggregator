@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 
@@ -9,14 +11,17 @@ namespace NewsAggregator.WebAPI.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<ArticlesController> _logger;
         private readonly IArticleService _articleService;
 
         public ArticlesController(IArticleService articleService,
-            ILogger<ArticlesController> logger)
+            ILogger<ArticlesController> logger, 
+            IMapper mapper)
         {
             _articleService = articleService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet("{id}")]
@@ -42,26 +47,25 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
+                return StatusCode(500, new { ex.Message });
             }
         }
 
         //Think about specification
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(GetArticleRequest request)
-        //{
-        //    try
-        //    {
-
-        //        var articles = await _articleService.GetAllNewsAsync();
-        //        return Ok(articles);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-        //        throw;
-        //    }
-        //}
+        [HttpPost("specify")]
+        public async Task<IActionResult> Get(GetArticleRequest request)
+        {
+            try
+            {
+                var articles = await _articleService.GetArticlesBySpecification(_mapper.Map<RequestArticleDto>(request));
+                return Ok(articles);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
     }
 }

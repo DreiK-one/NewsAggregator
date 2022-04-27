@@ -42,7 +42,7 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
+                return StatusCode(500, new { ex.Message });
             }
         }
     }

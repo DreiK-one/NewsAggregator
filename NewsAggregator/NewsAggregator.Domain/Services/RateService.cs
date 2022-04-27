@@ -4,7 +4,7 @@ using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
-using NewsAggregator.Domain.Services.DeserializationEntities;
+using NewsAggregator.Domain.Services.Tools;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

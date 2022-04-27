@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Core.Specifications;
 using NewsAggregator.Data.Entities;
 using System;
 using System.Collections.Concurrent;
@@ -306,6 +307,16 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
+        }
+
+        public async Task<List<ArticleDto>?> GetArticlesBySpecification(RequestArticleDto request)
+        {
+            var specification = new ArticleSpec(request.Rating);
+
+            var articles = await _unitOfWork.Articles
+                .FindWithSpecificationPattern(specification)
+                .ToListAsync();
+            return _mapper.Map<List<ArticleDto>>(articles);
         }
     }
 }

@@ -2,6 +2,7 @@
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
+using NewsAggregator.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +93,11 @@ namespace NewsAggregator.DataAccess
         {
             Db.Dispose();
             GC.SuppressFinalize(this);
+        }
+
+        public IQueryable<T> FindWithSpecificationPattern(ISpecification<T> specification = null)
+        {
+            return SpecificationEvaluator<T>.GetQuery(Db.Set<T>().AsQueryable(), specification);
         }
     }
 }

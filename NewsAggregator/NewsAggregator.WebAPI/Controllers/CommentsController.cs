@@ -29,25 +29,19 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid || request == null)
                 {
                     return BadRequest();
                 }
 
-                if (request != null)
-                {
-                    await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
-                    return Ok(request);
-                }
-                else
-                {
-                    return NoContent();
-                }
+                await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
+                return Ok();
+
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
+                return BadRequest();
             }
         }
     }

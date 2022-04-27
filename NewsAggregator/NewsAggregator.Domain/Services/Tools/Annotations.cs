@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewsAggregator.Domain.Services.DeserializationEntities
+namespace NewsAggregator.Domain.Services.Tools
 {
     public class Annotations
     {
