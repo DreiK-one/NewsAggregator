@@ -45,5 +45,27 @@ namespace NewsAggregator.WebAPI.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            try
+            {
+                var categories = await _categoryService.GetAllCategoriesAsync();
+                if (categories != null)
+                {
+                    return Ok(categories);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
     }
 }

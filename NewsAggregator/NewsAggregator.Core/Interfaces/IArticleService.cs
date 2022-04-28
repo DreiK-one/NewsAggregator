@@ -1,4 +1,5 @@
 ﻿using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,5 +26,8 @@ namespace NewsAggregator.Core.Interfaces
         Task<float?> MaxCoefOfToday();
         Task<float?> MaxCoefOfTheMonth();
         Task<float?> MaxCoefOfAllTime();
+
+
+        //Task<List<RequestArticleDto>> GetArticlesByRequest(Specification<RequestArticleDto> spec);
     }
 }

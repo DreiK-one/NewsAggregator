@@ -180,17 +180,36 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<CategoryDto> GetCategoryAsync(Guid Id)
+        public async Task<CategoryDto> GetCategoryAsync(Guid id)
         {
             try
             {
-                var category = await _unitOfWork.Categories.GetById(Id);
+                var category = await _unitOfWork.Categories.GetById(id);
                 return _mapper.Map<CategoryDto>(category);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByIdWithArticlesAsync(Guid id)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get()
+                .Where(category => category.Id.Equals(id))
+                .Include(article => article.Articles
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate))
+                .FirstOrDefaultAsync();
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw; ;
             }
         }
     }

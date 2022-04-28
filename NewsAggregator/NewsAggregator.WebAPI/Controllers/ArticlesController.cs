@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
-using NewsAggregator.Core.Specifications;
 using NewsAggregator.WebAPI.Models.Requests;
+using NewsAggregator.WebAPI.Tools.Specs;
 
 namespace NewsAggregator.WebAPI.Controllers
 {
@@ -52,22 +52,15 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        //Think about specification
-
         [HttpGet]
-        public async Task<IActionResult> Get(GetArticlesRequest request)
+        public async Task<IActionResult> Get()
         {
             try
             {
-                if (request == null)
+                var article = await _articleService.GetAllNewsByRatingAsync();
+                if (article != null)
                 {
-                    return BadRequest();
-                }
-                var spec = new CategorySpec(_mapper.Map<RequestArticleDto>(request));
-                var articles = await _articleService.GetAllNewsAsync();
-                if (articles != null)
-                {
-                    return Ok(articles);
+                    return Ok(article);
                 }
                 else
                 {
@@ -77,8 +70,42 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest();
+                return StatusCode(500, new { ex.Message });
             }
         }
+
+        //Think about specification
+
+        //[HttpGet]
+        //public async Task<IActionResult> Get(GetArticlesRequest request)
+        //{
+        //    try
+        //    {
+        //        if (request == null)
+        //        {
+        //            return BadRequest();
+        //        }
+        //        var spec1 = new OnlyCategorySpecification(request.CategoryName);
+        //        var spec2 = new OnlyRatingSpecification(request.Rating);
+
+        //        var spec = spec1.Or(spec2);
+
+        //        var articles = await _articleService.GetArticlesByRequest(spec);
+
+        //        if (articles != null)
+        //        {
+        //            return Ok(articles);
+        //        }
+        //        else
+        //        {
+        //            return NoContent();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+        //        return BadRequest();
+        //    }
+        //}
     }
 }

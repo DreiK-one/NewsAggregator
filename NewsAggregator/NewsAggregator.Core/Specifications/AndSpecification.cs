@@ -8,17 +8,25 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Core.Specifications
 {
-    public class AndSpecification<T> : CompositeSpecification<T>
+    internal sealed class AndSpecification<T> : Specification<T>
     {
-        readonly ISpecification<T> _left;
-        readonly ISpecification<T> _right;
+        private readonly Specification<T> _left;
+        private readonly Specification<T> _right;
 
-        public AndSpecification(ISpecification<T> left, ISpecification<T> right)
+        public AndSpecification(Specification<T> left, Specification<T> right)
         {
-            _left = left;
             _right = right;
+            _left = left;
         }
 
-        public override bool IsSatisfiedBy(T candidate) => _left.IsSatisfiedBy(candidate) && _right.IsSatisfiedBy(candidate);
+        public override Expression<Func<T, bool>> ToExpression()
+        {
+            var leftExpression = _left.ToExpression();
+            var rightExpression = _right.ToExpression();
+
+            var invokedExpression = Expression.Invoke(rightExpression, leftExpression.Parameters);
+
+            return (Expression<Func<T, bool>>)Expression.Lambda(Expression.AndAlso(leftExpression.Body, invokedExpression), leftExpression.Parameters);
+        }
     }
 }

@@ -308,5 +308,13 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
+        //public async Task<List<RequestArticleDto>> GetArticlesByRequest(Specification<RequestArticleDto> spec)
+        //{
+        //    var articles = await _unitOfWork.Articles.Get()
+        //        .Where(art => art.Category.Name.Equals(spec.IsSatisfiedBy) || art.Coefficient.Equals(spec.IsSatisfiedBy))
+        //        .ToListAsync();
+        //    return _mapper.Map<List<RequestArticleDto>>(articles);
+        //}
     }
 }

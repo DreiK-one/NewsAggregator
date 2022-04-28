@@ -8,10 +8,21 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Core.Specifications
 {
-    public class NotSpecification<T> : CompositeSpecification<T>
+    internal sealed class NotSpecification<T> : Specification<T>
     {
-        readonly ISpecification<T> _other;
-        public NotSpecification(ISpecification<T> other) => _other = other;
-        public override bool IsSatisfiedBy(T candidate) => !_other.IsSatisfiedBy(candidate);
+        private readonly Specification<T> _specification;
+
+        public NotSpecification(Specification<T> specification)
+        {
+            _specification = specification;
+        }
+
+        public override Expression<Func<T, bool>> ToExpression()
+        {
+            var expression = _specification.ToExpression();
+            var notExpression = Expression.Not(expression.Body);
+
+            return Expression.Lambda<Func<T, bool>>(notExpression, expression.Parameters.Single());
+        }
     }
 }
