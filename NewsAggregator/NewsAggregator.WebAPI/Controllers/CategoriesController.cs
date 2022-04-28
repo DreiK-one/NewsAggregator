@@ -67,5 +67,32 @@ namespace NewsAggregator.WebAPI.Controllers
                 return StatusCode(500, new { ex.Message });
             }
         }
+
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest();
+                }
+
+                var categories = await _categoryService.GetCategoryByIdWithArticlesAsync(id);
+                if (categories != null)
+                {
+                    return Ok(categories);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new { ex.Message });
+            }
+        }
     }
 }
