@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
@@ -24,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CQS\CQS.csproj" />
     <ProjectReference Include="..\NewsAggregator.App\NewsAggregator.App.csproj" />
     <ProjectReference Include="..\NewsAggregator.Core\NewsAggregator.Core.csproj" />
     <ProjectReference Include="..\NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj" />

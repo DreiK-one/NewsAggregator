@@ -5,6 +5,7 @@ using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
+using System.Net;
 
 namespace NewsAggregator.WebAPI.Controllers
 {
@@ -26,6 +27,8 @@ namespace NewsAggregator.WebAPI.Controllers
         }
 
         [HttpPost("auth")]
+        [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Authenticate(AuthenticateRequest request)
         {
             try
@@ -35,7 +38,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (response == null)
                 {
-                    return BadRequest(new { message = "Username or password is incorrect" });
+                    return BadRequest(new ErrorModel{ Message = "Username or password is incorrect" });
                 }
 
                 SetTokenCookie(response.RefreshToken);
@@ -44,12 +47,14 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                throw;
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ErrorModel { Message = ex.Message });
             }
         }
 
         [HttpPost("refresh-token")]
+        [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RefreshToken()
         {
             try
@@ -59,7 +64,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (response == null)
                 {
-                    return BadRequest(new { message = "Invalid token" });
+                    return BadRequest(new ErrorModel{ Message = "Invalid token" });
                 }
 
                 SetTokenCookie(response.RefreshToken);
@@ -68,13 +73,15 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                throw;
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ErrorModel { Message = ex.Message });
             }
         }
 
 
         [HttpPost("revoke-token")]
+        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         public IActionResult RevokeToken(RevokeTokenRequest request)
         {
             try
@@ -83,7 +90,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    return BadRequest(new { message = "Token is required" });
+                    return BadRequest(new ErrorModel{ Message = "Token is required" });
                 }
 
                 var response = _tokenService.RevokeToken(token, GetIpAddress());
@@ -91,8 +98,8 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                throw;
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ErrorModel { Message = ex.Message });
             }
         }
 
