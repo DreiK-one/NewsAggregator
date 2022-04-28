@@ -14,6 +14,12 @@ using NewsAggregator.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using MediatR;
+using CQS.Models.Queries;
+using NewsAggregator.Core.DTOs;
+using CQS.Handlers.QueryHandlers;
+using CQS.Models.Commands;
+using CQS.Handlers.CommandHanlers;
 
 namespace NewsAggregator.WebAPI
 {
@@ -57,10 +63,10 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IJwtService, JwtService>();
 
-            //services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
-            //        GetArticleByPageQueryHandler>();
-            //services.AddScoped<IRequestHandler<RateArticleCommand, bool>,
-            //        RateArticleCommandHandler>();
+            services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
+                    GetArticleByPageQueryHandler>();
+            services.AddScoped<IRequestHandler<RateArticleCommand, bool>,
+                    RateArticleCommandHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -99,7 +105,7 @@ namespace NewsAggregator.WebAPI
                     };
                 });
 
-            //services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers().AddFluentValidation(fv =>
             {

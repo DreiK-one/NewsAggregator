@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{6E2D1D8A-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DataAccess", "NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj", "{9B3E0938-F9F2-430E-98CB-BAA896F43688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.WebAPI", "NewsAggregator.WebAPI\NewsAggregator.WebAPI.csproj", "{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.WebAPI", "NewsAggregator.WebAPI\NewsAggregator.WebAPI.csproj", "{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQS", "CQS\CQS.csproj", "{C60FFF97-CD6C-4833-A6A3-949C4E3688FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C60FFF97-CD6C-4833-A6A3-949C4E3688FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C60FFF97-CD6C-4833-A6A3-949C4E3688FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C60FFF97-CD6C-4833-A6A3-949C4E3688FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C60FFF97-CD6C-4833-A6A3-949C4E3688FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +60,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{9A88E898-844B-4CCE-B0CF-61DB1848CEA7} = {6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}
 		{9B3E0938-F9F2-430E-98CB-BAA896F43688} = {6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}
+		{C60FFF97-CD6C-4833-A6A3-949C4E3688FC} = {6E2D1D8A-98FC-4EE3-B3CF-EA9128221624}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5FAB4299-85E4-49E0-9E0B-0AF82B620CB2}
