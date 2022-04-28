@@ -2,9 +2,8 @@
 {
     public class GetArticlesRequest
     {
-        public string CategoryName { get; set; }
-        public string StartDate { get; set; }
-        public string EndDate { get; set; }
-        public float Rating { get; set; }
+        public string? Name { get; set; }
+        public Guid? SourseId { get; set; }
+        public int? Page { get; set; }
     }
 }

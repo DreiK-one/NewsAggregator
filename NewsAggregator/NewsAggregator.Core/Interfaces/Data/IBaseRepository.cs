@@ -27,6 +27,8 @@ namespace NewsAggregator.Core.Interfaces.Data
 
         public Task Remove(Guid id);
 
+        public Task RemoveRange(Expression<Func<T, bool>> predicate);
+
         public void Dispose();
     }
 }

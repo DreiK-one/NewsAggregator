@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
+using NewsAggregator.WebAPI.Filters;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Tools.Specs;
 

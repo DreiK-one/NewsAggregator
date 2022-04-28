@@ -89,6 +89,13 @@ namespace NewsAggregator.DataAccess
             DbSet.Remove(await DbSet.FindAsync(id));
         }
 
+        public virtual async Task RemoveRange(Expression<Func<T, bool>> predicate)
+        {
+            var entities = DbSet.Where(predicate);
+
+            DbSet.RemoveRange(entities);
+        }
+
         public void Dispose()
         {
             Db.Dispose();

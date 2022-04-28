@@ -24,12 +24,15 @@ namespace NewsAggregator.DataAccess
 
         private readonly IBaseRepository<UserRole> _userRoleRepository;
 
+        private readonly IBaseRepository<RefreshToken> _refreshTokenRepository;
+
 
         public UnitOfWork(NewsAggregatorContext context, IArticleRepository articleRepository,
             IBaseRepository<Category> categories, IBaseRepository<Comment> comments,
             IBaseRepository<Role> roles, IBaseRepository<Source> sources,
-            IBaseRepository<User> users, IBaseRepository<UserActivity> userActivities, 
-            IBaseRepository<UserRole> userRoleRepository)
+            IBaseRepository<User> users, IBaseRepository<UserActivity> userActivities,
+            IBaseRepository<UserRole> userRoleRepository, 
+            IBaseRepository<RefreshToken> refreshTokenRepository)
         {
             _db = context;
             _articleRepository = articleRepository;
@@ -40,6 +43,7 @@ namespace NewsAggregator.DataAccess
             _userRepository = users;
             _userActivityRepository = userActivities;
             _userRoleRepository = userRoleRepository;
+            _refreshTokenRepository = refreshTokenRepository;
         }
 
         public IArticleRepository Articles => _articleRepository;
@@ -50,6 +54,9 @@ namespace NewsAggregator.DataAccess
         public IBaseRepository<User> Users => _userRepository;
         public IBaseRepository<UserActivity> UserActivities => _userActivityRepository;
         public IBaseRepository<UserRole> UserRoles => _userRoleRepository;
+        public IBaseRepository<RefreshToken> RefreshTokens => _refreshTokenRepository;
+
+
 
         public async Task<int> Save()
         {

@@ -10,6 +10,10 @@ using FluentValidation.AspNetCore;
 using NewsAggregator.WebAPI.Validators;
 using Hangfire;
 using Hangfire.SqlServer;
+using NewsAggregator.WebAPI.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace NewsAggregator.WebAPI
 {
@@ -38,6 +42,7 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
             services.AddScoped<IBaseRepository<UserRole>, UserRoleRepository>();
+            services.AddScoped<IBaseRepository<RefreshToken>, RefreshTokenRepository>();
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
@@ -49,6 +54,8 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IHtmlParserService, HtmlParserService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IRateService, RateService>();
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IJwtService, JwtService>();
 
             //services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
             //        GetArticleByPageQueryHandler>();
@@ -72,25 +79,25 @@ namespace NewsAggregator.WebAPI
                     }));
             services.AddHangfireServer();
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //    .AddJwtBearer(options =>
-            //    {
-            //        options.SaveToken = true;
-            //        options.RequireHttpsMetadata = true;
-            //        options.TokenValidationParameters = new TokenValidationParameters()
-            //        {
-            //            ValidateIssuerSigningKey = true,
-            //            ValidateIssuer = false,
-            //            ValidateAudience = false,
-            //            ClockSkew = TimeSpan.Zero,
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:Secret"]))
-            //        };
-            //    });
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = true;
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["AppSettings:Secret"]))
+                    };
+                });
 
             //services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -121,7 +128,7 @@ namespace NewsAggregator.WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            //app.UseMiddleware<JwtMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

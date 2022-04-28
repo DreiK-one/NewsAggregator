@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data;
@@ -66,6 +67,50 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             }
+        }
+        public async Task<UserDto> GetUserById(Guid id)
+        {
+            try
+            {
+                var user = await _unitOfWork.Users.GetById(id);
+                return _mapper.Map<UserDto>(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<UserDto> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+                string normalizedEmail = email.ToUpperInvariant();
+
+                var user = await (await _unitOfWork.Users.FindBy(user =>
+                    user.NormalizedEmail != null && user.NormalizedEmail
+                        .Equals(normalizedEmail)))
+                    .Include(user => user.UserRoles)
+                        .ThenInclude(role => role.Role)
+                    .FirstOrDefaultAsync();
+                return _mapper.Map<UserDto>(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<UserDto> GetUserByRefreshTokenAsync(string refreshToken)
+        {
+            var user = (await (await _unitOfWork.RefreshTokens
+                .FindBy(token => token.Token.Equals(refreshToken)))
+                .FirstOrDefaultAsync())
+                .User;
+
+            return _mapper.Map<UserDto>(user);
         }
 
         public async Task<Guid> GetUserIdByNicknameAsync(string nickname)
