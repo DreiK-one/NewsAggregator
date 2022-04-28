@@ -44,7 +44,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
-        }
+        } 
 
         [HttpPost]
         public async Task<IActionResult> Login(AccountLoginModel model)
@@ -81,8 +81,8 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-            } 
-        }
+            }
+        }//Add to API
 
         [HttpGet]
         public async Task<IActionResult> Register(string? returnUrl)
@@ -143,8 +143,8 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-            } 
-        }
+            }
+        } //Add to API
 
         [HttpGet]
         [Authorize]
@@ -158,8 +158,8 @@ namespace NewsAggregator.App.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
-            }  
-        }
+            }
+        } 
 
         [HttpPost]
         [Authorize]
@@ -175,8 +175,8 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-        }
-        
+        } //Add to API
+
         [HttpGet]
         [ApiExplorerSettings(IgnoreApi = true)]
         [Route("access-denied")]
@@ -250,7 +250,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-        }
+        } //Add to API
 
         [HttpGet]
         [Authorize]
@@ -295,7 +295,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return RedirectToAction("Error500");
             }
-        }
+        } //Add to API
 
         [HttpGet]
         [Authorize]
@@ -343,7 +343,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-        }
+        } //Add to API
 
         [Authorize]
         public async Task<IActionResult> ChangesApplied()

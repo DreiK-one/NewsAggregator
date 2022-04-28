@@ -45,6 +45,7 @@ namespace NewsAggregator.App
             services.AddScoped<IBaseRepository<User>, UserRepository>();
             services.AddScoped<IBaseRepository<UserActivity>, UserActivityRepository>();
             services.AddScoped<IBaseRepository<UserRole>, UserRoleRepository>();
+            services.AddScoped<IBaseRepository<RefreshToken>, RefreshTokenRepository>();
 
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
