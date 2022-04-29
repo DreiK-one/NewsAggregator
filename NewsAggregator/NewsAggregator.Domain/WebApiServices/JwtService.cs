@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,7 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewsAggregator.Domain.Services
+namespace NewsAggregator.Domain.WebApiServices
 {
     public class JwtService : IJwtService
     {

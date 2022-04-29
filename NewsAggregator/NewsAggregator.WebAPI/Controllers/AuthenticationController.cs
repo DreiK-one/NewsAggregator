@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
@@ -11,25 +13,29 @@ namespace NewsAggregator.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TokenController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<TokenController> _logger;
+        private readonly ILogger<AuthenticationController> _logger;
         private readonly ITokenService _tokenService;
-        
-        public TokenController(IMapper mapper,
-            ILogger<TokenController> logger,
-            ITokenService tokenService)
+        private readonly IAuthenticationService _authenticationService;
+
+        public AuthenticationController(IMapper mapper,
+            ILogger<AuthenticationController> logger,
+            ITokenService tokenService, 
+            IAuthenticationService authenticationService)
         {
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
+            _authenticationService = authenticationService;
         }
 
-        [HttpPost("auth")]
+        [HttpPost("authenticate")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> Authenticate(AuthenticateRequest request)
+        public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
         {
             try
             {
@@ -52,9 +58,30 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
+        [HttpPost("register")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(RegisterResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        {
+            try
+            {
+                var user = _mapper.Map<RegisterDto>(request);
+                var response = await _authenticationService.CreateUserByApiAsync(user);
+
+                return Ok(_mapper.Map<RegisterResponse>(response));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ErrorModel { Message = ex.Message });
+            }
+        }
+
         [HttpPost("refresh-token")]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> RefreshToken()
         {
             try
@@ -82,6 +109,7 @@ namespace NewsAggregator.WebAPI.Controllers
         [HttpPost("revoke-token")]
         [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [Authorize]
         public IActionResult RevokeToken(RevokeTokenRequest request)
         {
             try
@@ -108,7 +136,7 @@ namespace NewsAggregator.WebAPI.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTimeOffset.UtcNow.AddDays(2)
+                Expires = DateTimeOffset.UtcNow.AddDays(1)
             };
             Response.Cookies.Append("refresh-token", refreshToken, cookieOptions);
         }
@@ -119,5 +147,23 @@ namespace NewsAggregator.WebAPI.Controllers
                 ? Request.Headers["X-Forwarded-For"]
                 : HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> Login(AccountLoginModel model)
+
+        //[HttpPost]
+        //public async Task<IActionResult> Register(AccountRegisterModel model)
+
+        //[HttpPost]
+        //public async Task<IActionResult> LogoutConfirm()
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangeEmailConfirm(ChangeEmailViewModel model)
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangePasswordConfirm(ChangePasswordViewModel model)
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangeNicknameConfirm(ChangeNicknameViewModel model)
     }
 }

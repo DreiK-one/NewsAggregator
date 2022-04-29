@@ -1,4 +1,5 @@
 ﻿using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 
 namespace NewsAggregator.WebAPI.Middlewares
 {

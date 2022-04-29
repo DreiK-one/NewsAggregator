@@ -3,14 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace NewsAggregator.WebAPI.Models.Responses
 {
-    public class AuthenticateResponse
+    public class RegisterResponse
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
+        public string Nickname { get; set; }
+        public DateTime RegistrationDate { get; set; }
         public List<UserRoleDto> UserRoles { get; set; }
-        public string JwtToken { get; set; }
-
-        [JsonIgnore]
-        public string RefreshToken { get; set; }
     }
 }

@@ -20,6 +20,9 @@ using NewsAggregator.Core.DTOs;
 using CQS.Handlers.QueryHandlers;
 using CQS.Models.Commands;
 using CQS.Handlers.CommandHanlers;
+using System.Reflection;
+using NewsAggregator.Domain.WebApiServices;
+using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 
 namespace NewsAggregator.WebAPI
 {
@@ -60,8 +63,10 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IHtmlParserService, HtmlParserService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IRateService, RateService>();
+
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
                     GetArticleByPageQueryHandler>();

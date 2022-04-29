@@ -10,7 +10,7 @@ namespace NewsAggregator.Core.DTOs
     {
         public Guid Id { get; set; }
         public string Email { get; set; }
-        public List<UserRoleDto> RoleNames { get; set; }
+        public List<UserRoleDto> UserRoles { get; set; }
         public string JwtToken { get; set; }
         public string RefreshToken { get; set; }
 
@@ -18,7 +18,7 @@ namespace NewsAggregator.Core.DTOs
         {
             Id = user.Id;
             Email = user.Email;
-            RoleNames = user.UserRoles;
+            UserRoles = user.UserRoles;
             JwtToken = jwtToken;
             RefreshToken = refreshToken;
         }

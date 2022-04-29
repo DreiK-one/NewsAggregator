@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NewsAggregator.Core.Interfaces
+namespace NewsAggregator.Core.Interfaces.WebApiInterfaces
 {
     public interface ITokenService
     {

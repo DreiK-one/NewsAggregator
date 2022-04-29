@@ -4,9 +4,10 @@ namespace NewsAggregator.WebAPI.Models.Requests
 {
     public class AuthenticateRequest
     {
-        [Required]
+        [Required(ErrorMessage = "Login is required")]
         public string Login { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
     }
 }

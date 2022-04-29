@@ -6,15 +6,20 @@ using NewsAggregator.WebAPI.Models.Responses;
 
 namespace NewsAggregator.WebAPI.Mappers
 {
-    public class TokenProfile : Profile
+    public class AccountProfile : Profile
     {
-        public TokenProfile()
+        public AccountProfile()
         {
             CreateMap<AuthenticateRequest, LoginDto>();
-            CreateMap<RefreshToken, RefreshTokenDto>();
-            CreateMap<RefreshTokenDto, RefreshToken>();
-            CreateMap<JwtAuthDto, AuthenticateResponse>();
 
+            CreateMap<RegisterRequest, RegisterDto>();
+
+            CreateMap<UserDto, RegisterResponse>();
+
+
+            CreateMap<RefreshToken, RefreshTokenDto>().ReverseMap();
+
+            CreateMap<JwtAuthDto, AuthenticateResponse>();
         }
     }
 }
