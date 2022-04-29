@@ -17,6 +17,7 @@ namespace NewsAggregator.Core.Interfaces
         Task<int?> UpdateAsync(CreateOrEditArticleDto articleDto);
         Task<int?> DeleteAsync(Guid modelId);
         Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id);
+        Task<ArticleDto> GetArticleWithAllNavigationPropertiesByRating(Guid id);
         Task<List<string>> GetAllExistingArticleUrls();
         Task<ArticleDto> GetArticleWithoutRating();
         Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync();

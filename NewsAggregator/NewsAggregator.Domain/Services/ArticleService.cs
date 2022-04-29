@@ -142,6 +142,26 @@ namespace NewsAggregator.Domain.Services
             }           
         }
 
+        public async Task<ArticleDto> GetArticleWithAllNavigationPropertiesByRating(Guid id)
+        {
+            try
+            {
+                var model = await _unitOfWork.Articles.Get()
+                    .Where(a => a.Id.Equals(id) && a.Coefficient > 0)
+                    .Include(source => source.Source)
+                    .Include(comments => comments.Comments)
+                    .ThenInclude(user => user.User)
+                    .FirstOrDefaultAsync();
+
+                return _mapper.Map<ArticleDto>(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
         public async Task<int?> CreateAsync(CreateOrEditArticleDto articleDto)
         {
             try

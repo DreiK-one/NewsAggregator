@@ -304,7 +304,9 @@ namespace NewsAggregator.Domain.Services
 
         public async Task<int> UpdateEmail(Guid userId, string email)
         {
-            await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
+            try
+            {
+                await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
             {
                 new PatchModel
                 {
@@ -318,12 +320,20 @@ namespace NewsAggregator.Domain.Services
                     PropertyValue = email.ToUpperInvariant()
                 }
             });
-            return await _unitOfWork.Save();
+                return await _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<int> UpdateNickname(Guid userId, string nickname)
         {
-            await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
+            try
+            {
+                await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
             {
                 new PatchModel
                 {
@@ -337,7 +347,13 @@ namespace NewsAggregator.Domain.Services
                     PropertyValue = nickname.ToUpperInvariant()
                 }
             });
-            return await _unitOfWork.Save();
+                return await _unitOfWork.Save();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public bool ValidateIsEmailExists(string email)

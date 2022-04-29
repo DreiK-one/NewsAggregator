@@ -1,18 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
-using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NewsAggregator.Domain.WebApiServices
 {

@@ -28,7 +28,7 @@ namespace CQS.Handlers.QueryHandlers
             var articles = await _database.Articles
             .OrderBy(article => article.CreationDate)
             .Select(article => _mapper.Map<ArticleDto>(article))
-            .ToArrayAsync(cancellationToken: token);
+            .ToListAsync(cancellationToken: token);
 
             return articles;
         }

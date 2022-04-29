@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
@@ -28,7 +29,7 @@ namespace NewsAggregator.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("for-user/{id}")]
         [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
@@ -41,7 +42,7 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage { Message = "Identificator is null"});
                 }
 
-                var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+                var article = await _articleService.GetArticleWithAllNavigationPropertiesByRating(id);
                 if (article != null)
                 {
                     return Ok(article);
@@ -58,7 +59,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("for-user")]
         [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
         public async Task<IActionResult> Get()
@@ -82,38 +83,58 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        //Think about specification
+        [HttpGet("for-admin"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
+        public async Task<IActionResult> GetAsAdmin()
+        {
+            try
+            {
+                var article = await _articleService.GetAllNewsAsync();
+                if (article != null)
+                {
+                    return Ok(article);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
+            }
+        }
 
-        //[HttpGet]
-        //public async Task<IActionResult> Get(GetArticlesRequest request)
-        //{
-        //    try
-        //    {
-        //        if (request == null)
-        //        {
-        //            return BadRequest();
-        //        }
-        //        var spec1 = new OnlyCategorySpecification(request.CategoryName);
-        //        var spec2 = new OnlyRatingSpecification(request.Rating);
+        [HttpGet("for-admin/{id}"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> GetByIdAsAdmin(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Identificator is null" });
+                }
 
-        //        var spec = spec1.Or(spec2);
-
-        //        var articles = await _articleService.GetArticlesByRequest(spec);
-
-        //        if (articles != null)
-        //        {
-        //            return Ok(articles);
-        //        }
-        //        else
-        //        {
-        //            return NoContent();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-        //        return BadRequest();
-        //    }
-        //}
+                var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+                if (article != null)
+                {
+                    return Ok(article);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
+            }
+        }
     }
 }

@@ -19,23 +19,19 @@ namespace NewsAggregator.WebAPI.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly ITokenService _tokenService;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IAccountService _accountService;
 
         public AuthenticationController(IMapper mapper,
             ILogger<AuthenticationController> logger,
             ITokenService tokenService,
-            IAuthenticationService authenticationService, 
-            IAccountService accountService)
+            IAuthenticationService authenticationService)
         {
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
             _authenticationService = authenticationService;
-            _accountService = accountService;
         }
 
-        [HttpPost("authenticate")]
-        [AllowAnonymous]
+        [HttpPost("authenticate"), AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
@@ -61,10 +57,9 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpPost("register")]
+        [HttpPost("register"), AllowAnonymous]
         [ProducesResponseType(typeof(RegisterResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
-        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             try
@@ -81,10 +76,9 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpPost("change-password")] 
+        [HttpPost("change-password"), Authorize] 
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
-        [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             try
@@ -101,10 +95,9 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpPost("refresh-token")]
+        [HttpPost("refresh-token"), Authorize]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
-        [Authorize]
         public async Task<IActionResult> RefreshToken()
         {
             try
@@ -129,10 +122,9 @@ namespace NewsAggregator.WebAPI.Controllers
         }
 
 
-        [HttpPost("revoke-token")]
+        [HttpPost("revoke-token"), Authorize]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [Authorize]
         public IActionResult RevokeToken(RevokeTokenRequest request)
         {
             try
@@ -170,23 +162,5 @@ namespace NewsAggregator.WebAPI.Controllers
                 ? Request.Headers["X-Forwarded-For"]
                 : HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> Login(AccountLoginModel model)
-
-        //[HttpPost]
-        //public async Task<IActionResult> Register(AccountRegisterModel model)
-
-        //[HttpPost]
-        //public async Task<IActionResult> LogoutConfirm()
-
-        //[HttpPost]
-        //public async Task<IActionResult> ChangeEmailConfirm(ChangeEmailViewModel model)
-
-        //[HttpPost]
-        //public async Task<IActionResult> ChangePasswordConfirm(ChangePasswordViewModel model)
-
-        //[HttpPost]
-        //public async Task<IActionResult> ChangeNicknameConfirm(ChangeNicknameViewModel model)
     }
 }
