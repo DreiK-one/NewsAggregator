@@ -28,14 +28,14 @@ namespace NewsAggregator.WebAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(CreateCommentRequest request)
         {
             try
             {
                 if (!ModelState.IsValid || request == null)
                 {
-                    return BadRequest(new ErrorModel { Message = "Request is null or invalid" });
+                    return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
                 }
 
                 await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
@@ -45,7 +45,7 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ErrorModel { Message = ex.Message});
+                return BadRequest(new ResponseMessage { Message = ex.Message});
             }
         }
     }

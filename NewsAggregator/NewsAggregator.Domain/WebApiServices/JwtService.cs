@@ -26,24 +26,32 @@ namespace NewsAggregator.Domain.WebApiServices
 
         public string GenerateJwtToken(UserDto user)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var secretKey = Encoding.UTF8.GetBytes(_configuration["AppSettings:Secret"]);
-
-            var claims = user.UserRoles
-                .Select(rn => new Claim(ClaimTypes.Role, rn.Role.Name))
-                .ToList();
-            claims.Add(new Claim("id", user.Id.ToString("D")));
-
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(15),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey),
-                    SecurityAlgorithms.HmacSha256),
-            };
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var secretKey = Encoding.UTF8.GetBytes(_configuration["AppSettings:Secret"]);
 
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+                var claims = user.UserRoles
+                    .Select(rn => new Claim(ClaimTypes.Role, rn.Role.Name))
+                    .ToList();
+                claims.Add(new Claim("id", user.Id.ToString("D")));
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddMinutes(15),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKey),
+                        SecurityAlgorithms.HmacSha256),
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return tokenHandler.WriteToken(token);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<Guid?> ValidateJwtToken(string token)
@@ -71,23 +79,31 @@ namespace NewsAggregator.Domain.WebApiServices
                 var userId = Guid.Parse(jwtToken.Claims.First(claim => claim.Type == "id").Value);
                 return userId;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return null;
             }
         }
 
         public RefreshTokenDto GenerateRefreshToken(string ipAddress)
         {
-            var refreshToken = new RefreshTokenDto()
+            try
             {
-                Token = Guid.NewGuid().ToString("D"),
-                Expires = DateTime.UtcNow.AddDays(7),
-                Created = DateTime.UtcNow,
-                CreatedByIp = ipAddress
-            };
-            return refreshToken;
+                var refreshToken = new RefreshTokenDto()
+                {
+                    Token = Guid.NewGuid().ToString("D"),
+                    Expires = DateTime.UtcNow.AddDays(1),
+                    Created = DateTime.UtcNow,
+                    CreatedByIp = ipAddress
+                };
+                return refreshToken;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            } 
         }
     }
 }

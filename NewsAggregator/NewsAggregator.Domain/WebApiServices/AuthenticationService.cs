@@ -20,7 +20,6 @@ namespace NewsAggregator.Domain.WebApiServices
     {
         private readonly IMapper _mapper;
         private readonly ILogger<JwtService> _logger;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IAccountService _accountService;
 
         public AuthenticationService(IMapper mapper, 
@@ -33,26 +32,57 @@ namespace NewsAggregator.Domain.WebApiServices
         }
         public async Task<UserDto> CreateUserByApiAsync(RegisterDto dto)
         {
-            if (_accountService.ValidateIsEmailExists(dto.Email))
+            try
             {
-                throw new ArgumentException($"Email {dto.Email} is already exists");
-            }
+                if (_accountService.ValidateIsEmailExists(dto.Email))
+                {
+                    throw new ArgumentException($"Email {dto.Email} is already exists");
+                }
 
-            if (_accountService.ValidateIsNicknameExists(dto.Nickname))
+                if (_accountService.ValidateIsNicknameExists(dto.Nickname))
+                {
+                    throw new ArgumentException($"Nickname {dto.Nickname} is already exists");
+                }
+
+                if (string.IsNullOrWhiteSpace(dto.Password))
+                {
+                    throw new ArgumentException("Password is required");
+                }
+
+                var userId = await _accountService.CreateUserAsync(dto.Email, dto.Nickname);
+                await _accountService.SetRoleAsync(userId, "User");
+                await _accountService.SetPasswordAsync(userId, dto.Password);
+
+                return await _accountService.GetUserByEmailAsync(dto.Email);
+            }
+            catch (Exception ex)
             {
-                throw new ArgumentException($"Nickname {dto.Nickname} is already exists");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
             }
+        }
 
-            if (string.IsNullOrWhiteSpace(dto.Password))
+        public async Task<int?> ChangePasswordByApiAsync(string email, string currentPass, string newPass)
+        {
+            try
             {
-                throw new ArgumentException("Password is required");
+                if (!await _accountService.CheckPasswordByEmailAsync(email, currentPass))
+                {
+                    throw new ArgumentException("Incorrect email or current password");
+                }
+
+                var userId = await _accountService.GetUserIdByEmailAsync(email);
+                if (userId == null)
+                {
+                    throw new ArgumentException("User not found");
+                }
+                return await _accountService.SetPasswordAsync((Guid)userId, newPass);
             }
-
-            var userId = await _accountService.CreateUserAsync(dto.Email, dto.Nickname);
-            await _accountService.SetRoleAsync(userId, "User");
-            await _accountService.SetPasswordAsync(userId, dto.Password);
-
-            return await _accountService.GetUserByEmailAsync(dto.Email);
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
     }
 }

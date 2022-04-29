@@ -250,7 +250,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-        } //Add to API
+        }
 
         [HttpGet]
         [Authorize]
@@ -295,7 +295,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return RedirectToAction("Error500");
             }
-        } //Add to API
+        } 
 
         [HttpGet]
         [Authorize]
@@ -343,7 +343,7 @@ namespace NewsAggregator.App.Controllers
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
-        } //Add to API
+        }
 
         [Authorize]
         public async Task<IActionResult> ChangesApplied()

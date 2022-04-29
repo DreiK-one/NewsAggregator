@@ -24,15 +24,15 @@ namespace NewsAggregator.WebAPI.Controllers
 
         [HttpGet("{name}")]
         [ProducesResponseType(typeof(CategoryWithArticlesDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), 500)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetByName(string name)
         {
             try
             {
                 if (name == null)
                 {
-                    return BadRequest(new ErrorModel { Message = "Name is null" });
+                    return BadRequest(new ResponseMessage { Message = "Name is null" });
                 }
 
                 var category = await _categoryService.GetCategoryByNameWithArticlesAsync(name);
@@ -48,13 +48,13 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new ErrorModel { Message = ex.Message });
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<CategoryDto>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), 500)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
         public async Task<IActionResult> Get()
         {
             try
@@ -72,21 +72,21 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new ErrorModel { Message = ex.Message });
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }
 
         [HttpGet("{id:Guid}")]
         [ProducesResponseType(typeof(CategoryWithArticlesDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), 500)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
                 if (id == Guid.Empty)
                 {
-                    return BadRequest(new ErrorModel { Message = "Identificator is null" });
+                    return BadRequest(new ResponseMessage { Message = "Identificator is null" });
                 }
 
                 var categories = await _categoryService.GetCategoryByIdWithArticlesAsync(id);
@@ -102,7 +102,7 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new ErrorModel { Message = ex.Message });
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }
     }

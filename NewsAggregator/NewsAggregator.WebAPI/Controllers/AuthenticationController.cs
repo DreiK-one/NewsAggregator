@@ -19,22 +19,25 @@ namespace NewsAggregator.WebAPI.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly ITokenService _tokenService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IAccountService _accountService;
 
         public AuthenticationController(IMapper mapper,
             ILogger<AuthenticationController> logger,
-            ITokenService tokenService, 
-            IAuthenticationService authenticationService)
+            ITokenService tokenService,
+            IAuthenticationService authenticationService, 
+            IAccountService accountService)
         {
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
             _authenticationService = authenticationService;
+            _accountService = accountService;
         }
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Authenticate([FromBody] AuthenticateRequest request)
         {
             try
@@ -44,7 +47,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (response == null)
                 {
-                    return BadRequest(new ErrorModel{ Message = "Username or password is incorrect" });
+                    return BadRequest(new ResponseMessage{ Message = "Username or password is incorrect" });
                 }
 
                 SetTokenCookie(response.RefreshToken);
@@ -54,14 +57,14 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ErrorModel { Message = ex.Message });
+                return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
 
         [HttpPost("register")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(RegisterResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             try
@@ -74,13 +77,33 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ErrorModel { Message = ex.Message });
+                return BadRequest(new ResponseMessage { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("change-password")] 
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            try
+            {
+                var response = await _authenticationService
+                    .ChangePasswordByApiAsync(request.Email, request.CurrentPassword, request.NewPassword);
+
+                return Ok(new ResponseMessage { Message = "Password successfully changed!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
 
         [HttpPost("refresh-token")]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [Authorize]
         public async Task<IActionResult> RefreshToken()
         {
@@ -91,7 +114,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (response == null)
                 {
-                    return BadRequest(new ErrorModel{ Message = "Invalid token" });
+                    return BadRequest(new ResponseMessage{ Message = "Invalid token" });
                 }
 
                 SetTokenCookie(response.RefreshToken);
@@ -101,13 +124,13 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ErrorModel { Message = ex.Message });
+                return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
 
 
         [HttpPost("revoke-token")]
-        [ProducesResponseType(typeof(ErrorModel), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [Authorize]
         public IActionResult RevokeToken(RevokeTokenRequest request)
@@ -118,7 +141,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    return BadRequest(new ErrorModel{ Message = "Token is required" });
+                    return BadRequest(new ResponseMessage{ Message = "Token is required" });
                 }
 
                 var response = _tokenService.RevokeToken(token, GetIpAddress());
@@ -127,7 +150,7 @@ namespace NewsAggregator.WebAPI.Controllers
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ErrorModel { Message = ex.Message });
+                return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
 
