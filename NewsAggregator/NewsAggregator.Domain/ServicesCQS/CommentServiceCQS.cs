@@ -31,9 +31,9 @@ namespace NewsAggregator.Domain.ServicesCQS
             return await _mediator.Send(new EditCommentCommand(dto), new CancellationToken());
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _mediator.Send(new DeleteCommentCommand(id), new CancellationToken());
         } 
     }
 }

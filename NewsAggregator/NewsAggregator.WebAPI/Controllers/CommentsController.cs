@@ -29,6 +29,7 @@ namespace NewsAggregator.WebAPI.Controllers
         [HttpPost, Authorize]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Create(CreateCommentRequest request)
         {
             try
@@ -51,6 +52,7 @@ namespace NewsAggregator.WebAPI.Controllers
         [HttpPut("{id}"), Authorize(Roles = "Admin, Moderator")]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> Edit(Guid id, [FromBody]EditCommentRequest request)
         {
             try
@@ -74,6 +76,29 @@ namespace NewsAggregator.WebAPI.Controllers
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest(new ResponseMessage { Message = ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                if (id == Guid.Empty)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Identificator is null" });
+                }
+
+                await _commentServiceCQS.DeleteAsync(id);
+                return Ok(new ResponseMessage { Message = "Comment deleted!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }
     }
