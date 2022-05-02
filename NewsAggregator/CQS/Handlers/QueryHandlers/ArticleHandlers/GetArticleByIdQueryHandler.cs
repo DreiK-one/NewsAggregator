@@ -8,25 +8,25 @@ using NewsAggregator.Data;
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {
-    public class GetAllArticlesForAdminQueryHandler : IRequestHandler<GetAllArticlesForAdminQuery, IEnumerable<ArticleDto>>
+    public class GetArticleByIdQueryHandler : IRequestHandler<GetArticleByIdQuery, ArticleDto>
     {
         private readonly IMapper _mapper;
         private readonly NewsAggregatorContext _database;
 
-        public GetAllArticlesForAdminQueryHandler(NewsAggregatorContext database, IMapper mapper)
+        public GetArticleByIdQueryHandler(NewsAggregatorContext database, IMapper mapper)
         {
             _database = database;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ArticleDto>> Handle(GetAllArticlesForAdminQuery query, CancellationToken token)
+        public async Task<ArticleDto> Handle(GetArticleByIdQuery query, CancellationToken token)
         {
-            var articles = await _database.Articles
-                .OrderByDescending(art => art.CreationDate)
+            var article = await _database.Articles
+                .Where(art => art.Id.Equals(query.Id))
                 .Select(art => _mapper.Map<ArticleDto>(art))
-                .ToListAsync(cancellationToken: token);
+                .FirstOrDefaultAsync(cancellationToken: token);
 
-            return articles;
+            return article;
         }
     }
 }

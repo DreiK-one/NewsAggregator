@@ -8,21 +8,21 @@ using NewsAggregator.Data;
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {
-    public class GetArticlesByPageForUserQueryHandler : IRequestHandler<GetArticlesByPageForUserQuery, IEnumerable<ArticleDto>>
+    public class GetPositiveArticlesByPageQueryHandler : IRequestHandler<GetPositiveArticlesByPageQuery, IEnumerable<ArticleDto>>
     {
         private readonly IMapper _mapper;
         private readonly NewsAggregatorContext _database;
   
-        public GetArticlesByPageForUserQueryHandler(NewsAggregatorContext database, IMapper mapper)
+        public GetPositiveArticlesByPageQueryHandler(NewsAggregatorContext database, IMapper mapper)
         {
             _database = database;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ArticleDto>> Handle(GetArticlesByPageForUserQuery query, CancellationToken token)
+        public async Task<IEnumerable<ArticleDto>> Handle(GetPositiveArticlesByPageQuery query, CancellationToken token)
         {
             var articles = await _database.Articles
-                .Where(article => article.Coefficient > 0)
+                .Where(a => a.Coefficient > 0)
                 .OrderByDescending(article => article.CreationDate)
                 .Skip(query.PageNumber * query.PageSize)
                 .Take(query.PageSize)

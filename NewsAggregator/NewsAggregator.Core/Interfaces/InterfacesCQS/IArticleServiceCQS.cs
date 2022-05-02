@@ -5,12 +5,9 @@ namespace NewsAggregator.Core.Interfaces.InterfacesCQS
 {
     public interface IArticleServiceCQS
     {
-        Task<ArticleDto> GetArticleByIdForUser(Guid id);
-        Task<IEnumerable<ArticleDto>> GetAllArticlesForUser();
-        Task<IEnumerable<ArticleDto>> GetArticlesByPageForUser(int page);
-
-        Task<ArticleDto> GetArticleByIdForAdmin(Guid id);
-        Task<IEnumerable<ArticleDto>> GetAllArticlesForAdmin();
-        Task<IEnumerable<ArticleDto>> GetArticlesByPageForAdmin(int page);
+        Task<ArticleDto> GetArticleById(Guid id);
+        Task<IEnumerable<ArticleDto>> GetAllArticles();
+        Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page);
+        Task<IEnumerable<ArticleDto>> GetPositiveArticlesByPage(int page);
     }
 }

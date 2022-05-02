@@ -19,7 +19,7 @@ namespace NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers
 
         public async Task<bool> Handle(CreateCommentCommand command, CancellationToken token)
         {
-            var comment = _mapper.Map<Comment>(command.Comment);
+            var comment = _mapper.Map<Comment>(command);
 
             await _database.Comments.AddAsync(comment);
             await _database.SaveChangesAsync(token);

@@ -2,6 +2,7 @@
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.WebAPI.Models.Requests;
+using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 
 namespace NewsAggregator.WebAPI.Mappers
 {
@@ -21,6 +22,10 @@ namespace NewsAggregator.WebAPI.Mappers
 
             CreateMap<CreateOrEditCommentDto, EditCommentRequest>()
                 .ReverseMap();
+
+            CreateMap<CreateCommentCommand, Comment>();
+
+            CreateMap<EditCommentCommand, Comment>();
         }
     }
 }

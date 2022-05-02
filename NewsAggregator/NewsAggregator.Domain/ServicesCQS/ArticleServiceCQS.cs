@@ -22,56 +22,11 @@ namespace NewsAggregator.Domain.ServicesCQS
             _configuration = configuration;
         }
 
-        public async Task<ArticleDto> GetArticleByIdForUser(Guid id)
+        public async Task<ArticleDto> GetArticleById(Guid id)
         {
             try
             {
-                return await _mediator.Send(new GetArticleByIdForUserQuery(id),
-                new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<ArticleDto>> GetAllArticlesForUser()
-        {
-            try
-            {
-                return await _mediator.Send(new GetAllArticlesForUserQuery(),
-                new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
-            } 
-        }
-
-        public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForUser(int page)
-        {
-            try
-            {
-                var size = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]);
-
-                return await _mediator.Send(new GetArticlesByPageForUserQuery(size, page),
-                    new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
-            }
-        }
-
-        public async Task<ArticleDto> GetArticleByIdForAdmin(Guid id)
-        {
-            try
-            {
-                return await _mediator.Send(new GetArticleByIdForAdminQuery(id),
+                return await _mediator.Send(new GetArticleByIdQuery(id),
                 new CancellationToken());
             }
             catch (Exception ex)
@@ -81,11 +36,11 @@ namespace NewsAggregator.Domain.ServicesCQS
             }          
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetAllArticlesForAdmin()
+        public async Task<IEnumerable<ArticleDto>> GetAllArticles()
         {
             try
             {
-                return await _mediator.Send(new GetAllArticlesForAdminQuery(),
+                return await _mediator.Send(new GetAllArticlesQuery(),
                                 new CancellationToken());
             }
             catch (Exception ex)
@@ -95,14 +50,31 @@ namespace NewsAggregator.Domain.ServicesCQS
             }            
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForAdmin(int page)
+        public async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page)
         {
             try
             {
                 var size = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
 
-                return await _mediator.Send(new GetArticlesByPageForAdminQuery(size, page),
+                return await _mediator.Send(new GetArticlesByPageQuery(size, page),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetPositiveArticlesByPage(int page)
+        {
+            try
+            {
+                var size = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
+
+                return await _mediator.Send(new GetPositiveArticlesByPageQuery(size, page),
                     new CancellationToken());
             }
             catch (Exception ex)

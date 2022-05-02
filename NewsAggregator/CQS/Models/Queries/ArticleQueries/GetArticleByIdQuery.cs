@@ -4,9 +4,9 @@ using NewsAggregator.Core.DTOs;
 
 namespace NewsAggregetor.CQS.Models.Queries.ArticleQueries
 {
-    public class GetArticleByIdForAdminQuery : IRequest<ArticleDto>
+    public class GetArticleByIdQuery : IRequest<ArticleDto>
     {
-        public GetArticleByIdForAdminQuery(Guid id)
+        public GetArticleByIdQuery(Guid id)
         {
             Id = id;
         }

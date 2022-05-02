@@ -75,18 +75,14 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
             services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();
 
-            services.AddScoped<IRequestHandler<GetAllArticlesForUserQuery, IEnumerable<ArticleDto>>,
-                    GetAllArticlesForUserQueryHandler>();
-            services.AddScoped<IRequestHandler<GetArticleByIdForUserQuery, ArticleDto>,
-                    GetArticleByIdForUserQueryHandler>();
-            services.AddScoped<IRequestHandler<GetArticlesByPageForUserQuery, IEnumerable<ArticleDto>>,
-                    GetArticlesByPageForUserQueryHandler>();
-            services.AddScoped<IRequestHandler<GetAllArticlesForAdminQuery, IEnumerable<ArticleDto>>,
-                    GetAllArticlesForAdminQueryHandler>();
-            services.AddScoped<IRequestHandler<GetArticleByIdForAdminQuery, ArticleDto>,
-                    GetArticleByIdForAdminQueryHandler>();
-            services.AddScoped<IRequestHandler<GetArticlesByPageForAdminQuery, IEnumerable<ArticleDto>>,
-                    GetArticlesByPageForAdminQueryHandler>();
+            services.AddScoped<IRequestHandler<GetAllArticlesQuery, IEnumerable<ArticleDto>>,
+                    GetAllArticlesQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticleByIdQuery, ArticleDto>,
+                    GetArticleByIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
+                    GetArticlesByPageQueryHandler>();
+            services.AddScoped<IRequestHandler<GetPositiveArticlesByPageQuery, IEnumerable<ArticleDto>>,
+                    GetPositiveArticlesByPageQueryHandler>();
 
             services.AddScoped<IRequestHandler<GetAllCategoriesQuery, IEnumerable<CategoryWithArticlesDto>>,
                     GetAllCategoriesQueryHandler>();
