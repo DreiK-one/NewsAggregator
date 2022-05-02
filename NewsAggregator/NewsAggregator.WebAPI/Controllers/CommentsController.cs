@@ -39,7 +39,7 @@ namespace NewsAggregator.WebAPI.Controllers
                 }
 
                 await _commentServiceCQS.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
-                return Ok();
+                return Ok(new ResponseMessage { Message = "Comment created!"});
             }
             catch (Exception ex)
             {

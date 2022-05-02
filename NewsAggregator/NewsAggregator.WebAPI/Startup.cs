@@ -23,6 +23,8 @@ using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using CQS.Models.Queries.ArticleQueries;
 using CQS.Handlers.QueryHandlers.ArticleHandlers;
+using CQS.Models.Commands.CommentCommands;
+using CQS.Handlers.CommandHandlers.CommentHandlers;
 
 namespace NewsAggregator.WebAPI
 {
@@ -83,6 +85,9 @@ namespace NewsAggregator.WebAPI
                     GetArticleByIdForAdminQueryHandler>();
             services.AddScoped<IRequestHandler<GetArticlesByPageForAdminQuery, IEnumerable<ArticleDto>>,
                     GetArticlesByPageForAdminQueryHandler>();
+
+            services.AddScoped<IRequestHandler<CreateCommentCommand, bool>,
+                    CreateCommentCommandHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
