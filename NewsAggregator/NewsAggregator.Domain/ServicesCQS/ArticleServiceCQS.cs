@@ -20,18 +20,14 @@ namespace NewsAggregator.Domain.ServicesCQS
 
         public async Task<ArticleDto> GetArticleByIdForUser(Guid id)
         {
-            var query = new GetArticleByIdForUserQuery { Id = id};
-            var article = await _mediator.Send(query, new CancellationToken());
-
-            return article;
+            return await _mediator.Send(new GetArticleByIdForUserQuery { Id = id }, 
+                new CancellationToken());
         }
 
         public async Task<IEnumerable<ArticleDto>> GetAllArticlesForUser()
         {
-            var query = new GetAllArticlesForUserQuery();
-            var articles = await _mediator.Send(query, new CancellationToken());
-
-            return articles;
+            return await _mediator.Send(new GetAllArticlesForUserQuery(), 
+                new CancellationToken());
         }
 
         public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForUser(int page)
@@ -42,25 +38,20 @@ namespace NewsAggregator.Domain.ServicesCQS
                     _configuration["ApplicationVariables:PageSize"]),
                 PageNumber = page
             };
-            var articles = await _mediator.Send(query, new CancellationToken());
 
-            return articles;
+            return await _mediator.Send(query, new CancellationToken());
         }
 
         public async Task<ArticleDto> GetArticleByIdForAdmin(Guid id)
         {
-            var query = new GetArticleByIdForUserQuery { Id = id };
-            var article = await _mediator.Send(query, new CancellationToken());
-
-            return article;
+            return await _mediator.Send(new GetArticleByIdForUserQuery { Id = id }, 
+                new CancellationToken());
         }
 
         public async Task<IEnumerable<ArticleDto>> GetAllArticlesForAdmin()
         {
-            var query = new GetAllArticlesForAdminQuery();
-            var articles = await _mediator.Send(query, new CancellationToken());
-
-            return articles;
+            return await _mediator.Send(new GetAllArticlesForAdminQuery(), 
+                new CancellationToken());
         }
 
         public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForAdmin(int page)
@@ -71,9 +62,8 @@ namespace NewsAggregator.Domain.ServicesCQS
                     _configuration["ApplicationVariables:PageSize"]),
                 PageNumber = page
             };
-            var articles = await _mediator.Send(query, new CancellationToken());
 
-            return articles;
+            return await _mediator.Send(query, new CancellationToken());
         }
     }
 }
