@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.Interfaces;
-using System.Text.RegularExpressions;
+
 
 namespace NewsAggregator.App.Validation
 {

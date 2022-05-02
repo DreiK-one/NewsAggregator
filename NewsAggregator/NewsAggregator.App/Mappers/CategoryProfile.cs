@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 
 namespace NewsAggregator.App.Mappers

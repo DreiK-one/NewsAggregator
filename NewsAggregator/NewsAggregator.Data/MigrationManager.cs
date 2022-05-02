@@ -18,10 +18,9 @@ namespace NewsAggregator.Data
                     {
                         context.Database.Migrate();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //Log errors or do anything it's needed
-                        throw;
+                        throw new Exception(ex.Message);
                     }
                 }
             }

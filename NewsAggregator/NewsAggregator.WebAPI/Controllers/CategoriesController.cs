@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
-using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
 

@@ -1,13 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using NewsAggregator.App.Models;
-using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
-using NewsAggregator.Data;
-using System.Collections.Concurrent;
-using System.Diagnostics;
+
 
 namespace NewsAggregator.App.Controllers
 {
@@ -17,18 +12,16 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IArticleService _articleService;
         private readonly IConfiguration _configuration;
-        private readonly IRateService _rateService;
 
         public HomeController(IMapper mapper,
             ILogger<HomeController> logger,
             IArticleService articleService,
-            IConfiguration configuration, IRateService rateService)
+            IConfiguration configuration)
         {
             _mapper = mapper;
             _logger = logger;
             _articleService = articleService;
             _configuration = configuration;
-            _rateService = rateService;
         }
 
         public async Task<IActionResult> Index(int page = 1)

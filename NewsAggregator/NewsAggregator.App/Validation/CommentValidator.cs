@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using NewsAggregator.App.Models;
 
+
 namespace NewsAggregator.App.Validation
 {
     public class CommentValidator : AbstractValidator<CommentModel>

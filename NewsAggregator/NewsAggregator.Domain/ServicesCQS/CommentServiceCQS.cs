@@ -1,23 +1,27 @@
-﻿using CQS.Models.Commands.CommentCommands;
-using CQS.Models.Queries.CommentQueries;
-using MediatR;
-using Microsoft.Extensions.Configuration;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Queries.CommentQueries;
+using NewsAggregetor.CQS.Models.Commands.CommentCommands;
+using AutoMapper;
 
 namespace NewsAggregator.Domain.ServicesCQS
 {
     public class CommentServiceCQS : ICommentServiceCQS
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<CommentServiceCQS> _logger;
         private readonly IMediator _mediator;
 
-        public CommentServiceCQS(ILogger<CommentServiceCQS> logger, 
+        public CommentServiceCQS(IMapper mapper,
+            ILogger<CommentServiceCQS> logger,
             IMediator mediator)
         {
+            _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
+            
         }
 
         public async Task<CreateOrEditCommentDto> GetByIdAsync(Guid id)
@@ -38,7 +42,9 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                return await _mediator.Send(new CreateCommentCommand(dto), 
+                var command = _mapper.Map<CreateCommentCommand>(dto);
+
+                return await _mediator.Send(command, 
                     new CancellationToken());
             }
             catch (Exception ex)
@@ -52,7 +58,9 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                return await _mediator.Send(new EditCommentCommand(dto), 
+                var command = _mapper.Map<EditCommentCommand>(dto);
+
+                return await _mediator.Send(command,
                     new CancellationToken());
             }
             catch (Exception ex)

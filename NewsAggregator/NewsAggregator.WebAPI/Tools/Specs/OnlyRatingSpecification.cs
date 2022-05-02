@@ -2,6 +2,7 @@
 using NewsAggregator.Core.Specifications;
 using System.Linq.Expressions;
 
+
 namespace NewsAggregator.WebAPI.Tools.Specs
 {
     public class OnlyRatingSpecification : Specification<RequestArticleDto>

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
-using NewsAggregator.Domain.Services;
+
 
 namespace NewsAggregator.App.Controllers
 {
@@ -93,7 +93,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
         }
@@ -120,7 +120,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
         }
@@ -137,7 +137,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             }
         }
@@ -162,7 +162,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return BadRequest();
             }
         }
@@ -187,7 +187,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, StackTrace: {ex.StackTrace}");
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new { ex.Message });
             } 
         }

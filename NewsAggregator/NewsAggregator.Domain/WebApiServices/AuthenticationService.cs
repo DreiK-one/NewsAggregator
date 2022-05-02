@@ -9,15 +9,12 @@ namespace NewsAggregator.Domain.WebApiServices
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<JwtService> _logger;
         private readonly IAccountService _accountService;
 
-        public AuthenticationService(IMapper mapper, 
-            ILogger<JwtService> logger,
+        public AuthenticationService(ILogger<JwtService> logger,
             IAccountService accountService)
         {
-            _mapper = mapper;
             _logger = logger;
             _accountService = accountService;
         }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using NewsAggregator.App.Filters;
 using Microsoft.ApplicationInsights;
 
+
 namespace NewsAggregator.App
 {
     public class Startup
@@ -31,9 +32,6 @@ namespace NewsAggregator.App
         {
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<NewsAggregatorContext>(options => options.UseSqlServer(connectionString));
-
-            // Add services to the container.
-            
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

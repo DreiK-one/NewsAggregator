@@ -1,13 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using NewsAggregator.Core.DTOs;
-using NewsAggregator.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NewsAggregator.App.Models
+﻿namespace NewsAggregator.App.Models
 {
     public class UserViewModel
     {

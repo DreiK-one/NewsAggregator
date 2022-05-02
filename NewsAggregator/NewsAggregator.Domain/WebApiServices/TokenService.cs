@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
@@ -8,11 +7,7 @@ using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace NewsAggregator.Domain.WebApiServices
 {

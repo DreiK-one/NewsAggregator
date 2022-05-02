@@ -1,6 +1,7 @@
 ﻿using NewsAggregator.Core.DTOs;
 using System.Text.Json.Serialization;
 
+
 namespace NewsAggregator.WebAPI.Models.Responses
 {
     public class AuthenticateResponse

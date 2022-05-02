@@ -1,9 +1,8 @@
-﻿using CQS.Models.Queries.CategoryQueries;
-using MediatR;
-using Microsoft.Extensions.Configuration;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
 
 namespace NewsAggregator.Domain.ServicesCQS
 {

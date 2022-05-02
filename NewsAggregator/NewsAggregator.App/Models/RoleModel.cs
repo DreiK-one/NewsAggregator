@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace NewsAggregator.App.Models
+﻿namespace NewsAggregator.App.Models
 {
     public class RoleModel : BaseModel
     {

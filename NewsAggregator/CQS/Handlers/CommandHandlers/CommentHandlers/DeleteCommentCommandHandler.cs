@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using CQS.Models.Commands.CommentCommands;
+using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Data;
-using NewsAggregator.Data.Entities;
 
-namespace CQS.Handlers.CommandHandlers.CommentHandlers
+
+namespace NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers
 {
     public class DeleteCommentCommandHandler : IRequestHandler<DeleteCommentCommand, bool>
     {

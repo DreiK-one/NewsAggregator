@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using CQS.Models.Queries.ArticleQueries;
+using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CQS.Handlers.QueryHandlers.ArticleHandlers
+
+namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {
     public class GetAllArticlesForAdminQueryHandler : IRequestHandler<GetAllArticlesForAdminQuery, IEnumerable<ArticleDto>>
     {

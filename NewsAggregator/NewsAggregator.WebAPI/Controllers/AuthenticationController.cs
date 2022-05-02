@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;

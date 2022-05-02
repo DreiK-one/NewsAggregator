@@ -2,6 +2,7 @@
 using NewsAggregator.App.Models;
 using NewsAggregator.Core.Interfaces;
 
+
 namespace NewsAggregator.App.Validation
 {
     public class CreateUserValidator : AbstractValidator<CreateUserViewModel>

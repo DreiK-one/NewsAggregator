@@ -1,5 +1,4 @@
 ﻿using NewsAggregator.Data.Entities;
-using System.Linq.Expressions;
 
 
 namespace NewsAggregator.Core.Interfaces.Data

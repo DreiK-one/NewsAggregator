@@ -15,17 +15,16 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
 using NewsAggregator.Core.DTOs;
-using System.Reflection;
 using NewsAggregator.Domain.WebApiServices;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
-using CQS.Models.Queries.ArticleQueries;
-using CQS.Handlers.QueryHandlers.ArticleHandlers;
-using CQS.Models.Commands.CommentCommands;
-using CQS.Handlers.CommandHandlers.CommentHandlers;
-using CQS.Models.Queries.CategoryQueries;
-using CQS.Handlers.QueryHandlers.CategoryHandlers;
+using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
+using NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers;
+using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
+using NewsAggregetor.CQS.Handlers.QueryHandlers.CategoryHandlers;
+using NewsAggregetor.CQS.Models.Commands.CommentCommands;
+using NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers;
 
 
 namespace NewsAggregator.WebAPI

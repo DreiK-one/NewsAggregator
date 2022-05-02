@@ -1,16 +1,12 @@
 ﻿using AutoMapper;
-using CQS.Models.Queries.CategoryQueries;
+using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CQS.Handlers.QueryHandlers.CategoryHandlers
+
+namespace NewsAggregetor.CQS.Handlers.QueryHandlers.CategoryHandlers
 {
     public class GetCategoryByNameQueryHandler : IRequestHandler<GetCategoryByNameQuery, CategoryWithArticlesDto>
     {

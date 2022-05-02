@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using NewsAggregator.WebAPI.Models.Requests;
 
+
 namespace NewsAggregator.WebAPI.Validators
 {
     public class CommentValidator : AbstractValidator<CreateCommentRequest>
