@@ -18,7 +18,7 @@ namespace NewsAggregator.Domain.ServicesCQS
 
         public async Task<CreateOrEditCommentDto> GetByIdAsync(Guid id)
         {
-            return await _mediator.Send(new GetCommentByIdQuery { Id = id }, new CancellationToken());
+            return await _mediator.Send(new GetCommentByIdQuery(id), new CancellationToken());
         }
 
         public async Task<bool> CreateAsync(CreateOrEditCommentDto dto)

@@ -10,7 +10,7 @@ namespace NewsAggregator.WebAPI.Mappers
         {
             CreateMap<Category, CategoryDto>().ReverseMap();
 
-            CreateMap<Category, CategoryWithArticlesDto>();
+            CreateMap<Category, CategoryWithArticlesDto>().ReverseMap();
         }
     }
 }

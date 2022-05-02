@@ -25,7 +25,7 @@ namespace NewsAggregator.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("for-user/{id}")]
+        [HttpGet("for-user/{id}"), AllowAnonymous]
         [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
@@ -56,7 +56,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpGet("for-user")]
+        [HttpGet("for-user"), AllowAnonymous]
         [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
         public async Task<IActionResult> Get(int? page)

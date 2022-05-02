@@ -12,5 +12,11 @@ namespace CQS.Models.Queries.ArticleQueries
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
+
+        public GetArticlesByPageForAdminQuery(int pageSize, int pageNumber)
+        {
+            PageNumber = pageNumber;
+            PageSize = pageSize;
+        }   
     }
 }

@@ -11,5 +11,11 @@ namespace CQS.Models.Queries.ArticleQueries
     public class GetArticleByIdForAdminQuery : IRequest<ArticleDto>
     {
         public Guid Id { get; set; }
+
+        public GetArticleByIdForAdminQuery(Guid id)
+        {
+            Id = id;
+        }
+        
     }
 }

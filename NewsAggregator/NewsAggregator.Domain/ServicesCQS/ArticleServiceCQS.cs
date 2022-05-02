@@ -20,7 +20,7 @@ namespace NewsAggregator.Domain.ServicesCQS
 
         public async Task<ArticleDto> GetArticleByIdForUser(Guid id)
         {
-            return await _mediator.Send(new GetArticleByIdForUserQuery { Id = id }, 
+            return await _mediator.Send(new GetArticleByIdForUserQuery(id), 
                 new CancellationToken());
         }
 
@@ -32,19 +32,16 @@ namespace NewsAggregator.Domain.ServicesCQS
 
         public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForUser(int page)
         {
-            var query = new GetArticlesByPageForUserQuery
-            {
-                PageSize = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]),
-                PageNumber = page
-            };
+            var size = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
 
-            return await _mediator.Send(query, new CancellationToken());
+            return await _mediator.Send(new GetArticlesByPageForUserQuery(size, page), 
+                new CancellationToken());
         }
 
         public async Task<ArticleDto> GetArticleByIdForAdmin(Guid id)
         {
-            return await _mediator.Send(new GetArticleByIdForUserQuery { Id = id }, 
+            return await _mediator.Send(new GetArticleByIdForAdminQuery(id), 
                 new CancellationToken());
         }
 
@@ -56,14 +53,11 @@ namespace NewsAggregator.Domain.ServicesCQS
 
         public async Task<IEnumerable<ArticleDto>> GetArticlesByPageForAdmin(int page)
         {
-            var query = new GetArticlesByPageForAdminQuery
-            {
-                PageSize = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]),
-                PageNumber = page
-            };
+            var size = Convert.ToInt32(
+                    _configuration["ApplicationVariables:PageSize"]);
 
-            return await _mediator.Send(query, new CancellationToken());
+            return await _mediator.Send(new GetArticlesByPageForAdminQuery(size, page), 
+                new CancellationToken());
         }
     }
 }

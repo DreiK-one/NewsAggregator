@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
@@ -12,30 +14,34 @@ namespace NewsAggregator.WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ILogger<ArticlesController> _logger;
-        private readonly ICategoryService _categoryService;
+        private readonly IMapper _mapper;
+        private readonly ILogger<CategoriesController> _logger;
+        private readonly ICategoryServiceCQS _categoryServiceCQS;
 
-        public CategoriesController(ICategoryService categoryService,
-            ILogger<ArticlesController> logger)
+        public CategoriesController(IMapper mapper, 
+            ILogger<CategoriesController> logger, 
+            ICategoryServiceCQS categoryServiceCQS)
         {
-            _categoryService = categoryService;
             _logger = logger;
+            _mapper = mapper;
+            _categoryServiceCQS = categoryServiceCQS;
         }
 
-        [HttpGet("{name}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(CategoryWithArticlesDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetByName(string name)
+        public async Task<IActionResult> GetById(Guid id)
         {
             try
             {
-                if (name == null)
+                if (id == Guid.Empty)
                 {
-                    return BadRequest(new ResponseMessage { Message = "Name is null" });
+                    return BadRequest(new ResponseMessage { Message = "Identificator is null" });
                 }
 
-                var category = await _categoryService.GetCategoryByNameWithArticlesAsync(name);
+                var category = await _categoryServiceCQS.GetCategoryById(id);
+
                 if (category != null)
                 {
                     return Ok(category);
@@ -53,57 +59,35 @@ namespace NewsAggregator.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CategoryDto>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ResponseMessage), 500)]
-        public async Task<IActionResult> Get()
+        [ProducesResponseType(typeof(IEnumerable<CategoryWithArticlesDto>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> Get(string? name)
         {
             try
             {
-                var categories = await _categoryService.GetAllCategoriesAsync();
-                if (categories != null)
+                if (!string.IsNullOrEmpty(name))
                 {
-                    return Ok(categories);
+                    var category = await _categoryServiceCQS.GetCategoryByName(Convert.ToString(name));
+                    if (category != null)
+                    {
+                        return Ok(category);
+                    }
                 }
                 else
                 {
-                    return NoContent();
+                    var categories = await _categoryServiceCQS.GetAllCategories();
+                    if (categories != null)
+                    {
+                        return Ok(categories);
+                    }
                 }
+                return NoContent();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
-        }
-
-        [HttpGet("{id:Guid}")]
-        [ProducesResponseType(typeof(CategoryWithArticlesDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ResponseMessage), 500)]
-        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            try
-            {
-                if (id == Guid.Empty)
-                {
-                    return BadRequest(new ResponseMessage { Message = "Identificator is null" });
-                }
-
-                var categories = await _categoryService.GetCategoryByIdWithArticlesAsync(id);
-                if (categories != null)
-                {
-                    return Ok(categories);
-                }
-                else
-                {
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new ResponseMessage { Message = ex.Message });
-            }
-        }
+        }   
     }
 }

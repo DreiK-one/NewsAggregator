@@ -25,6 +25,9 @@ using CQS.Models.Queries.ArticleQueries;
 using CQS.Handlers.QueryHandlers.ArticleHandlers;
 using CQS.Models.Commands.CommentCommands;
 using CQS.Handlers.CommandHandlers.CommentHandlers;
+using CQS.Models.Queries.CategoryQueries;
+using CQS.Handlers.QueryHandlers.CategoryHandlers;
+
 
 namespace NewsAggregator.WebAPI
 {
@@ -72,6 +75,7 @@ namespace NewsAggregator.WebAPI
 
             services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
+            services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();
 
             services.AddScoped<IRequestHandler<GetAllArticlesForUserQuery, IEnumerable<ArticleDto>>,
                     GetAllArticlesForUserQueryHandler>();
@@ -85,6 +89,13 @@ namespace NewsAggregator.WebAPI
                     GetArticleByIdForAdminQueryHandler>();
             services.AddScoped<IRequestHandler<GetArticlesByPageForAdminQuery, IEnumerable<ArticleDto>>,
                     GetArticlesByPageForAdminQueryHandler>();
+
+            services.AddScoped<IRequestHandler<GetAllCategoriesQuery, IEnumerable<CategoryWithArticlesDto>>,
+                    GetAllCategoriesQueryHandler>();
+            services.AddScoped<IRequestHandler<GetCategoryByIdQuery, CategoryWithArticlesDto>,
+                    GetCategoryByIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetCategoryByNameQuery, CategoryWithArticlesDto>,
+                    GetCategoryByNameQueryHandler>();
 
             services.AddScoped<IRequestHandler<CreateCommentCommand, bool>,
                     CreateCommentCommandHandler>();

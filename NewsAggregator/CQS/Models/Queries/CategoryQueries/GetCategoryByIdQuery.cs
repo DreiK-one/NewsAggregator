@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CQS.Models.Queries.CommentQueries
+namespace CQS.Models.Queries.CategoryQueries
 {
-    public class GetCommentByIdQuery : IRequest<CreateOrEditCommentDto>
+    public class GetCategoryByIdQuery : IRequest<CategoryWithArticlesDto>
     {
-        public GetCommentByIdQuery(Guid id)
+        public GetCategoryByIdQuery(Guid id)
         {
             Id = id;
         }
