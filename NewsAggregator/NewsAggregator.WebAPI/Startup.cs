@@ -88,6 +88,8 @@ namespace NewsAggregator.WebAPI
 
             services.AddScoped<IRequestHandler<CreateCommentCommand, bool>,
                     CreateCommentCommandHandler>();
+            services.AddScoped<IRequestHandler<EditCommentCommand, bool>,
+                    EditCommentCommandHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -121,7 +121,6 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-
         [HttpPost("revoke-token"), Authorize]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]

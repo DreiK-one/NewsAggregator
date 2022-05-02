@@ -18,7 +18,7 @@ namespace NewsAggregator.WebAPI.Controllers
         private readonly ICommentServiceCQS _commentServiceCQS;
 
         public CommentsController(ICommentServiceCQS commentServiceCQS,
-            ILogger<ArticlesController> logger, 
+            ILogger<ArticlesController> logger,
             IMapper mapper)
         {
             _logger = logger;
@@ -27,7 +27,7 @@ namespace NewsAggregator.WebAPI.Controllers
         }
 
         [HttpPost, Authorize]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(CreateCommentRequest request)
         {
@@ -39,12 +39,41 @@ namespace NewsAggregator.WebAPI.Controllers
                 }
 
                 await _commentServiceCQS.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
-                return Ok(new ResponseMessage { Message = "Comment created!"});
+                return Ok(new ResponseMessage { Message = "Comment created!" });
             }
             catch (Exception ex)
             {
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return BadRequest(new ResponseMessage { Message = ex.Message});
+                return BadRequest(new ResponseMessage { Message = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}"), Authorize(Roles = "Admin, Moderator")]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> Edit(Guid id, [FromBody]EditCommentRequest request)
+        {
+            try
+            {
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
+                }
+                var comment = await _commentServiceCQS.GetByIdAsync(id);
+                if (comment == null)
+                {
+                    return BadRequest(new ResponseMessage { Message = $"Comment with id {id} not found" });
+                }
+
+                comment.Text = request.Text;
+
+                await _commentServiceCQS.EditAsync(_mapper.Map<CreateOrEditCommentDto>(comment));
+                return Ok(new ResponseMessage { Message = "Comment changed!" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
     }

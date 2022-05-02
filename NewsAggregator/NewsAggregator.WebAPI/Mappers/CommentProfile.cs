@@ -13,9 +13,14 @@ namespace NewsAggregator.WebAPI.Mappers
 
             CreateMap<CommentDto, UserDto>().ReverseMap();
 
-            CreateMap<Comment, CreateOrEditCommentDto>().ReverseMap();
+            CreateMap<Comment, CreateOrEditCommentDto>()
+                .ReverseMap();
 
-            CreateMap<CreateOrEditCommentDto, CreateCommentRequest>().ReverseMap();
+            CreateMap<CreateOrEditCommentDto, CreateCommentRequest>()
+                .ReverseMap();
+
+            CreateMap<CreateOrEditCommentDto, EditCommentRequest>()
+                .ReverseMap();
         }
     }
 }
