@@ -10,7 +10,6 @@ using FluentValidation.AspNetCore;
 using NewsAggregator.WebAPI.Validators;
 using Hangfire;
 using Hangfire.SqlServer;
-using NewsAggregator.WebAPI.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -169,8 +168,6 @@ namespace NewsAggregator.WebAPI
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

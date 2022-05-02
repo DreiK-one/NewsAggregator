@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQS\CQS.csproj" />
+    <ProjectReference Include="..\CQS\NewsAggregator.CQS.csproj" />
     <ProjectReference Include="..\NewsAggregator.App\NewsAggregator.App.csproj" />
     <ProjectReference Include="..\NewsAggregator.Core\NewsAggregator.Core.csproj" />
     <ProjectReference Include="..\NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj" />
