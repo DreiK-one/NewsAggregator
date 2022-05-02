@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
-using NewsAggregator.WebAPI.Filters;
-using NewsAggregator.WebAPI.Models.Requests;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.WebAPI.Models.Responses;
-using NewsAggregator.WebAPI.Tools.Specs;
 using System.Net;
 
 namespace NewsAggregator.WebAPI.Controllers
@@ -18,13 +14,13 @@ namespace NewsAggregator.WebAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILogger<ArticlesController> _logger;
-        private readonly IArticleService _articleService;
+        private readonly IArticleServiceCQS _articleServiceCQS;
 
-        public ArticlesController(IArticleService articleService,
+        public ArticlesController(IArticleServiceCQS articleServiceCQS,
             ILogger<ArticlesController> logger,
             IMapper mapper)
         {
-            _articleService = articleService;
+            _articleServiceCQS = articleServiceCQS;
             _logger = logger;
             _mapper = mapper;
         }
@@ -42,7 +38,8 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage { Message = "Identificator is null"});
                 }
 
-                var article = await _articleService.GetArticleWithAllNavigationPropertiesByRating(id);
+                var article = await _articleServiceCQS.GetArticleByIdForUser(id);
+
                 if (article != null)
                 {
                     return Ok(article);
@@ -62,38 +59,20 @@ namespace NewsAggregator.WebAPI.Controllers
         [HttpGet("for-user")]
         [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), 500)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int? page)
         {
             try
             {
-                var article = await _articleService.GetAllNewsByRatingAsync();
-                if (article != null)
+                var articles = await _articleServiceCQS.GetAllArticlesForUser();
+                if (page >= 0 && page != null)
                 {
-                    return Ok(article);
+                    articles = await _articleServiceCQS
+                        .GetArticlesByPageForUser(Convert.ToInt32(page));
                 }
-                else
-                {
-                    return NoContent();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                return StatusCode(500, new ResponseMessage { Message = ex.Message });
-            }
-        }
 
-        [HttpGet("for-admin"), Authorize(Roles = "Admin")]
-        [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ResponseMessage), 500)]
-        public async Task<IActionResult> GetAsAdmin()
-        {
-            try
-            {
-                var article = await _articleService.GetAllNewsAsync();
-                if (article != null)
+                if (articles != null)
                 {
-                    return Ok(article);
+                    return Ok(articles);
                 }
                 else
                 {
@@ -119,11 +98,43 @@ namespace NewsAggregator.WebAPI.Controllers
                 {
                     return BadRequest(new ResponseMessage { Message = "Identificator is null" });
                 }
+                var article = await _articleServiceCQS
+                    .GetArticleByIdForAdmin(id);
 
-                var article = await _articleService.GetArticleWithAllNavigationProperties(id);
                 if (article != null)
                 {
                     return Ok(article);
+                }
+                else
+                {
+                    return NoContent();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                return StatusCode(500, new ResponseMessage { Message = ex.Message });
+            }
+        }
+
+
+        [HttpGet("for-admin"), Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(ArticleDto), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ResponseMessage), 500)]
+        public async Task<IActionResult> GetAsAdmin(int? page)
+        {
+            try
+            {
+                var articles = await _articleServiceCQS.GetAllArticlesForAdmin();
+                if (page >= 0 && page != null)
+                {
+                    articles = await _articleServiceCQS
+                        .GetArticlesByPageForAdmin(Convert.ToInt32(page));
+                }
+
+                if (articles != null)
+                {
+                    return Ok(articles);
                 }
                 else
                 {

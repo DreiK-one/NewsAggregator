@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
@@ -15,18 +15,18 @@ namespace NewsAggregator.WebAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILogger<ArticlesController> _logger;
-        private readonly ICommentService _commentService;
+        private readonly ICommentServiceCQS _commentServiceCQS;
 
-        public CommentsController(ICommentService commentService,
+        public CommentsController(ICommentServiceCQS commentServiceCQS,
             ILogger<ArticlesController> logger, 
             IMapper mapper)
         {
-            _commentService = commentService;
             _logger = logger;
             _mapper = mapper;
+            _commentServiceCQS = commentServiceCQS;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> Create(CreateCommentRequest request)
@@ -38,9 +38,8 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
                 }
 
-                await _commentService.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
+                await _commentServiceCQS.CreateAsync(_mapper.Map<CreateOrEditCommentDto>(request));
                 return Ok();
-
             }
             catch (Exception ex)
             {

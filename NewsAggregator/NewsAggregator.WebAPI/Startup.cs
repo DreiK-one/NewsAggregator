@@ -15,14 +15,14 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
-using CQS.Models.Queries;
 using NewsAggregator.Core.DTOs;
-using CQS.Handlers.QueryHandlers;
-using CQS.Models.Commands;
-using CQS.Handlers.CommandHanlers;
 using System.Reflection;
 using NewsAggregator.Domain.WebApiServices;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregator.Domain.ServicesCQS;
+using CQS.Models.Queries.ArticleQueries;
+using CQS.Handlers.QueryHandlers.ArticleHandlers;
 
 namespace NewsAggregator.WebAPI
 {
@@ -68,10 +68,21 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IJwtService, JwtService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            services.AddScoped<IRequestHandler<GetArticlesByPageQuery, IEnumerable<ArticleDto>>,
-                    GetArticleByPageQueryHandler>();
-            services.AddScoped<IRequestHandler<RateArticleCommand, bool>,
-                    RateArticleCommandHandler>();
+            services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
+            services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
+
+            services.AddScoped<IRequestHandler<GetAllArticlesForUserQuery, IEnumerable<ArticleDto>>,
+                    GetAllArticlesForUserQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticleByIdForUserQuery, ArticleDto>,
+                    GetArticleByIdForUserQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticlesByPageForUserQuery, IEnumerable<ArticleDto>>,
+                    GetArticlesByPageForUserQueryHandler>();
+            services.AddScoped<IRequestHandler<GetAllArticlesForAdminQuery, IEnumerable<ArticleDto>>,
+                    GetAllArticlesForAdminQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticleByIdForAdminQuery, ArticleDto>,
+                    GetArticleByIdForAdminQueryHandler>();
+            services.AddScoped<IRequestHandler<GetArticlesByPageForAdminQuery, IEnumerable<ArticleDto>>,
+                    GetArticlesByPageForAdminQueryHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CQS.Models.Queries
+namespace CQS.Models.Queries.ArticleQueries
 {
-    public class GetAllArticlesQuery : IRequest<IEnumerable<ArticleDto>>
+    public class GetAllArticlesForAdminQuery : IRequest<IEnumerable<ArticleDto>>
     {
     }
 }
