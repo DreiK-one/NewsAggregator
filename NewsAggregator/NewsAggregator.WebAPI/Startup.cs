@@ -14,21 +14,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediatR;
-using NewsAggregator.Core.DTOs;
 using NewsAggregator.Domain.WebApiServices;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
-using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
-using NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers;
-using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
-using NewsAggregetor.CQS.Handlers.QueryHandlers.CategoryHandlers;
-using NewsAggregetor.CQS.Models.Commands.CommentCommands;
-using NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers;
-using NewsAggregetor.CQS.Models.Queries.AccountQueries;
-using NewsAggregetor.CQS.Handlers.QueryHandlers.AccountHandlers;
-using NewsAggregetor.CQS.Models.Commands.AccountCommands;
-using NewsAggregetor.CQS.Handlers.CommandHandlers.AccountCommands;
 using System.Reflection;
 
 namespace NewsAggregator.WebAPI
@@ -151,14 +140,19 @@ namespace NewsAggregator.WebAPI
                 endpoints.MapControllers();
             });
 
-            var rssService = serviceProvider.GetRequiredService<IRssService>();
-            RecurringJob.AddOrUpdate("Aggregate news",
-                () => rssService.GetNewsFromSourcesAsync(),
+            var aggregateNews = serviceProvider.GetRequiredService<IRssService>();
+            RecurringJob.AddOrUpdate("Aggregate",
+                () => aggregateNews.GetNewsFromSourcesAsync(),
                 "*/10 * * * *");
 
-            var rateService = serviceProvider.GetRequiredService<IRateService>();
-            RecurringJob.AddOrUpdate("Rate news",
-                () => rateService.RateArticle(),
+            var parseNews = serviceProvider.GetRequiredService<IHtmlParserService>();
+            RecurringJob.AddOrUpdate("Parse",
+                () => parseNews.GetArticleContentFromUrlAsync(),
+                "*/5 * * * *");
+
+            var rateNews = serviceProvider.GetRequiredService<IRateService>();
+            RecurringJob.AddOrUpdate("Rate",
+                () => rateNews.RateArticle(),
                 "*/1 * * * *");
         }
     }

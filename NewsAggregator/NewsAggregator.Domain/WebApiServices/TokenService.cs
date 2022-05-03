@@ -57,8 +57,8 @@ namespace NewsAggregator.Domain.WebApiServices
                 var jwtToken = _jwtService.GenerateJwtToken(user);
                 var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
                 refreshToken.UserId = user.Id;
-                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshToken));
-                await _unitOfWork.Save();
+                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshToken)); //CQS!
+                await _unitOfWork.Save(); //CQS
 
                 return new JwtAuthDto(user, jwtToken, refreshToken.Token);
             }
@@ -74,7 +74,7 @@ namespace NewsAggregator.Domain.WebApiServices
             try
             {
                 var refreshToken = await (await _unitOfWork.RefreshTokens.FindBy(rt => rt.Token.Equals(token)))
-                .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(); //CQS
 
                 if (refreshToken == null || !refreshToken.IsActive)
                     throw new ArgumentException("Invalid token", "token");
@@ -92,7 +92,7 @@ namespace NewsAggregator.Domain.WebApiServices
         {
             try
             {
-                var user = await _accountService.GetUserByRefreshTokenAsync(token);
+                var user = await _accountService.GetUserByRefreshTokenAsync(token); //CQS
 
                 var refreshToken = await (await _unitOfWork.RefreshTokens.FindBy(rt => rt.Token.Equals(token)))
                     .FirstOrDefaultAsync();
@@ -110,8 +110,8 @@ namespace NewsAggregator.Domain.WebApiServices
                 var refreshTokenDto = await RotateRefreshToken(refreshToken, ipAddress);
                 refreshTokenDto.UserId = user.Id;
 
-                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshTokenDto));
-                await _unitOfWork.Save();
+                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshTokenDto)); //CQS
+                await _unitOfWork.Save(); //CQS
 
                 await RemoveOldRefreshTokens(user);
 
@@ -176,7 +176,7 @@ namespace NewsAggregator.Domain.WebApiServices
         {
             try
             {
-                await _unitOfWork.RefreshTokens.RemoveRange(token => !token.IsActive && token.UserId.Equals(userDto.Id));
+                await _unitOfWork.RefreshTokens.RemoveRange(token => !token.IsActive && token.UserId.Equals(userDto.Id)); //CQS
                 await _unitOfWork.Save();
             }
             catch (Exception ex)

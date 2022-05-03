@@ -9,7 +9,7 @@
         public string SourceUrl { get; set; }
         public string Image { get; set; }
         public DateTime CreationDate { get; set; }
-        public float Coefficient { get; set; }
+        public float? Coefficient { get; set; }
         public Guid CategoryId { get; set; }
         public Guid SourceId { get; set; }
     }

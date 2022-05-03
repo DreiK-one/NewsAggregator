@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 
 
@@ -30,27 +32,43 @@ namespace NewsAggregator.Domain.Services
             _categoryService = categoryService;
         }
 
-        public async Task<int?> GetArticleContentFromUrlAsync(string url)
+        public async Task<int?> GetArticleContentFromUrlAsync()
         {
             try
             {
-                var sourceId = await _sourceService.GetSourceByUrl(url);
+                var article = await (await _unitOfWork.Articles
+                    .FindBy(a => string.IsNullOrWhiteSpace(a.Body) && string.IsNullOrWhiteSpace(a.Title)))
+                    .FirstOrDefaultAsync();
+                if (article == null)
+                {
+                    return null;
+                }
+                var sourceId = await _sourceService.GetSourceByUrl(article.SourceUrl);
 
                 switch (sourceId.ToString("D").ToUpperInvariant())
                 {
                     case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
-                        var articleOnliner = await ParseOnlinerArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleOnliner));
+                        var articleOnliner = await ParseOnlinerArticle(article.SourceUrl);
+                        article.Title = articleOnliner.Title;
+                        article.Description = articleOnliner.Description;
+                        article.Body = articleOnliner.Body;
+                        article.Image = articleOnliner.Image;
                         return await _unitOfWork.Save();
 
                     case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
-                        var articleGoha = await ParseGohaArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(articleGoha));
+                        var articleGoha = await ParseGohaArticle(article.SourceUrl);
+                        article.Title = articleGoha.Title;
+                        article.Description = articleGoha.Description;
+                        article.Body = articleGoha.Body;
+                        article.Image = articleGoha.Image;
                         return await _unitOfWork.Save();
 
                     case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
-                        var article4pda = await ParseShazooArticle(url);
-                        await _unitOfWork.Articles.Add(_mapper.Map<Article>(article4pda));
+                        var article4pda = await ParseShazooArticle(article.SourceUrl);
+                        article.Title = article4pda.Title;
+                        article.Description = article4pda.Description;
+                        article.Body = article4pda.Body;
+                        article.Image = article4pda.Image;
                         return await _unitOfWork.Save();
 
                     default:
@@ -168,14 +186,9 @@ namespace NewsAggregator.Domain.Services
 
                 var model = new NewArticleDto()
                 {
-                    Id = Guid.NewGuid(),
                     Title = title,
                     Description = description,
-                    Body = text,
-                    CreationDate = DateTime.Now,         
-                    SourceUrl = url,
-                    CategoryId = await _categoryService.GetCategoryByUrl(url),
-                    SourceId = await _sourceService.GetSourceByUrl(url),
+                    Body = text,         
                     Image = image
                 };
 
@@ -241,14 +254,9 @@ namespace NewsAggregator.Domain.Services
                 
                 var model = new NewArticleDto()
                 {
-                    Id = Guid.NewGuid(),
                     Title = title,
                     Description = description,
                     Body = text,
-                    CreationDate = DateTime.Now,         
-                    SourceUrl = url,
-                    CategoryId = await _categoryService.GetCategoryByUrl(url),
-                    SourceId = await _sourceService.GetSourceByUrl(url),
                     Image = image
                 };
 
@@ -319,14 +327,9 @@ namespace NewsAggregator.Domain.Services
                 
                 var model = new NewArticleDto()
                 {
-                    Id = Guid.NewGuid(),
                     Title = title,
                     Description = description,
                     Body = text,
-                    CreationDate = DateTime.Now,  
-                    SourceUrl = url,
-                    CategoryId = await _categoryService.GetCategoryByUrl(url),
-                    SourceId = await _sourceService.GetSourceByUrl(url),
                     Image = image
                 };
 

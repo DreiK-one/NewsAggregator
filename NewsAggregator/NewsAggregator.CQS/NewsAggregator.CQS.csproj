@@ -17,4 +17,9 @@
     <ProjectReference Include="..\NewsAggregator.Data\NewsAggregator.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Handlers\CommandHandlers\TokenHandlers\" />
+    <Folder Include="Models\Commands\TokenCommands\" />
+  </ItemGroup>
+
 </Project>

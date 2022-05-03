@@ -94,7 +94,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        //Change to CQS
+        
         [HttpPost("refresh-token"), AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
@@ -112,7 +112,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 SetTokenCookie(response.RefreshToken);
 
-                return Ok(_mapper.Map<AuthenticateResponse>(response));
+                return Ok(_mapper.Map<AuthenticateResponse>(response)); //Change to CQS
             }
             catch (Exception ex)
             {
@@ -121,7 +121,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        //Change to CQS
+        
         [HttpPost("revoke-token"), Authorize]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -136,7 +136,7 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage{ Message = "Token is required" });
                 }
 
-                var response = _tokenService.RevokeToken(token, GetIpAddress());
+                var response = _tokenService.RevokeToken(token, GetIpAddress()); //Change to CQS
                 return Ok(new { message = "Token is revoked" });
             }
             catch (Exception ex)

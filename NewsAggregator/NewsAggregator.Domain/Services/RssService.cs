@@ -15,18 +15,21 @@ namespace NewsAggregator.Domain.Services
         private readonly IArticleService _articleService;
         private readonly ISourceService _sourceService;
         private readonly IHtmlParserService _htmlParserService;
+        private readonly ICategoryService _categoryService;
 
-        public RssService(IMapper mapper, 
+        public RssService(IMapper mapper,
             ILogger<RssService> logger,
             IArticleService articleService,
             ISourceService sourceService,
-            IHtmlParserService htmlParserService)
+            IHtmlParserService htmlParserService, 
+            ICategoryService categoryService)
         {
             _mapper = mapper;
             _logger = logger;
             _articleService = articleService;
             _sourceService = sourceService;
             _htmlParserService = htmlParserService;
+            _categoryService = categoryService;
         }
 
         public IEnumerable<RssArticleDto> GetArticlesInfoFromRss(string rssUrl)
@@ -66,7 +69,21 @@ namespace NewsAggregator.Domain.Services
 
                 foreach (var rssArticleDto in concurrentDictionary)
                 {
-                    var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
+                    //var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
+                    var articleUrl = await _articleService.CreateAsync(
+                        new CreateOrEditArticleDto
+                        {
+                            Id = Guid.NewGuid(),
+                            Title = " ",
+                            Body = " ",
+                            Description = " ",
+                            SourceUrl = rssArticleDto.Key,
+                            Image = " ",
+                            Coefficient = null,
+                            CreationDate = DateTime.Now,
+                            CategoryId = await _categoryService.GetCategoryByUrl(rssArticleDto.Key),
+                            SourceId = await _sourceService.GetSourceByUrl(rssArticleDto.Key),
+                        });
                 }
                 return false;
             }

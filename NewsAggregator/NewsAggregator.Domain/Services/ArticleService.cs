@@ -239,7 +239,8 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var article = await _unitOfWork.Articles.Get()
-                    .Where(article => article.Coefficient.Equals(null))
+                    .Where(article => article.Coefficient.Equals(null) && 
+                        !string.IsNullOrWhiteSpace(article.Body))
                     .Take(1).FirstOrDefaultAsync();
 
                 return _mapper.Map<ArticleDto>(article);
