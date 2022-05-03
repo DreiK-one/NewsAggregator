@@ -26,6 +26,10 @@ namespace NewsAggregator.WebAPI.Mappers
             CreateMap<CreateCommentCommand, Comment>();
 
             CreateMap<EditCommentCommand, Comment>();
+
+            CreateMap<CreateOrEditCommentDto, CreateCommentCommand>();
+
+            CreateMap<CreateOrEditCommentDto, EditCommentCommand>();
         }
     }
 }

@@ -9,13 +9,13 @@ namespace NewsAggregator.WebAPI.Validators
         public CommentValidator()
         {
             RuleFor(comment => comment.Text)
-               .NotNull();
-            RuleFor(comment => comment.UserId)
-               .NotNull();
-            RuleFor(comment => comment.ArticleId)
-               .NotNull();
+               .NotEmpty().WithMessage("Comment text is required!");
             RuleFor(comment => comment.CreationDate)
-               .NotNull();
+               .NotEmpty().WithMessage("Date is required!");
+            RuleFor(comment => comment.UserId)
+               .NotEmpty();
+            RuleFor(comment => comment.ArticleId)
+               .NotEmpty();
         }
     }
 }

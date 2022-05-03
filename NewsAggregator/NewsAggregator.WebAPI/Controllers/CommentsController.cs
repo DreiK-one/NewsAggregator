@@ -69,7 +69,7 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 comment.Text = request.Text;
 
-                await _commentServiceCQS.EditAsync(_mapper.Map<CreateOrEditCommentDto>(comment));
+                await _commentServiceCQS.EditAsync(comment);
                 return Ok(new ResponseMessage { Message = "Comment changed!" });
             }
             catch (Exception ex)

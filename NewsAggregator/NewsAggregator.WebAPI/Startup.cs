@@ -110,7 +110,7 @@ namespace NewsAggregator.WebAPI
 
             services.AddControllers().AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<CommentValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
 
             services.AddSwaggerGen(c =>
