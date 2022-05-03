@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
-
+using NewsAggregetor.CQS.Models.Queries.TokenQueries;
 
 namespace NewsAggregator.Domain.WebApiServices
 {
@@ -18,23 +17,23 @@ namespace NewsAggregator.Domain.WebApiServices
         private readonly ILogger<TokenService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAccountServiceCQS _accountServiceCQS;
-        private readonly IAccountService _accountService;
         private readonly IJwtService _jwtService;
+        private readonly IMediator _mediator;
 
 
         public TokenService(IMapper mapper,
             ILogger<TokenService> logger,
             IUnitOfWork unitOfWork,
-            IAccountService accountService,
-            IJwtService jwtService, 
-            IAccountServiceCQS accountServiceCQS)
+            IJwtService jwtService,
+            IAccountServiceCQS accountServiceCQS, 
+            IMediator mediator)
         {
             _unitOfWork = unitOfWork;
-            _accountService = accountService;
             _logger = logger;
             _jwtService = jwtService;
             _mapper = mapper;
             _accountServiceCQS = accountServiceCQS;
+            _mediator = mediator;
         }
 
         public async Task<JwtAuthDto> GetToken(LoginDto request, string ipAddress)
@@ -57,8 +56,8 @@ namespace NewsAggregator.Domain.WebApiServices
                 var jwtToken = _jwtService.GenerateJwtToken(user);
                 var refreshToken = _jwtService.GenerateRefreshToken(ipAddress);
                 refreshToken.UserId = user.Id;
-                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshToken)); //CQS!
-                await _unitOfWork.Save(); //CQS
+                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshToken));
+                await _unitOfWork.Save();
 
                 return new JwtAuthDto(user, jwtToken, refreshToken.Token);
             }
@@ -73,8 +72,8 @@ namespace NewsAggregator.Domain.WebApiServices
         {
             try
             {
-                var refreshToken = await (await _unitOfWork.RefreshTokens.FindBy(rt => rt.Token.Equals(token)))
-                    .FirstOrDefaultAsync(); //CQS
+                var refreshToken = await _mediator.Send(new GetRefreshTokenQuery(token), 
+                    new CancellationToken());
 
                 if (refreshToken == null || !refreshToken.IsActive)
                     throw new ArgumentException("Invalid token", "token");
@@ -92,10 +91,10 @@ namespace NewsAggregator.Domain.WebApiServices
         {
             try
             {
-                var user = await _accountService.GetUserByRefreshTokenAsync(token); //CQS
+                var user = await _accountServiceCQS.GetUserByRefreshTokenAsync(token);
 
-                var refreshToken = await (await _unitOfWork.RefreshTokens.FindBy(rt => rt.Token.Equals(token)))
-                    .FirstOrDefaultAsync();
+                var refreshToken = await _mediator.Send(new GetRefreshTokenQuery(token),
+                    new CancellationToken());
 
 
                 if (refreshToken == null || !refreshToken.IsActive)
@@ -110,8 +109,8 @@ namespace NewsAggregator.Domain.WebApiServices
                 var refreshTokenDto = await RotateRefreshToken(refreshToken, ipAddress);
                 refreshTokenDto.UserId = user.Id;
 
-                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshTokenDto)); //CQS
-                await _unitOfWork.Save(); //CQS
+                await _unitOfWork.RefreshTokens.Add(_mapper.Map<RefreshToken>(refreshTokenDto));
+                await _unitOfWork.Save();
 
                 await RemoveOldRefreshTokens(user);
 
@@ -132,9 +131,9 @@ namespace NewsAggregator.Domain.WebApiServices
             {
                 if (!string.IsNullOrEmpty(token.ReplacedByToken))
                 {
-                    var childToken = await (await _unitOfWork.RefreshTokens
-                        .FindBy(rt => rt.ReplacedByToken.Equals(token.ReplacedByToken)))
-                        .FirstOrDefaultAsync();
+                    var childToken = await _mediator.Send(new GetChildTokenQuery(token.ReplacedByToken),
+                        new CancellationToken());
+
                     if (childToken.IsActive)
                     {
                         await RevokeRefreshToken(childToken, ipAddress, reason);
@@ -176,7 +175,7 @@ namespace NewsAggregator.Domain.WebApiServices
         {
             try
             {
-                await _unitOfWork.RefreshTokens.RemoveRange(token => !token.IsActive && token.UserId.Equals(userDto.Id)); //CQS
+                await _unitOfWork.RefreshTokens.RemoveRange(token => !token.IsActive && token.UserId.Equals(userDto.Id));
                 await _unitOfWork.Save();
             }
             catch (Exception ex)

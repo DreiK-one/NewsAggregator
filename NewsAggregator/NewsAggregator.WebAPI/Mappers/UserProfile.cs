@@ -14,6 +14,9 @@ namespace NewsAggregator.WebAPI.Mappers
             CreateMap<CreateOrEditUserDto, User>();
 
             CreateMap<CreateUserCommand, User>();
+
+            CreateMap<RefreshToken, UserDto>()
+                .ForPath(dest => dest.Id, opt => opt.MapFrom(src => src.User.Id));
         }
     }
 }

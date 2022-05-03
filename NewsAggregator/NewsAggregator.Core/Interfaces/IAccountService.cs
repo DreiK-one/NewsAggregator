@@ -8,7 +8,6 @@ namespace NewsAggregator.Core.Interfaces
         Task<bool> CheckUserWithThatEmailIsExistAsync(string email);
         Task<UserDto> GetUserByEmailAsync(string email);
         Task<UserDto> GetUserById(Guid id);
-        Task<UserDto> GetUserByRefreshTokenAsync(string refreshToken);
         Task<Guid> CreateUserAsync(string email, string nickname); 
         Task<int> SetRoleAsync(Guid userId, string roleName);
         Task<IEnumerable<string>> GetRolesAsync(Guid userId);

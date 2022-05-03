@@ -13,17 +13,14 @@ namespace NewsAggregator.Domain.ServicesCQS
 {
     public class AccountServiceCQS : IAccountServiceCQS
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<CommentServiceCQS> _logger;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
 
-        public AccountServiceCQS(IMapper mapper,
-            ILogger<CommentServiceCQS> logger,
+        public AccountServiceCQS(ILogger<CommentServiceCQS> logger,
             IConfiguration configuration,
             IMediator mediator)
         {
-            _mapper = mapper;
             _logger = logger;
             _configuration = configuration;
             _mediator = mediator;
@@ -57,6 +54,20 @@ namespace NewsAggregator.Domain.ServicesCQS
                 _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
                 throw;
             } 
+        }
+
+        public async Task<UserDto> GetUserByRefreshTokenAsync(string token)
+        {
+            try
+            {
+                return await _mediator.Send(new GetUserByRefreshToken(token),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         public async Task<bool> CreateUserAsync(RegisterDto dto)

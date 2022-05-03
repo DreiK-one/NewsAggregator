@@ -13,23 +13,17 @@ namespace NewsAggregator.Domain.Services
 {
     public class HtmlParserService : IHtmlParserService
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<HtmlParserService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISourceService _sourceService;
-        private readonly ICategoryService _categoryService;
 
-        public HtmlParserService(IMapper mapper, 
-            ILogger<HtmlParserService> logger,
+        public HtmlParserService( ILogger<HtmlParserService> logger,
             IUnitOfWork unitOfWork,
-            ISourceService sourceService,
-            ICategoryService categoryService)
+            ISourceService sourceService)
         {
-            _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _sourceService = sourceService;
-            _categoryService = categoryService;
         }
 
         public async Task<int?> GetArticleContentFromUrlAsync()

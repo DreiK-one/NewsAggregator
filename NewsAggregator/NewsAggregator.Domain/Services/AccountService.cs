@@ -102,16 +102,6 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<UserDto> GetUserByRefreshTokenAsync(string refreshToken)
-        {
-            var user = (await (await _unitOfWork.RefreshTokens
-                .FindBy(token => token.Token.Equals(refreshToken)))
-                .FirstOrDefaultAsync())
-                .User;
-
-            return _mapper.Map<UserDto>(user);
-        }
-
         public async Task<Guid> GetUserIdByNicknameAsync(string nickname)
         {
             try

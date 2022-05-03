@@ -69,7 +69,6 @@ namespace NewsAggregator.Domain.Services
 
                 foreach (var rssArticleDto in concurrentDictionary)
                 {
-                    //var articleInfo = await _htmlParserService.GetArticleContentFromUrlAsync(rssArticleDto.Key);
                     var articleUrl = await _articleService.CreateAsync(
                         new CreateOrEditArticleDto
                         {
