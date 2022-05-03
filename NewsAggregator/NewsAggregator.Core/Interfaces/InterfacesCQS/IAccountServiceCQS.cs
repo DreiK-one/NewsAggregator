@@ -12,5 +12,8 @@ namespace NewsAggregator.Core.Interfaces.InterfacesCQS
         
         Task<bool> CheckPasswordByEmailAsync(string email, string password);
         Task<bool> ChangePasswordAsync(string email, string currentPass, string newPass);
+
+        Task<bool> ValidateIsNicknameExists(string nickname);
+        Task<bool> ValidateIsEmailExists(string email);
     }
 }

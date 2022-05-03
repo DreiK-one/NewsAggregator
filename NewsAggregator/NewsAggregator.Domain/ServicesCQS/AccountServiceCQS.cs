@@ -203,7 +203,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        private async Task<bool> ValidateIsNicknameExists(string nickname)
+        public async Task<bool> ValidateIsNicknameExists(string nickname)
         {
             try
             {
@@ -219,7 +219,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        private async Task<bool> ValidateIsEmailExists(string email)
+        public async Task<bool> ValidateIsEmailExists(string email)
         {
             try
             {

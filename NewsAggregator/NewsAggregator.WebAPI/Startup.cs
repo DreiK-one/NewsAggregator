@@ -63,6 +63,7 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IJwtService, JwtService>();
 
+            services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
             services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
             services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();

@@ -37,6 +37,11 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
+                }
+
                 var dto = _mapper.Map<LoginDto>(request);
                 var response = await _tokenService.GetToken(dto, GetIpAddress());
 
@@ -63,6 +68,11 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
+                }
+
                 var user = _mapper.Map<RegisterDto>(request);
                 var response = await _accountServiceCQS.CreateUserAsync(user);
 
@@ -82,6 +92,11 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
+                if (!ModelState.IsValid || request == null)
+                {
+                    return BadRequest(new ResponseMessage { Message = "Request is null or invalid" });
+                }
+
                 var response = await _accountServiceCQS
                     .ChangePasswordAsync(request.Email, request.CurrentPassword, request.NewPassword);
 
