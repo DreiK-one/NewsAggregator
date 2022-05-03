@@ -94,6 +94,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
+        //Change to CQS
         [HttpPost("refresh-token"), AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
@@ -120,6 +121,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
+        //Change to CQS
         [HttpPost("revoke-token"), Authorize]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
