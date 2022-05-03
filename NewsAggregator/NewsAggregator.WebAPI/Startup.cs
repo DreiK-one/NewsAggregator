@@ -19,6 +19,7 @@ using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using System.Reflection;
+using Microsoft.ApplicationInsights;
 
 namespace NewsAggregator.WebAPI
 {
@@ -63,11 +64,14 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IJwtService, JwtService>();
 
-            services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
             services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
             services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();
             services.AddScoped<IAccountServiceCQS, AccountServiceCQS>();
+
+            services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
+
+            services.AddScoped<TelemetryClient>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

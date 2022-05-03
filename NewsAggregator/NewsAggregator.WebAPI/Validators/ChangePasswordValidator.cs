@@ -8,8 +8,10 @@ namespace NewsAggregator.WebAPI.Validators
     public class ChangePasswordValidator : AbstractValidator<ChangePasswordRequest>
     {
         private readonly IValidationMethodsCQS _validationMethods;
-        public ChangePasswordValidator()
+        public ChangePasswordValidator(IValidationMethodsCQS validationMethods)
         {
+            _validationMethods = validationMethods;
+
             RuleFor(request => request.Email)
                 .NotEmpty().WithMessage("Email is required")
                 .EmailAddress().WithMessage("Invalid email format");

@@ -8,8 +8,10 @@ namespace NewsAggregator.WebAPI.Validators
     public class LoginValidator : AbstractValidator<AuthenticateRequest>
     {
         private readonly IValidationMethodsCQS _validationMethods;
-        public LoginValidator()
+        public LoginValidator(IValidationMethodsCQS validationMethods)
         {
+            _validationMethods = validationMethods;
+
             RuleFor(request => request.Login)
                .NotNull().WithMessage("Login is required")
                .EmailAddress().WithMessage("Invalid email format")
