@@ -93,7 +93,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpPost("refresh-token"), Authorize]
+        [HttpPost("refresh-token"), AllowAnonymous]
         [ProducesResponseType(typeof(AuthenticateResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> RefreshToken()

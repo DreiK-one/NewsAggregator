@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Queries\AccountQueries\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="MediatR" Version="10.0.1" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.ServiceModel.Syndication" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\NewsAggregator.Core\NewsAggregator.Core.csproj" />
-    <ProjectReference Include="..\NewsAggregator.CQS\NewsAggregator.CQS.csproj" />
+    <ProjectReference Include="..\NewsAggregator.Data\NewsAggregator.Data.csproj" />
   </ItemGroup>
 
 </Project>

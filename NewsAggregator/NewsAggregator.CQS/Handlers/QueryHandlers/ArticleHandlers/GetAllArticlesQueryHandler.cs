@@ -2,9 +2,8 @@
 using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data;
-
+using NewsAggregator.Core.DTOs;
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {

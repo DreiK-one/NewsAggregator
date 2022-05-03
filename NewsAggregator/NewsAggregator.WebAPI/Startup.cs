@@ -74,6 +74,7 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
             services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();
+            //services.AddScoped<IAccountServiceCQS, AccountServiceCQS>();
 
             services.AddScoped<IRequestHandler<GetAllArticlesQuery, IEnumerable<ArticleDto>>,
                     GetAllArticlesQueryHandler>();

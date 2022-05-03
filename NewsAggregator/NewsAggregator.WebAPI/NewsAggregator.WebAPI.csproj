@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -26,9 +26,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CQS\NewsAggregator.CQS.csproj" />
     <ProjectReference Include="..\NewsAggregator.App\NewsAggregator.App.csproj" />
     <ProjectReference Include="..\NewsAggregator.Core\NewsAggregator.Core.csproj" />
+    <ProjectReference Include="..\NewsAggregator.CQS\NewsAggregator.CQS.csproj" />
     <ProjectReference Include="..\NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj" />
     <ProjectReference Include="..\NewsAggregator.Data\NewsAggregator.Data.csproj" />
     <ProjectReference Include="..\NewsAggregator.Domain\NewsAggregator.Domain.csproj" />
