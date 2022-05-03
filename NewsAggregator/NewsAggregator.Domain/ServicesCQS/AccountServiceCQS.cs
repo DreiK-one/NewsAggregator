@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 
-
 namespace NewsAggregator.Domain.ServicesCQS
 {
-    public class AccountServiceCQS /*: IAccountServiceCQS*/
+    public class AccountServiceCQS : IAccountServiceCQS
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CommentServiceCQS> _logger;
@@ -22,7 +20,5 @@ namespace NewsAggregator.Domain.ServicesCQS
             _logger = logger;
             _mediator = mediator;
         }
-
-
     }
 }

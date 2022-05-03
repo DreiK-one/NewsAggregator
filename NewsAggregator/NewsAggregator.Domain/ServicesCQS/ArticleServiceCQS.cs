@@ -36,12 +36,23 @@ namespace NewsAggregator.Domain.ServicesCQS
             }          
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetAllArticles()
+        public async Task<IEnumerable<ArticleDto>> GetAllArticles(int? page, string? role)
         {
             try
             {
-                return await _mediator.Send(new GetAllArticlesQuery(),
-                                new CancellationToken());
+                if (page >= 0 && page != null)
+                {
+                    await GetArticlesByPage(Convert.ToInt32(page), role);
+                }
+
+                if (role.Equals("Admin"))
+                {
+                    return await _mediator.Send(new GetAllArticlesQuery(),
+                    new CancellationToken());
+                }
+
+                return await _mediator.Send(new GetAllPositiveArticlesQuery(),
+                    new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -50,32 +61,20 @@ namespace NewsAggregator.Domain.ServicesCQS
             }            
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page)
+        private async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page, string role)
         {
             try
             {
                 var size = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
 
-                return await _mediator.Send(new GetArticlesByPageQuery(size, page),
-                    new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-                throw;
-            }
-        }
+                if (role.Equals("Admin"))
+                {
+                    return await _mediator.Send(new GetArticlesByPageQuery(size, page),
+                        new CancellationToken());
+                }
 
-        public async Task<IEnumerable<ArticleDto>> GetPositiveArticlesByPage(int page)
-        {
-            try
-            {
-                var size = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]);
-
-                return await _mediator.Send(new GetPositiveArticlesByPageQuery(size, page),
-                    new CancellationToken());
+                return await _mediator.Send(new GetPositiveArticlesByPageQuery(size, page));
             }
             catch (Exception ex)
             {

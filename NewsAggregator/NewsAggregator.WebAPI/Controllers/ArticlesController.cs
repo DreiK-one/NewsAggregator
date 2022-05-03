@@ -67,25 +67,8 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
-                var articles = await _articleServiceCQS.GetAllArticles();
-                if (!User.IsInRole("Admin"))
-                {
-                    articles = articles.Where(art => art.Coefficient > 0).ToList();
-                }
-
-                if (page >= 0 && page != null)
-                {
-                    if (!User.IsInRole("Admin"))
-                    {
-                        articles = await _articleServiceCQS
-                         .GetPositiveArticlesByPage(Convert.ToInt32(page));
-                    }
-                    else
-                    {
-                        articles = await _articleServiceCQS
-                          .GetArticlesByPage(Convert.ToInt32(page));
-                    }
-                }
+                var role = User.Claims.FirstOrDefault()?.Value ?? "Anonymous";
+                var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
                 if (articles != null)
                 {

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DataAccess",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.WebAPI", "NewsAggregator.WebAPI\NewsAggregator.WebAPI.csproj", "{776BEBCB-4FEC-4471-ABD5-B51A702BB27A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.CQS", "NewsAggregator.CQS\NewsAggregator.CQS.csproj", "{F10CDABD-A542-4024-9EA8-BE9ED2975AFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.CQS", "NewsAggregator.CQS\NewsAggregator.CQS.csproj", "{F10CDABD-A542-4024-9EA8-BE9ED2975AFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
