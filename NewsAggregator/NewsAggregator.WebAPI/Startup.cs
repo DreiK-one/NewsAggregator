@@ -72,7 +72,6 @@ namespace NewsAggregator.WebAPI
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IJwtService, JwtService>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
 
             services.AddScoped<IArticleServiceCQS, ArticleServiceCQS>();
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
@@ -119,6 +118,8 @@ namespace NewsAggregator.WebAPI
                    CreateUserCommandHandler>();
             services.AddScoped<IRequestHandler<CreateRoleCommand, bool>,
                   CreateRoleCommandHandler>();
+            services.AddScoped<IRequestHandler<ChangePasswordCommand, bool>,
+                  ChangePasswordCommandHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

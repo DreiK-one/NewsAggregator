@@ -12,25 +12,22 @@ namespace NewsAggregator.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<AuthenticationController> _logger;
+        private readonly ILogger<AccountController> _logger;
         private readonly ITokenService _tokenService;
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IAccountServiceCQS _acoountServiceCQS;
+        private readonly IAccountServiceCQS _accountServiceCQS;
 
-        public AuthenticationController(IMapper mapper,
-            ILogger<AuthenticationController> logger,
+        public AccountController(IMapper mapper,
+            ILogger<AccountController> logger,
             ITokenService tokenService,
-            IAuthenticationService authenticationService,
-            IAccountServiceCQS acoountServiceCQS)
+            IAccountServiceCQS accountServiceCQS)
         {
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
-            _authenticationService = authenticationService;
-            _acoountServiceCQS = acoountServiceCQS;
+            _accountServiceCQS = accountServiceCQS;
         }
 
         [HttpPost("authenticate"), AllowAnonymous]
@@ -67,7 +64,7 @@ namespace NewsAggregator.WebAPI.Controllers
             try
             {
                 var user = _mapper.Map<RegisterDto>(request);
-                var response = await _acoountServiceCQS.CreateUserAsync(user);
+                var response = await _accountServiceCQS.CreateUserAsync(user);
 
                 return Ok(new ResponseMessage { Message = "Registration success!"});
             }
@@ -78,15 +75,15 @@ namespace NewsAggregator.WebAPI.Controllers
             }
         }
 
-        [HttpPost("change-password"), Authorize] 
+        [HttpPut("change-password"), Authorize] 
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ResponseMessage), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
         {
             try
             {
-                var response = await _authenticationService
-                    .ChangePasswordByApiAsync(request.Email, request.CurrentPassword, request.NewPassword);
+                var response = await _accountServiceCQS
+                    .ChangePasswordAsync(request.Email, request.CurrentPassword, request.NewPassword);
 
                 return Ok(new ResponseMessage { Message = "Password successfully changed!" });
             }

@@ -63,15 +63,6 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                //if (dto.Email == null)
-                //{
-                //    throw new ArgumentException($"Email is required");
-                //}
-
-                //if (dto.Nickname == null)
-                //{
-                //    throw new ArgumentException($"Nickname is required");
-                //}
                 if (Convert.ToBoolean(ValidateIsEmailExists(dto.Email).Result))
                 {
                     throw new ArgumentException($"Email {dto.Email} is already exists");
@@ -136,28 +127,32 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        //public async Task<int?> ChangePasswordByApiAsync(string email, string currentPass, string newPass)
-        //{
-        //    try
-        //    {
-        //        if (!await _accountService.CheckPasswordByEmailAsync(email, currentPass)) //ok
-        //        {
-        //            throw new ArgumentException("Incorrect email or current password");
-        //        }
+        public async Task<bool> ChangePasswordAsync(string email, string currentPass, string newPass)
+        {
+            try
+            {
+                if (!await CheckPasswordByEmailAsync(email, currentPass))
+                {
+                    throw new ArgumentException("Incorrect email or current password");
+                }
 
-        //        var userId = await _accountService.GetUserIdByEmailAsync(email); //ok
-        //        if (userId == null)
-        //        {
-        //            throw new ArgumentException("User not found");
-        //        }
-        //        return await _accountService.SetPasswordAsync((Guid)userId, newPass);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
-        //        throw;
-        //    }
-        //}
+                var user = await GetUserByEmailAsync(email);
+                if (user == null)
+                {
+                    throw new ArgumentException("User not found");
+                }
+
+                var password = GetPasswordHash(newPass, _configuration["ApplicationVariables:Salt"]);
+                var command = new ChangePasswordCommand(user.Id, password);
+
+                return await _mediator.Send(command, new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                throw;
+            }
+        }
 
         private string GetPasswordHash(string password, string salt)
         {
