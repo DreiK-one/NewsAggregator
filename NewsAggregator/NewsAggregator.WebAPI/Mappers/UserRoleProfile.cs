@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data.Entities;
-using NewsAggregator.WebAPI.Models.Responses;
+using NewsAggregetor.CQS.Models.Commands.AccountCommands;
 
 namespace NewsAggregator.WebAPI.Mappers
 {
@@ -10,6 +10,8 @@ namespace NewsAggregator.WebAPI.Mappers
         public UserRoleProfile()
         {
             CreateMap<UserRole, UserRoleDto>().ReverseMap();
+
+            CreateMap<CreateRoleCommand, UserRole>();
         }
     }
 }

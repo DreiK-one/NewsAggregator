@@ -25,7 +25,10 @@ using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
 using NewsAggregetor.CQS.Handlers.QueryHandlers.CategoryHandlers;
 using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 using NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers;
-
+using NewsAggregetor.CQS.Models.Queries.AccountQueries;
+using NewsAggregetor.CQS.Handlers.QueryHandlers.AccountHandlers;
+using NewsAggregetor.CQS.Models.Commands.AccountCommands;
+using NewsAggregetor.CQS.Handlers.CommandHandlers.AccountCommands;
 
 namespace NewsAggregator.WebAPI
 {
@@ -100,6 +103,22 @@ namespace NewsAggregator.WebAPI
                     EditCommentCommandHandler>();
             services.AddScoped<IRequestHandler<DeleteCommentCommand, bool>,
                     DeleteCommentCommandHandler>();
+
+            services.AddScoped<IRequestHandler<GetUserByIdQuery, UserDto>,
+                   GetUserByIdQueryHandler>();
+            services.AddScoped<IRequestHandler<GetUserByEmailQuery, UserDto>,
+                   GetUserByEmailQueryHandler>();
+            services.AddScoped<IRequestHandler<GetRoleIdByRoleNameQuery, Guid>,
+                   GetRoleIdByRoleNameQueryHandler>();
+            services.AddScoped<IRequestHandler<ValidateEmailQuery, bool>,
+                   ValidateEmailQueryHandler>();
+            services.AddScoped<IRequestHandler<ValidateNicknameQuery, bool>,
+                  ValidateNicknameQueryHandler>();
+
+            services.AddScoped<IRequestHandler<CreateUserCommand, bool>,
+                   CreateUserCommandHandler>();
+            services.AddScoped<IRequestHandler<CreateRoleCommand, bool>,
+                  CreateRoleCommandHandler>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

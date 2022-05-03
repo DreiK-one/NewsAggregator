@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
@@ -16,29 +17,32 @@ namespace NewsAggregator.Domain.WebApiServices
         private readonly IMapper _mapper;
         private readonly ILogger<TokenService> _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAccountServiceCQS _accountServiceCQS;
         private readonly IAccountService _accountService;
         private readonly IJwtService _jwtService;
-        
+
 
         public TokenService(IMapper mapper,
             ILogger<TokenService> logger,
             IUnitOfWork unitOfWork,
-            IAccountService accountService,  
-            IJwtService jwtService)
+            IAccountService accountService,
+            IJwtService jwtService, 
+            IAccountServiceCQS accountServiceCQS)
         {
             _unitOfWork = unitOfWork;
             _accountService = accountService;
             _logger = logger;
             _jwtService = jwtService;
             _mapper = mapper;
+            _accountServiceCQS = accountServiceCQS;
         }
 
         public async Task<JwtAuthDto> GetToken(LoginDto request, string ipAddress)
         {
             try
             {
-                var user = await _accountService.GetUserByEmailAsync(request.Login);
-                if (!await _accountService.CheckPasswordByEmailAsync(request.Login, request.Password))
+                var user = await _accountServiceCQS.GetUserByEmailAsync(request.Login);
+                if (!await _accountServiceCQS.CheckPasswordByEmailAsync(request.Login, request.Password))
                 {
                     _logger.LogWarning("Incorrect password");
                     return null;
@@ -128,7 +132,8 @@ namespace NewsAggregator.Domain.WebApiServices
             {
                 if (!string.IsNullOrEmpty(token.ReplacedByToken))
                 {
-                    var childToken = await (await _unitOfWork.RefreshTokens.FindBy(rt => rt.ReplacedByToken.Equals(token.ReplacedByToken)))
+                    var childToken = await (await _unitOfWork.RefreshTokens
+                        .FindBy(rt => rt.ReplacedByToken.Equals(token.ReplacedByToken)))
                         .FirstOrDefaultAsync();
                     if (childToken.IsActive)
                     {

@@ -239,15 +239,14 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var userId = await GetUserIdByEmailAsync(email);
-                if (userId.GetValueOrDefault() != Guid.Empty)
+                var user = await GetUserByEmailAsync(email);
+                if (user.Id != Guid.Empty)
                 {
-                    var userPasswordHash = (await _unitOfWork.Users.GetById(userId.GetValueOrDefault())).PasswordHash;
-                    if (!string.IsNullOrEmpty(userPasswordHash))
+                    if (!string.IsNullOrEmpty(user.PasswordHash))
                     {
                         var enteredPasswordHash = GetPasswordHash(password, _configuration["ApplicationVariables:Salt"]);
 
-                        if (userPasswordHash.Equals(enteredPasswordHash))
+                        if (user.PasswordHash.Equals(enteredPasswordHash))
                         {
                             return true;
                         }

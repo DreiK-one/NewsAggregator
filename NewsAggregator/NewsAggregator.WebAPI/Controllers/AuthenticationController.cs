@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
@@ -17,16 +18,19 @@ namespace NewsAggregator.WebAPI.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly ITokenService _tokenService;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IAccountServiceCQS _acoountServiceCQS;
 
         public AuthenticationController(IMapper mapper,
             ILogger<AuthenticationController> logger,
             ITokenService tokenService,
-            IAuthenticationService authenticationService)
+            IAuthenticationService authenticationService,
+            IAccountServiceCQS acoountServiceCQS)
         {
             _tokenService = tokenService;
             _logger = logger;
             _mapper = mapper;
             _authenticationService = authenticationService;
+            _acoountServiceCQS = acoountServiceCQS;
         }
 
         [HttpPost("authenticate"), AllowAnonymous]
@@ -63,9 +67,9 @@ namespace NewsAggregator.WebAPI.Controllers
             try
             {
                 var user = _mapper.Map<RegisterDto>(request);
-                var response = await _authenticationService.CreateUserByApiAsync(user);
+                var response = await _acoountServiceCQS.CreateUserAsync(user);
 
-                return Ok(_mapper.Map<RegisterResponse>(response));
+                return Ok(new ResponseMessage { Message = "Registration success!"});
             }
             catch (Exception ex)
             {

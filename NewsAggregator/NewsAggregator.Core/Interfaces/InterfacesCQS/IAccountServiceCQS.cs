@@ -5,8 +5,12 @@ namespace NewsAggregator.Core.Interfaces.InterfacesCQS
 {
     public interface IAccountServiceCQS
     {
-        //Task<UserDto> GetUserByEmailAsync(string email);
-        //Task<Guid> GetUserIdByEmailAsync(string email);
-        //Task<UserDto> GetById(Guid id);
+        Task<UserDto> GetUserByEmailAsync(string email);
+        Task<UserDto> GetUserByIdAsync(Guid id);
+        Task<bool> CreateUserAsync(RegisterDto dto);
+        
+
+        Task<bool> CheckPasswordByEmailAsync(string email, string password);
+        //Task<int?> ChangePasswordAsync(string email, string currentPass, string newPass);
     }
 }
