@@ -67,7 +67,7 @@ namespace NewsAggregator.WebAPI.Controllers
         {
             try
             {
-                var role = User.Claims.FirstOrDefault()?.Value ?? "Anonymous";
+                var role = User.Claims.FirstOrDefault()?.Value;
                 var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
                 if (articles != null)

@@ -172,7 +172,7 @@ namespace NewsAggregator.App
             var parserService = serviceProvider.GetRequiredService<IHtmlParserService>();
             RecurringJob.AddOrUpdate("Parse news",
                 () => parserService.GetArticleContentFromUrlAsync(),
-                "*/5 * * * *");
+                "*/20 * * * *");
 
             var rateService = serviceProvider.GetRequiredService<IRateService>();
             RecurringJob.AddOrUpdate("Rate news",

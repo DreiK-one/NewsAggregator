@@ -20,6 +20,9 @@ using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using System.Reflection;
 using Microsoft.ApplicationInsights;
+using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
+using NewsAggregator.Core.DTOs;
+using NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers;
 
 namespace NewsAggregator.WebAPI
 {
@@ -153,7 +156,7 @@ namespace NewsAggregator.WebAPI
             var parseNews = serviceProvider.GetRequiredService<IHtmlParserService>();
             RecurringJob.AddOrUpdate("Parse",
                 () => parseNews.GetArticleContentFromUrlAsync(),
-                "*/5 * * * *");
+                "*/20 * * * *");
 
             var rateNews = serviceProvider.GetRequiredService<IRateService>();
             RecurringJob.AddOrUpdate("Rate",

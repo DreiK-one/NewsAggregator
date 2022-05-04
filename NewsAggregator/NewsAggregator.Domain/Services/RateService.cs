@@ -15,17 +15,14 @@ namespace NewsAggregator.Domain.Services
 {
     public class RateService : IRateService
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<RateService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArticleService _articleService;
 
-        public RateService(IMapper mapper,
-            ILogger<RateService> logger,
+        public RateService(ILogger<RateService> logger,
             IUnitOfWork unitOfWork, 
             IArticleService articleService)
         {
-            _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _articleService = articleService;

@@ -14,21 +14,18 @@ namespace NewsAggregator.Domain.Services
         private readonly ILogger<RssService> _logger;
         private readonly IArticleService _articleService;
         private readonly ISourceService _sourceService;
-        private readonly IHtmlParserService _htmlParserService;
         private readonly ICategoryService _categoryService;
 
         public RssService(IMapper mapper,
             ILogger<RssService> logger,
             IArticleService articleService,
             ISourceService sourceService,
-            IHtmlParserService htmlParserService, 
             ICategoryService categoryService)
         {
             _mapper = mapper;
             _logger = logger;
             _articleService = articleService;
             _sourceService = sourceService;
-            _htmlParserService = htmlParserService;
             _categoryService = categoryService;
         }
 

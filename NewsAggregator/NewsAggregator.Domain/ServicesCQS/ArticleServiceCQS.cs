@@ -40,9 +40,10 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                if (page >= 0 && page != null)
+                role = role ?? "Anonimous";
+                if (page > 0 && page != null)
                 {
-                    await GetArticlesByPage(Convert.ToInt32(page), role);
+                   return await GetArticlesByPage(Convert.ToInt32(page), role);
                 }
 
                 if (role.Equals("Admin"))
