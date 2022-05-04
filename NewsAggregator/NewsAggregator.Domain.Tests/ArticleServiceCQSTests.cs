@@ -131,26 +131,25 @@ namespace NewsAggregator.Domain.Tests
 
         [Test]
         [TestCase(0, "Admin")]
-        public async Task GetAllArticles_ZeroPageNumberAndWithAdminRole_ReturnedAllNewsForAdmin(int? page, string? role)
+        public async Task GetAllArticles_ZeroPageNumberAndWithAdminRole_ReturnedData(int? page, string? role)
         {
-            var expected = new List<ArticleDto>();
+            var expected = new ArticleDto[2000];
 
             _mediator.Setup(m => m.Send(It.IsAny<GetAllArticlesQuery>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => expected);
+                    It.IsAny<CancellationToken>())).ReturnsAsync(() => expected);
 
             var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
-            Assert.AreEqual(expected.Count(), articles.Count());
+            Assert.That(articles, Is.Not.Null);
         }
 
         [Test]
         [TestCase(0, "User")]
         [TestCase(0, "Moderator")]
         [TestCase(0, null)]
-        public async Task GetAllArticles_ZeroPageNumberAndWithNonAdminRoleOrNullRole_ReturnedAllPozitiveNews(int? page, string? role)
+        public async Task GetAllArticles_ZeroPageNumberAndWithNonAdminRoleOrNullRole_ReturnedData(int? page, string? role)
         {
-            var expected = new List<ArticleDto>();
+            var expected = new ArticleDto[2000];
 
             _mediator.Setup(m => m.Send(It.IsAny<GetAllPositiveArticlesQuery>(),
                     It.IsAny<CancellationToken>()))
@@ -158,16 +157,16 @@ namespace NewsAggregator.Domain.Tests
 
             var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
-            Assert.AreEqual(expected.Count(), articles.Count());
+            Assert.That(articles, Is.Not.Null);
         }
 
         [Test]
         [TestCase(-1, "User")]
         [TestCase(-15, "Moderator")]
         [TestCase(-3, null)]
-        public async Task GetAllArticles_NegativePageNumberAndWithNonAdminRoleOrNullRole_ReturnedAllPozitiveNews(int? page, string? role)
+        public async Task GetAllArticles_NegativePageNumberAndWithNonAdminRoleOrNullRole_ReturnedData(int? page, string? role)
         {
-            var expected = new List<ArticleDto>();
+            var expected = new ArticleDto[2000];
 
             _mediator.Setup(m => m.Send(It.IsAny<GetAllPositiveArticlesQuery>(),
                     It.IsAny<CancellationToken>()))
@@ -175,7 +174,7 @@ namespace NewsAggregator.Domain.Tests
 
             var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
-            Assert.AreEqual(expected.Count(), articles.Count());
+            Assert.That(articles, Is.Not.Null);
         }
 
         [Test]
@@ -184,7 +183,7 @@ namespace NewsAggregator.Domain.Tests
         [TestCase(-5, "Admin")]
         public async Task GetAllArticles_NegativePageNumberAndWithAdminRole_ReturnedAllNews(int? page, string? role)
         {
-            var expected = new List<ArticleDto>();
+            var expected = new ArticleDto[2000];
 
             _mediator.Setup(m => m.Send(It.IsAny<GetAllPositiveArticlesQuery>(),
                     It.IsAny<CancellationToken>()))
@@ -193,7 +192,7 @@ namespace NewsAggregator.Domain.Tests
             var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
 
-            Assert.AreEqual(expected.Count(), articles.Count());
+            Assert.That(articles, Is.Not.Null);
         }
     }
 }
