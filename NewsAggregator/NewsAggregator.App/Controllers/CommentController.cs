@@ -14,17 +14,20 @@ namespace NewsAggregator.App.Controllers
         private readonly ILogger<CommentController> _logger;
         private readonly ICommentService _commentService;
         private readonly IAccountService _accountService;
+        private readonly IArticleService _articleService;
 
 
         public CommentController(IMapper mapper,
             ILogger<CommentController> logger,
             ICommentService commentService,
-            IAccountService accountService)
+            IAccountService accountService, 
+            IArticleService articleService)
         {
             _mapper = mapper;
             _logger = logger;
             _commentService = commentService;
             _accountService = accountService;
+            _articleService = articleService;
         }
 
         [HttpPost]
@@ -69,7 +72,15 @@ namespace NewsAggregator.App.Controllers
             {
                 var comment = await _commentService.GetCommentAsync(id);
                 var model = _mapper.Map<DeleteCommentViewModel>(comment);
+                if (model == null)
+                {
+                    var newModel = await _articleService
+                        .GetArticleWithAllNavigationProperties(returnUrl);
+                    var article = _mapper.Map<ReadArticleViewModel>(newModel);
+                    return RedirectToAction("ReadArticle", "Article", article);
+                }
                 model.ReturnUrl = returnUrl;
+                
                 return View(model);
             }
             catch (Exception ex)
@@ -114,6 +125,13 @@ namespace NewsAggregator.App.Controllers
             {
                 var comment = await _commentService.GetCommentAsync(id);
                 var model = _mapper.Map<CommentModel>(comment);
+                if (model == null)
+                {
+                    var newModel = await _articleService
+                        .GetArticleWithAllNavigationProperties(returnUrl);
+                    var article = _mapper.Map<ReadArticleViewModel>(newModel);
+                    return RedirectToAction("ReadArticle", "Article", article);
+                }
                 model.ReturnUrl = returnUrl;
                 return View(model);
             }
