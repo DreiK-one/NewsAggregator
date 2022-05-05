@@ -23,6 +23,7 @@ using Microsoft.ApplicationInsights;
 using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using NewsAggregator.Core.DTOs;
 using NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers;
+using Microsoft.AspNetCore.Builder;
 
 namespace NewsAggregator.WebAPI
 {
@@ -116,6 +117,17 @@ namespace NewsAggregator.WebAPI
             Assembly.Load("NewsAggregator.CQS");
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "Enable",
+                    policy =>
+                    {
+                        policy.AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowAnyOrigin();
+                    });
+            });
+
             services.AddControllers().AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
@@ -139,6 +151,8 @@ namespace NewsAggregator.WebAPI
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("Enable");
 
             app.UseAuthentication();
             app.UseAuthorization();

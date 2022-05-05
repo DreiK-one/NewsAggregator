@@ -33,6 +33,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 return await _unitOfWork.Articles.Get()
+                    .Where(art => !string.IsNullOrWhiteSpace(art.Body))
                     .OrderByDescending(article => article.CreationDate)
                     .Select(article => _mapper.Map<ArticleDto>(article))
                     .ToListAsync();
@@ -51,6 +52,7 @@ namespace NewsAggregator.Domain.Services
                 var pageSize = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
                 return await _unitOfWork.Articles.Get()
+                    .Where(art => !string.IsNullOrWhiteSpace(art.Body))
                     .OrderByDescending(article => article.CreationDate)
                     .Skip(page * pageSize)
                     .Take(pageSize)
