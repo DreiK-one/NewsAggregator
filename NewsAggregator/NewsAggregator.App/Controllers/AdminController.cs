@@ -14,18 +14,21 @@ namespace NewsAggregator.App.Controllers
         private readonly IRssService _rssService;
         private readonly IArticleService _articleService;
         private readonly IConfiguration _configuration;
+        private readonly IHtmlParserService _htmlParserService;
 
         public AdminController(ILogger<AdminController> logger,
             IRssService rssService,
             IArticleService articleService,
             IMapper mapper, 
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHtmlParserService htmlParserService)
         {
             _logger = logger;
             _rssService = rssService;
             _articleService = articleService;
             _mapper = mapper;
             _configuration = configuration;
+            _htmlParserService = htmlParserService;
         }
 
         public IActionResult Index()
@@ -46,6 +49,7 @@ namespace NewsAggregator.App.Controllers
             try
             {
                 await _rssService.GetNewsFromSourcesAsync();
+                await _htmlParserService.GetArticleContentFromUrlAsync();
 
                 return RedirectToAction("GetArticlesOnAdminPanel", "Admin");
             }
