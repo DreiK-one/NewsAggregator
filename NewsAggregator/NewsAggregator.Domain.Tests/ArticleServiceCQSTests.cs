@@ -35,9 +35,7 @@ namespace NewsAggregator.Domain.Tests
             _articleServiceCQS = new ArticleServiceCQS(
                 _logger.Object,
                 _mediator.Object,
-                _configuration.Object);
-
-            
+                _configuration.Object); 
         }
 
         [Test]
@@ -60,7 +58,7 @@ namespace NewsAggregator.Domain.Tests
         }
 
         [Test]
-        [TestCase(null)]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")] //fake id
         public async Task GetArticleById_NoExistentId_ReturnedNull(Guid id)
         {
             _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),

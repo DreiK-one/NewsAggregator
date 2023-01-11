@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NewsAggregator.Data.Configuration;
 using NewsAggregator.Data.Entities;
 
 
