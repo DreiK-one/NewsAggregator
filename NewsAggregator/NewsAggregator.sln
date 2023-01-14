@@ -4,6 +4,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Data", "NewsAggregator.Data\NewsAggregator.Data.csproj", "{9A88E898-844B-4CCE-B0CF-61DB1848CEA7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{29B42DA9-6000-4E8A-ADF2-43415B351819} = {29B42DA9-6000-4E8A-ADF2-43415B351819}
+		{38E0222C-476A-4045-84AD-79061887A8D4} = {38E0222C-476A-4045-84AD-79061887A8D4}
+		{776BEBCB-4FEC-4471-ABD5-B51A702BB27A} = {776BEBCB-4FEC-4471-ABD5-B51A702BB27A}
+		{CA448301-6024-47C8-B616-0E450CA15084} = {CA448301-6024-47C8-B616-0E450CA15084}
+		{F10CDABD-A542-4024-9EA8-BE9ED2975AFB} = {F10CDABD-A542-4024-9EA8-BE9ED2975AFB}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Core", "NewsAggregator.Core\NewsAggregator.Core.csproj", "{38E0222C-476A-4045-84AD-79061887A8D4}"
 EndProject
@@ -21,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.CQS", "NewsA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{94B07885-F137-47D8-8B9E-44B7941C709C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Domain.Tests", "NewsAggregator.Domain.Tests\NewsAggregator.Domain.Tests.csproj", "{CA448301-6024-47C8-B616-0E450CA15084}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Domain.Tests", "NewsAggregator.Domain.Tests\NewsAggregator.Domain.Tests.csproj", "{CA448301-6024-47C8-B616-0E450CA15084}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
