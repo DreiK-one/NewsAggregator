@@ -98,7 +98,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
 
         public ValueTask<bool> MoveNextAsync()
         {
-            return ValueTask.FromResult<bool>(_enumerator.MoveNext());
+            return ValueTask.FromResult(_enumerator.MoveNext());
         }
     }
 }
