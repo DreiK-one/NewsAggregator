@@ -12,7 +12,7 @@ namespace NewsAggregator.Core.Interfaces.Data
 
         public Task<T> GetById(Guid id);
         public Task<T> GetByIdWithIncludes(Guid id, params Expression<Func<T, object>>[] includes);
-        public IQueryable<T> Get();
+        public Task<IQueryable<T>> Get();
 
         public Task<IQueryable<T>> FindBy(Expression<Func<T, bool>> predicate, 
             params Expression<Func<T, object>>[] includes);

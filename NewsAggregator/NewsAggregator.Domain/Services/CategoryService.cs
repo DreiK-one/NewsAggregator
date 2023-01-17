@@ -28,7 +28,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Categories.Get()
+                return await _unitOfWork.Categories.Get().Result
                 .Select(category => _mapper.Map<CategoryDto>(category))
                 .ToListAsync();
             }
@@ -119,16 +119,16 @@ namespace NewsAggregator.Domain.Services
                 var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
                 var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
 
-                var category = await _unitOfWork.Categories.Get().Select(category => category.Name).ToListAsync();
+                var category = await _unitOfWork.Categories.Get().Result.Select(category => category.Name).ToListAsync();
 
                 if (category.Contains(res))
                 {
-                    return (await _unitOfWork.Categories.Get()
+                    return (await _unitOfWork.Categories.Get().Result
                     .FirstOrDefaultAsync(category => category.Name.Equals(res)))?.Id ?? Guid.Empty;
                 }
                 else
                 {
-                    return (await _unitOfWork.Categories.Get()
+                    return (await _unitOfWork.Categories.Get().Result
                     .FirstOrDefaultAsync(category => category.Name.Equals("Games")))?.Id ?? Guid.Empty;
                 }
             }
@@ -143,7 +143,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var category = await _unitOfWork.Categories.Get()
+                var category = await _unitOfWork.Categories.Get().Result
                 .Where(category => category.Name.Equals(name))
                 .Include(article => article.Articles
                     .Where(article => article.Coefficient > 0)
@@ -162,7 +162,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var category = await _unitOfWork.Categories.Get()
+                var category = await _unitOfWork.Categories.Get().Result
                 .Where(category => category.Name.Equals(name))
                 .Include(article => article.Articles
                     .OrderByDescending(article => article.CreationDate))
@@ -194,7 +194,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var category = await _unitOfWork.Categories.Get()
+                var category = await _unitOfWork.Categories.Get().Result
                 .Where(category => category.Id.Equals(id))
                 .Include(article => article.Articles
                     .Where(article => article.Coefficient > 0)

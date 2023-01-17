@@ -32,7 +32,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Articles.Get()
+                return await _unitOfWork.Articles.Get().Result
                     .Where(art => !string.IsNullOrWhiteSpace(art.Body))
                     .OrderByDescending(article => article.CreationDate)
                     .Select(article => _mapper.Map<ArticleDto>(article))
@@ -51,7 +51,7 @@ namespace NewsAggregator.Domain.Services
             {
                 var pageSize = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
-                return await _unitOfWork.Articles.Get()
+                return await _unitOfWork.Articles.Get().Result
                     .Where(art => !string.IsNullOrWhiteSpace(art.Body))
                     .OrderByDescending(article => article.CreationDate)
                     .Skip(page * pageSize)
@@ -70,7 +70,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Articles.Get()
+                return await _unitOfWork.Articles.Get().Result
                     .Where(article => article.Coefficient > 0)
                     .OrderByDescending(article => article.CreationDate)
                     .Select(article => _mapper.Map<ArticleDto>(article))
@@ -89,7 +89,7 @@ namespace NewsAggregator.Domain.Services
             {
                 var pageSize = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
-                return await _unitOfWork.Articles.Get()
+                return await _unitOfWork.Articles.Get().Result
                     .Where(article => article.Coefficient > 0)
                     .OrderByDescending(article => article.CreationDate)
                     .Skip(page * pageSize)
@@ -122,7 +122,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var model = await _unitOfWork.Articles.Get()
+                var model = await _unitOfWork.Articles.Get().Result
                     .Where(a => a.Id.Equals(id))
                     .Include(source => source.Source)
                     .Include(comments => comments.Comments)
@@ -142,7 +142,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var model = await _unitOfWork.Articles.Get()
+                var model = await _unitOfWork.Articles.Get().Result
                     .Where(a => a.Id.Equals(id) && a.Coefficient > 0)
                     .Include(source => source.Source)
                     .Include(comments => comments.Comments)
@@ -225,7 +225,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Articles.Get()
+                return await _unitOfWork.Articles.Get().Result
                     .Select(article => article.SourceUrl)
                     .ToListAsync();
             }
@@ -240,7 +240,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var article = await _unitOfWork.Articles.Get()
+                var article = await _unitOfWork.Articles.Get().Result
                     .Where(article => article.Coefficient.Equals(null) && 
                         !string.IsNullOrWhiteSpace(article.Body))
                     .Take(1).FirstOrDefaultAsync();
@@ -258,7 +258,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var article = await _unitOfWork.Articles.Get()
+                var article = await _unitOfWork.Articles.Get().Result
                     .Where(article => article.Coefficient.Equals(maxCoef))
                     .Include(source => source.Source)
                     .Include(comments => comments.Comments)
@@ -278,7 +278,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var maxCoef = await _unitOfWork.Articles.Get()
+                var maxCoef = await _unitOfWork.Articles.Get().Result
                 .Where(article => article.CreationDate.Date
                     .Equals(DateTime.Today.Date))
                     .MaxAsync(article => article.Coefficient);
@@ -296,7 +296,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var maxCoef = await _unitOfWork.Articles.Get()
+                var maxCoef = await _unitOfWork.Articles.Get().Result
                 .Where(article => article.CreationDate.Date.Month
                     .Equals(DateTime.Today.Date.Month))
                     .MaxAsync(article => article.Coefficient);
@@ -314,7 +314,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var maxCoef = await _unitOfWork.Articles.Get()
+                var maxCoef = await _unitOfWork.Articles.Get().Result
                     .MaxAsync(article => article.Coefficient);
 
                 return maxCoef;

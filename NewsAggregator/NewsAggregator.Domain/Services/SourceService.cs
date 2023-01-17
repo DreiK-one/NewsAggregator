@@ -28,7 +28,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Sources.Get()
+                return await _unitOfWork.Sources.Get().Result
                 .Select(source => _mapper.Map<SourceDto>(source))
                 .ToListAsync();
             }
@@ -115,7 +115,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var result = await _unitOfWork.Sources.Get()
+                var result = await _unitOfWork.Sources.Get().Result
                     .Select(source => _mapper.Map<RssUrlsFromSourceDto>(source))
                     .ToListAsync();
                 return result;
@@ -136,7 +136,7 @@ namespace NewsAggregator.Domain.Services
                 .Split('.')
                 .TakeLast(2)
                 .ToList());
-                return (await _unitOfWork.Sources.Get()
+                return (await _unitOfWork.Sources.Get().Result
                      .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
             }
             catch (Exception ex)

@@ -46,7 +46,7 @@ namespace NewsAggregator.DataAccess
             return await GetById(id);
         }
 
-        public virtual IQueryable<T> Get()
+        public virtual async Task<IQueryable<T>> Get()
         {
             return DbSet;
         }

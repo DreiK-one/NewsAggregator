@@ -39,7 +39,7 @@ namespace NewsAggregator.Domain.Services
             {
                 var normalizedEmail = email.ToUpperInvariant();
 
-                return await _unitOfWork.Users.Get()
+                return await _unitOfWork.Users.Get().Result
                     .AnyAsync(user =>
                         user.NormalizedEmail
                            .Equals(normalizedEmail));
@@ -350,7 +350,7 @@ namespace NewsAggregator.Domain.Services
             {
                 var normalizedEmail = email.ToUpperInvariant();
 
-                return _unitOfWork.Users.Get()
+                return _unitOfWork.Users.Get().Result
                     .Any(user => user.NormalizedEmail.Equals(normalizedEmail));
             }
             catch (Exception ex)
@@ -366,7 +366,7 @@ namespace NewsAggregator.Domain.Services
             {
                 var normalizedNickname = nickname.ToUpperInvariant();
 
-                return _unitOfWork.Users.Get()
+                return _unitOfWork.Users.Get().Result
                     .Any(user => user.NormalizedNickname.Equals(normalizedNickname));
             }
             catch (Exception ex)

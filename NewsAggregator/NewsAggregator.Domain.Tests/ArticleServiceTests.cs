@@ -7,11 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Moq.EntityFrameworkCore;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.Data;
-using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
-using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using NewsAggregator.Domain.Tests.Helpers;
 using NUnit.Framework;
@@ -39,7 +38,7 @@ namespace NewsAggregator.Domain.Tests
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
 
             _unitOfWork.Setup(uOw => uOw.Articles.Get())
-                .Returns(TestFunctions.GetDbSet(TestArticlesData.Articles).Object);
+                .ReturnsAsync(TestFunctions.GetDbSet(TestArticlesData.Articles).Object);
 
             _articleService = new ArticleService(
                 _mapper.Object, 
@@ -61,7 +60,7 @@ namespace NewsAggregator.Domain.Tests
         public async Task GetAllNewsAsync_ReturnedAnyoneException()
         {
             var nullList = new List<Article>().AsQueryable();
-            _unitOfWork.Setup(uOw => uOw.Articles.Get()).Returns(nullList);
+            _unitOfWork.Setup(uOw => uOw.Articles.Get()).Returns(Task.FromResult(nullList));
 
             Assert.ThrowsAsync<InvalidOperationException>(() => _articleService.GetAllNewsAsync());
         }
@@ -104,8 +103,10 @@ namespace NewsAggregator.Domain.Tests
         public async Task GetArticleAsync_WithExistingId_ReturnsArticle(Guid id)
         {
             var expected = new Article { Id = id };
+
             _unitOfWork.Setup(uOw => uOw.Articles.GetById(id))
                 .ReturnsAsync(expected);
+
             _mapper.Setup(mapper => mapper.Map<CreateOrEditArticleDto>(expected))
                 .Returns(new CreateOrEditArticleDto { Id = id });
 
@@ -129,7 +130,16 @@ namespace NewsAggregator.Domain.Tests
         [TestCase("e076479a-a96f-40fe-a54f-ddaceec29558")]
         public async Task GetArticleWithAllNavigationProperties_WithExistingId_ReturnsArticle(Guid id)
         {
-            var articles = _articleService.GetArticleWithAllNavigationProperties(id);
+            var testData = new List<Article> { new Article { Id = id } }.AsQueryable();
+
+            var artRepoMock = new Mock<IArticleRepository>();
+            artRepoMock.Setup(art => art.Get()).Returns(Task.FromResult(testData));
+
+            _unitOfWork.Setup(uOw => uOw.Articles).Returns(artRepoMock.Object);
+
+            var article = await _articleService.GetArticleWithAllNavigationProperties(id);
+
+            Assert.AreEqual(id, article.Id);
         }
     }
 }

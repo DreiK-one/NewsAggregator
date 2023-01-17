@@ -32,7 +32,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Users.Get()
+                return await _unitOfWork.Users.Get().Result
                 .Include(userRoles => userRoles.UserRoles)
                 .ThenInclude(role => role.Role)
                 .Include(comments => comments.Comments)
@@ -51,7 +51,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var user = await _unitOfWork.Users.Get()
+                var user = await _unitOfWork.Users.Get().Result
                 .Where(u => u.Id.Equals(id))
                 .FirstOrDefaultAsync();
 

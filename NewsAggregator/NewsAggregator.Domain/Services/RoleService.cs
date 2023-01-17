@@ -29,7 +29,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.Roles.Get()
+                return await _unitOfWork.Roles.Get().Result
                 .Select(role => _mapper.Map<RoleDto>(role))
                 .ToListAsync();
             }
@@ -44,7 +44,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return await _unitOfWork.UserRoles.Get()
+                return await _unitOfWork.UserRoles.Get().Result
                     .Where(userId => userId.UserId.Equals(id))
                     .Select(roleId => roleId.RoleId)
                     .FirstOrDefaultAsync();
@@ -203,7 +203,7 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return (_unitOfWork.UserRoles.Get()
+                return (_unitOfWork.UserRoles.Get().Result
                           .Where(userId => userId.UserId.Equals(id))
                           .FirstOrDefault()).Id;
             }
