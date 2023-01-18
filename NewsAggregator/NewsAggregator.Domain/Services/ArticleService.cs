@@ -123,7 +123,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var model = await _unitOfWork.Articles.Get().Result
-                    .Where(a => a.Id.Equals(id))
+                    .Where(a => a.Id == id)
                     .Include(source => source.Source)
                     .Include(comments => comments.Comments)
                     .ThenInclude(user => user.User)

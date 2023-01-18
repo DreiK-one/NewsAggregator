@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NewsAggregator.App\NewsAggregator.App.csproj" />
     <ProjectReference Include="..\NewsAggregator.DataAccess\NewsAggregator.DataAccess.csproj" />
     <ProjectReference Include="..\NewsAggregator.Domain\NewsAggregator.Domain.csproj" />
   </ItemGroup>

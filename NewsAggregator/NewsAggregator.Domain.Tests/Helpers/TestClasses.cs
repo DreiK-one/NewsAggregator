@@ -43,9 +43,14 @@ namespace NewsAggregator.Domain.Tests.Helpers
             return new TestAsyncEnumerable<TResult>(expression);
         }
 
-        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
+        public TResult ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken = new CancellationToken())
         {
-            return Execute<TResult>(expression);
+            var expectedResultType = typeof(TResult).GetGenericArguments()[0];
+            var executionResult = ((IQueryProvider)this).Execute(expression);
+
+            return (TResult)typeof(Task).GetMethod(nameof(Task.FromResult))
+                .MakeGenericMethod(expectedResultType)
+                .Invoke(null, new[] { executionResult });
         }
     }
 
@@ -85,7 +90,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
 
         public async ValueTask DisposeAsync()
         {
-            _enumerator.Dispose();
+            await Task.Run(() => _enumerator.Dispose());
         }
 
         public T Current

@@ -30,21 +30,21 @@ namespace NewsAggregator.Domain.Tests.Helpers
                     },
                     new Article
                     {
-                        Id = Guid.NewGuid(),
+                        Id = new Guid("16c80b2d-db21-4b0f-aeb1-c2bc5e925e9a"),
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 2.3f,
                     },
                     new Article
                     {
-                        Id = Guid.NewGuid(),
+                        Id = new Guid("1ca88641-9f96-417c-ac2f-1c5f343a4080"),
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.8f,
                     },
                     new Article
                     {
-                        Id = Guid.NewGuid(),
+                        Id = new Guid("97f7d7fd-3d77-498d-a024-16c0354b6ccb"),
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -2.9f,

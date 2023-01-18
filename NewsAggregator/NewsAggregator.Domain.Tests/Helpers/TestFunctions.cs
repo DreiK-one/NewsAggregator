@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
+using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data.Entities;
+using NUnit.Framework.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Threading;
 
 
@@ -10,27 +13,15 @@ namespace NewsAggregator.Domain.Tests.Helpers
 {
     public static class TestFunctions
     {
-        // Return a DbSet of the specified generic type with support for async operations
-        public static Mock<DbSet<T>> GetDbSet<T>(IQueryable<T> TestData) where T : class
+        public static Mock<IQueryable<T>> GetArticles<T>(IQueryable<T> testData) where T : BaseEntity
         {
-            var MockSet = new Mock<DbSet<T>>();
-            MockSet.As<IAsyncEnumerable<T>>().Setup(x => x.GetAsyncEnumerator(new CancellationToken())).Returns(new TestAsyncEnumerator<T>(TestData.GetEnumerator()));
-            MockSet.As<IQueryable<T>>().Setup(x => x.Provider).Returns(new TestAsyncQueryProvider<T>(TestData.Provider));
-            MockSet.As<IQueryable<T>>().Setup(x => x.Expression).Returns(TestData.Expression);
-            MockSet.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(TestData.ElementType);
-            MockSet.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(TestData.GetEnumerator());
-            return MockSet;
-        }
-
-        public static Mock<IQueryable<T>> GetArticle<T>(IQueryable<T> TestData) where T : class
-        {
-            var MockSet = new Mock<IQueryable<T>>();
-            MockSet.As<IAsyncEnumerable<T>>().Setup(x => x.GetAsyncEnumerator(new CancellationToken())).Returns(new TestAsyncEnumerator<T>(TestData.GetEnumerator()));
-            MockSet.As<IQueryable<T>>().Setup(x => x.Provider).Returns(new TestAsyncQueryProvider<T>(TestData.Provider));
-            MockSet.As<IQueryable<T>>().Setup(x => x.Expression).Returns(TestData.Expression);
-            MockSet.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(TestData.ElementType);
-            MockSet.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(TestData.GetEnumerator());
-            return MockSet;
+            var mockSet = new Mock<IQueryable<T>>();
+            mockSet.As<IAsyncEnumerable<T>>().Setup(x => x.GetAsyncEnumerator(new CancellationToken())).Returns(new TestAsyncEnumerator<T>(testData.GetEnumerator()));
+            mockSet.As<IQueryable<T>>().Setup(x => x.Provider).Returns(new TestAsyncQueryProvider<T>(testData.Provider));
+            mockSet.As<IQueryable<T>>().Setup(x => x.Expression).Returns(testData.Expression);
+            mockSet.As<IQueryable<T>>().Setup(x => x.ElementType).Returns(testData.ElementType);
+            mockSet.As<IQueryable<T>>().Setup(x => x.GetEnumerator()).Returns(testData.GetEnumerator());
+            return mockSet;
         }
     }
 }
