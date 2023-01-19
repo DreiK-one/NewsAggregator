@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -78,9 +79,9 @@ namespace NewsAggregator.Domain.Tests
         public async Task GetAllNewsAsync_WithNoArticlesFromDb_ReturnedInvalidOperationException()
         {
             var nullList = new List<Article>().AsQueryable();
-            _unitOfWork.Setup(uOw => uOw.Articles.Get()).Returns(Task.FromResult(nullList));
+            await Task.Run(() => _unitOfWork.Setup(uOw => uOw.Articles.Get()).Returns(Task.FromResult(nullList)));
 
-            Assert.ThrowsAsync<InvalidOperationException>(() => _articleService.GetAllNewsAsync());
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await _articleService.GetAllNewsAsync());
         }
 
         [Test]
@@ -188,6 +189,50 @@ namespace NewsAggregator.Domain.Tests
             var article = await _articleService.GetArticleWithAllNavigationPropertiesByRating(id);
 
             Assert.Null(article);
+        }
+
+        [Test]
+        public async Task CreateAsync_WithCorrectModel_ReturnsSaveResult()
+        {
+            var articleDto = new CreateOrEditArticleDto
+            {
+                Id = Guid.NewGuid(),
+                Title = "test",
+                Description = "test",
+                Body = "test",
+                SourceUrl = "test",
+                Image = "test",
+                CreationDate = DateTime.Now,
+                CategoryId = Guid.NewGuid(),
+                SourceId = Guid.NewGuid()
+            };
+
+            var testData = new List<Article>();
+
+            var mockData = TestFunctions.GetDbSet(testData.AsQueryable());
+            mockData.Setup(m => m.AddAsync(It.IsAny<Article>(), default)).Callback<Article, CancellationToken>((s, token) =>
+            {
+                testData.Add(s);
+            });
+
+            var mockContext = new Mock<NewsAggregatorContext>();
+            mockContext.Object.Articles = mockData.Object;
+
+            
+
+
+            var result = await _articleService.CreateAsync(articleDto);
+
+            _unitOfWork.Verify(uOw => uOw.Articles.Add(_mapper.Map<Article>(articleDto)), Times.Once);
+            _unitOfWork.Verify(uOw => uOw.Save(), Times.Once);
+        }
+
+        [Test]
+        public async Task CreateAsync_WithNulltModel_ReturnsNullReferenceException()
+        {
+            var result = _articleService.CreateAsync(null);
+
+            Assert.ThrowsAsync<NullReferenceException>(async () => await result);
         }
     }
 }
