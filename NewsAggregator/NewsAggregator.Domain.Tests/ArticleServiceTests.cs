@@ -210,5 +210,25 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.CreateAsync(null));
         }
+
+        [Test]
+        public async Task UpdateAsync_WithCorrectModel_ReturnsSaveResult()
+        {
+            var articleDto = new CreateOrEditArticleDto
+            {
+                Id = Guid.NewGuid()
+            };
+
+            await _articleService.UpdateAsync(articleDto);
+
+            _unitOfWork.Verify(uOw => uOw.Articles.Update(It.IsAny<Article>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        public async Task UpdateAsync_WithNullModel_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.UpdateAsync(null));
+        }
     }
 }
