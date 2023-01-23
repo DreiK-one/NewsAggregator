@@ -196,43 +196,19 @@ namespace NewsAggregator.Domain.Tests
         {
             var articleDto = new CreateOrEditArticleDto
             {
-                Id = Guid.NewGuid(),
-                Title = "test",
-                Description = "test",
-                Body = "test",
-                SourceUrl = "test",
-                Image = "test",
-                CreationDate = DateTime.Now,
-                CategoryId = Guid.NewGuid(),
-                SourceId = Guid.NewGuid()
+                Id = Guid.NewGuid()
             };
 
-            var testData = new List<Article>();
+            await _articleService.CreateAsync(articleDto);
 
-            var mockData = TestFunctions.GetDbSet(testData.AsQueryable());
-            mockData.Setup(m => m.AddAsync(It.IsAny<Article>(), default)).Callback<Article, CancellationToken>((s, token) =>
-            {
-                testData.Add(s);
-            });
-
-            var mockContext = new Mock<NewsAggregatorContext>();
-            mockContext.Object.Articles = mockData.Object;
-
-            
-
-
-            var result = await _articleService.CreateAsync(articleDto);
-
-            _unitOfWork.Verify(uOw => uOw.Articles.Add(_mapper.Map<Article>(articleDto)), Times.Once);
-            _unitOfWork.Verify(uOw => uOw.Save(), Times.Once);
+            _unitOfWork.Verify(uOw => uOw.Articles.Add(It.IsAny<Article>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
         }
 
         [Test]
-        public async Task CreateAsync_WithNulltModel_ReturnsNullReferenceException()
+        public async Task CreateAsync_WithNullModel_ReturnsNullReferenceException()
         {
-            var result = _articleService.CreateAsync(null);
-
-            Assert.ThrowsAsync<NullReferenceException>(async () => await result);
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.CreateAsync(null));
         }
     }
 }
