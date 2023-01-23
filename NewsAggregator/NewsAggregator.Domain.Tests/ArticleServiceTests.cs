@@ -230,5 +230,26 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.UpdateAsync(null));
         }
+
+        [Test]
+        public async Task DeleteAsync_WithCorrectId_CorrectlyFinished()
+        {
+            var id = Guid.NewGuid();
+            var expected = new Article { Id = id };
+
+            _unitOfWork.Setup(uOw => uOw.Articles.GetById(id))
+                .ReturnsAsync(expected);
+
+            await _articleService.DeleteAsync(id);
+
+            _unitOfWork.Verify(uOw => uOw.Articles.Remove(It.IsAny<Guid>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        public async Task DeleteAsync_WithWrongId_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.DeleteAsync(It.IsAny<Guid>()));
+        }
     }
 }
