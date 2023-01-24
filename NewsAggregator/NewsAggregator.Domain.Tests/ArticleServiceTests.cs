@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Moq.EntityFrameworkCore;
 using NewsAggregator.App.Mappers;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.Data;
-using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
-using NewsAggregator.DataAccess;
 using NewsAggregator.Domain.Services;
 using NewsAggregator.Domain.Tests.Helpers;
 using NUnit.Framework;
-using NUnit.Framework.Interfaces;
 
 
 namespace NewsAggregator.Domain.Tests
