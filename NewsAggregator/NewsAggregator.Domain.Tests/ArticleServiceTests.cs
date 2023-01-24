@@ -58,6 +58,7 @@ namespace NewsAggregator.Domain.Tests
                 _configuration.Object);
         }
 
+        #region GetAllNewsAsync tests
         [Test]
         public async Task GetAllNewsAsync_CorrectlyReturnedListOfArticles()
         {
@@ -75,7 +76,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await _articleService.GetAllNewsAsync());
         }
+        #endregion
 
+        #region GetNewsByPageAsync tests
         [Test]
         [TestCase(1)]
         [TestCase(2)]
@@ -96,7 +99,9 @@ namespace NewsAggregator.Domain.Tests
             Assert.IsNotNull(articles);
             Assert.AreEqual(13, articles.Count());
         }
+        #endregion
 
+        #region GetNewsByRatingByPageAsync tests
         [Test]
         [TestCase(0, 10)]
         [TestCase(1, 3)]
@@ -107,7 +112,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.AreEqual(expected, articles.Count());
         }
+        #endregion
 
+        #region GetArticleAsync tests
         [Test]
         [TestCase("49139cd4-6761-4eaf-a5ec-eb212ee7ee0c")]
         [TestCase("e076479a-a96f-40fe-a54f-ddaceec29558")]
@@ -132,7 +139,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.Null(article);
         }
+        #endregion
 
+        #region GetArticleWithAllNavigationProperties tests
         [Test]
         [TestCase("49139cd4-6761-4eaf-a5ec-eb212ee7ee0c")]
         [TestCase("e076479a-a96f-40fe-a54f-ddaceec29558")]
@@ -152,7 +161,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.Null(article);
         }
+        #endregion
 
+        #region GetArticleWithAllNavigationPropertiesRating tests
         [Test]
         [TestCase("1ca88641-9f96-417c-ac2f-1c5f343a4080")]
         [TestCase("49139cd4-6761-4eaf-a5ec-eb212ee7ee0c")]
@@ -182,7 +193,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.Null(article);
         }
+        #endregion
 
+        #region CreateAsync tests
         [Test]
         public async Task CreateAsync_WithCorrectModel_ReturnsSaveResult()
         {
@@ -202,7 +215,9 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.CreateAsync(null));
         }
+        #endregion
 
+        #region UpdateAsync tests
         [Test]
         public async Task UpdateAsync_WithCorrectModel_ReturnsSaveResult()
         {
@@ -222,7 +237,9 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.UpdateAsync(null));
         }
+        #endregion
 
+        #region DeleteAsync tests
         [Test]
         public async Task DeleteAsync_WithCorrectId_CorrectlyFinished()
         {
@@ -243,7 +260,9 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.DeleteAsync(It.IsAny<Guid>()));
         }
+        #endregion
 
+        #region GetAllExistingArticleUrls tests
         [Test]
         public async Task GetAllExistingArticleUrls_CorrectlyReturnsListOfUrls()
         {
@@ -261,7 +280,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await _articleService.GetAllExistingArticleUrls());
         }
+        #endregion
 
+        #region GetArticleWithoutRating tests
         [Test]
         public async Task GetArticleWithoutRating_CorrectlyReturnedOneArticleWithNullCoefficient()
         {
@@ -269,7 +290,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.NotNull(article);
         }
+        #endregion
 
+        #region MostRatedArticleByPeriodOfTime tests
         [Test]
         [TestCase(5.0f)]
         [TestCase(4.1f)]
@@ -292,7 +315,9 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.Null(article);
         }
+        #endregion
 
+        #region MsxCoef tests
         [Test]
         public async Task MaxCoefOfToday_CorrectlyReturnedMaxCoefficientOfToday()
         {
@@ -319,5 +344,6 @@ namespace NewsAggregator.Domain.Tests
             Assert.NotNull(coef);
             Assert.AreEqual(5.0f, coef);
         }
+        #endregion
     }
 }
