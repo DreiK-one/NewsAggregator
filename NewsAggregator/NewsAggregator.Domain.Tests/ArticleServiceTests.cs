@@ -251,5 +251,23 @@ namespace NewsAggregator.Domain.Tests
         {
             Assert.ThrowsAsync<NullReferenceException>(async () => await _articleService.DeleteAsync(It.IsAny<Guid>()));
         }
+
+        [Test]
+        public async Task GetAllExistingArticleUrls_CorrectlyReturnsListOfUrls()
+        {
+            var urls = await _articleService.GetAllExistingArticleUrls();
+
+            Assert.NotNull(urls);
+            Assert.AreEqual(30, urls.Count());
+        }
+
+        [Test]
+        public async Task GetAllExistingArticleUrls_WithNoArticlesFromDb_ReturnedInvalidOperationException()
+        {
+            var nullList = new List<Article>().AsQueryable();
+            await Task.Run(() => _unitOfWork.Setup(uOw => uOw.Articles.Get()).Returns(Task.FromResult(nullList)));
+
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await _articleService.GetAllExistingArticleUrls());
+        }
     }
 }

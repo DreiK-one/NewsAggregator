@@ -20,6 +20,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 1.6f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -27,6 +28,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -1.7f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -34,6 +36,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 2.3f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -41,6 +44,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.8f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -48,6 +52,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -2.9f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -55,6 +60,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -3.5f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -62,6 +68,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.4f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -69,6 +76,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 5f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -76,6 +84,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -2f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -83,6 +92,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -3f,
+                        SourceUrl = "onliner"
                     },
                     new Article
                     {
@@ -90,6 +100,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 3.1f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -97,6 +108,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 1.5f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -104,6 +116,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 0f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -111,6 +124,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -1.3f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -118,6 +132,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -4.5f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -125,6 +140,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.5f,
+                        SourceUrl = "goha"      
                     },
                     new Article
                     {
@@ -132,6 +148,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 3.5f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -139,6 +156,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 5.0f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -146,6 +164,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -3.5f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -153,6 +172,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -1.5f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -160,6 +180,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -4.6f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -167,6 +188,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -1.3f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -174,6 +196,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -5.0f,
+                        SourceUrl = "goha"
                     },
                     new Article
                     {
@@ -181,6 +204,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.5f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -188,6 +212,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 3.2f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -195,6 +220,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.7f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -202,6 +228,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -4.6f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -209,6 +236,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -2.3f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -216,6 +244,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -1.1f,
+                        SourceUrl = "lenta"
                     },
                     new Article
                     {
@@ -223,6 +252,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = -2.1f,
+                        SourceUrl = "lenta"
                     }
 
                 }.AsQueryable();
