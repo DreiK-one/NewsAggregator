@@ -67,7 +67,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = 4.4f,
+                        Coefficient = 4.1f,
                         SourceUrl = "onliner"
                     },
                     new Article
@@ -139,7 +139,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = 4.5f,
+                        Coefficient = 4.7f,
                         SourceUrl = "goha"      
                     },
                     new Article
@@ -195,7 +195,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = -5.0f,
+                        Coefficient = -4.9f,
                         SourceUrl = "goha"
                     },
                     new Article
@@ -219,7 +219,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = 4.7f,
+                        Coefficient = 4.4f,
                         SourceUrl = "lenta"
                     },
                     new Article
@@ -235,7 +235,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = -2.3f,
+                        Coefficient = null,
                         SourceUrl = "lenta"
                     },
                     new Article
@@ -243,7 +243,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Id = Guid.NewGuid(),
                         Body = "examp",
                         CreationDate = DateTime.Now,
-                        Coefficient = -1.1f,
+                        Coefficient = null,
                         SourceUrl = "lenta"
                     },
                     new Article

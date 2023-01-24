@@ -269,5 +269,63 @@ namespace NewsAggregator.Domain.Tests
 
             Assert.ThrowsAsync<InvalidOperationException>(async () => await _articleService.GetAllExistingArticleUrls());
         }
+
+        [Test]
+        public async Task GetArticleWithoutRating_CorrectlyReturnedOneArticleWithNullCoefficient()
+        {
+            var article = await _articleService.GetArticleWithoutRating();
+
+            Assert.NotNull(article);
+        }
+
+        [Test]
+        [TestCase(5.0f)]
+        [TestCase(4.1f)]
+        [TestCase(4.8f)]
+        public async Task MostRatedArticleByPeriodOfTime_WithExistingCoefficient_CorrectlyReturndeArticleWithThatRating(float? coefficient)
+        {
+            var article = await _articleService.MostRatedArticleByPeriodOfTime(coefficient);
+
+            Assert.NotNull(article);
+            Assert.AreEqual(coefficient, article.Coefficient);
+        }
+
+        [Test]
+        [TestCase(6.0f)]
+        [TestCase(7.1f)]
+        [TestCase(-13f)]
+        public async Task MostRatedArticleByPeriodOfTime_WithNotExistingCoefficient_ReturnedNull(float? coefficient)
+        {
+            var article = await _articleService.MostRatedArticleByPeriodOfTime(coefficient);
+
+            Assert.Null(article);
+        }
+
+        [Test]
+        public async Task MaxCoefOfToday_CorrectlyReturnedMaxCoefficientOfToday()
+        {
+            var coef = await _articleService.MaxCoefOfToday();
+
+            Assert.NotNull(coef);
+            Assert.AreEqual(5.0f, coef);
+        }
+
+        [Test]
+        public async Task MaxCoefOfTheMonth_CorrectlyReturnedMaxCoefficientOfTheMonth()
+        {
+            var coef = await _articleService.MaxCoefOfTheMonth();
+
+            Assert.NotNull(coef);
+            Assert.AreEqual(5.0f, coef);
+        }
+
+        [Test]
+        public async Task MaxCoefOfAllTime_CorrectlyReturnedMaxCoefficient()
+        {
+            var coef = await _articleService.MaxCoefOfAllTime();
+
+            Assert.NotNull(coef);
+            Assert.AreEqual(5.0f, coef);
+        }
     }
 }
