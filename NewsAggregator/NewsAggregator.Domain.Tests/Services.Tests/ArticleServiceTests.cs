@@ -37,24 +37,25 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
                 });
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;
-            }
-
-            _unitOfWork = new Mock<IUnitOfWork>();
-            _logger = new Mock<ILogger<ArticleService>>();
-            _configuration = new Mock<IConfiguration>();
-            _articleService = new ArticleService(_mapper,
-                _logger.Object,
-                _unitOfWork.Object,
-                _configuration.Object);
+            }    
         }
 
         [SetUp]
         public void Setup()
         {
+            _unitOfWork = new Mock<IUnitOfWork>();
+            _logger = new Mock<ILogger<ArticleService>>();
+            _configuration = new Mock<IConfiguration>();
+    
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
 
             _unitOfWork.Setup(uOw => uOw.Articles.Get())
                 .ReturnsAsync(TestFunctions.GetMockData(TestArticlesData.Articles).Object);
+
+            _articleService = new ArticleService(_mapper,
+                _logger.Object,
+                _unitOfWork.Object,
+                _configuration.Object);
         }
 
         #region GetAllNewsAsync tests
