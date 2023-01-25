@@ -9,11 +9,11 @@ using System.Net.Sockets;
 using System.Threading;
 
 
-namespace NewsAggregator.Domain.Tests.Helpers
+namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers
 {
     public static class TestFunctions
     {
-        public static Mock<IQueryable<T>> GetArticles<T>(IQueryable<T> testData) where T : BaseEntity
+        public static Mock<IQueryable<T>> GetMockData<T>(IQueryable<T> testData) where T : BaseEntity
         {
             var mockSet = new Mock<IQueryable<T>>();
             mockSet.As<IAsyncEnumerable<T>>().Setup(x => x.GetAsyncEnumerator(new CancellationToken())).Returns(new TestAsyncEnumerator<T>(testData.GetEnumerator()));

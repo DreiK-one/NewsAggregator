@@ -13,7 +13,7 @@ using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using NUnit.Framework;
 
 
-namespace NewsAggregator.Domain.Tests
+namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 {
     [TestFixture]
     public class ArticleServiceCQSTests
@@ -35,7 +35,7 @@ namespace NewsAggregator.Domain.Tests
             _articleServiceCQS = new ArticleServiceCQS(
                 _logger.Object,
                 _mediator.Object,
-                _configuration.Object); 
+                _configuration.Object);
         }
 
         [Test]

@@ -11,18 +11,19 @@ using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.Domain.Services;
-using NewsAggregator.Domain.Tests.Helpers;
+using NewsAggregator.Domain.Tests.Services.Tests.Helpers;
+using NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData;
 using NUnit.Framework;
 
 
-namespace NewsAggregator.Domain.Tests
+namespace NewsAggregator.Domain.Tests.Services.Tests
 {
     [TestFixture]
     public class ArticleServiceTests
     {
-        private Mock<IUnitOfWork> _unitOfWork;
         private IMapper _mapper;
         private Mock<ILogger<ArticleService>> _logger;
+        private Mock<IUnitOfWork> _unitOfWork;
         private Mock<IConfiguration> _configuration;
         private ArticleService _articleService;
 
@@ -37,25 +38,23 @@ namespace NewsAggregator.Domain.Tests
                 IMapper mapper = mappingConfig.CreateMapper();
                 _mapper = mapper;
             }
+
+            _unitOfWork = new Mock<IUnitOfWork>();
+            _logger = new Mock<ILogger<ArticleService>>();
+            _configuration = new Mock<IConfiguration>();
+            _articleService = new ArticleService(_mapper,
+                _logger.Object,
+                _unitOfWork.Object,
+                _configuration.Object);
         }
 
         [SetUp]
         public void Setup()
         {
-            _unitOfWork = new Mock<IUnitOfWork>();
-            _logger= new Mock<ILogger<ArticleService>>();
-            _configuration = new Mock<IConfiguration>();
-
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
 
             _unitOfWork.Setup(uOw => uOw.Articles.Get())
-                .ReturnsAsync(TestFunctions.GetArticles(TestArticlesData.Articles).Object);
-
-            _articleService = new ArticleService(
-                _mapper, 
-                _logger.Object, 
-                _unitOfWork.Object, 
-                _configuration.Object);
+                .ReturnsAsync(TestFunctions.GetMockData(TestArticlesData.Articles).Object);
         }
 
         #region GetAllNewsAsync tests
@@ -154,7 +153,7 @@ namespace NewsAggregator.Domain.Tests
 
         [Test]
         [TestCase("a3470938-60ce-4ae2-880c-93d39503ddb7")]
-        [TestCase("06d0ef95-35b8-40a6-ba02-e8ad99a5fa8c")] 
+        [TestCase("06d0ef95-35b8-40a6-ba02-e8ad99a5fa8c")]
         public async Task GetArticleWithAllNavigationProperties_WithNonExistingId_ReturnsNull(Guid id)
         {
             var article = await _articleService.GetArticleWithAllNavigationProperties(id);

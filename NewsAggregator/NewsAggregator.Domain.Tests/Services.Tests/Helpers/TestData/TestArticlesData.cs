@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace NewsAggregator.Domain.Tests.Helpers
+namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
 {
     public static class TestArticlesData
     {
@@ -140,7 +140,7 @@ namespace NewsAggregator.Domain.Tests.Helpers
                         Body = "examp",
                         CreationDate = DateTime.Now,
                         Coefficient = 4.7f,
-                        SourceUrl = "goha"      
+                        SourceUrl = "goha"
                     },
                     new Article
                     {

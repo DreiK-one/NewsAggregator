@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace NewsAggregator.Domain.Tests.Helpers
+namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers
 {
     // Async query provider for unit testing
     internal class TestAsyncQueryProvider<TEntity> : IAsyncQueryProvider
@@ -62,8 +62,8 @@ namespace NewsAggregator.Domain.Tests.Helpers
         {
         }
 
-        public TestAsyncEnumerable(Expression expression) : base(expression) 
-        { 
+        public TestAsyncEnumerable(Expression expression) : base(expression)
+        {
         }
 
         public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
