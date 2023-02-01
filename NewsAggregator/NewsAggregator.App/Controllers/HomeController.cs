@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.App.Models;
+using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces;
 
 
@@ -56,7 +57,7 @@ namespace NewsAggregator.App.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return StatusCode(500, new { ex.Message });
             }
         }

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
+
 
 namespace NewsAggregator.WebAPI.Controllers
 {
@@ -50,7 +52,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }
@@ -82,7 +84,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return StatusCode(500, new ResponseMessage { Message = ex.Message });
             }
         }   

@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Core.Interfaces.WebApiInterfaces;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 using System.Net;
+
 
 namespace NewsAggregator.WebAPI.Controllers
 {
@@ -56,7 +58,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
@@ -80,7 +82,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
@@ -104,7 +106,7 @@ namespace NewsAggregator.WebAPI.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
@@ -127,11 +129,11 @@ namespace NewsAggregator.WebAPI.Controllers
 
                 SetTokenCookie(response.RefreshToken);
 
-                return Ok(_mapper.Map<AuthenticateResponse>(response)); //Change to CQS
+                return Ok(_mapper.Map<AuthenticateResponse>(response));
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
@@ -151,12 +153,12 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage{ Message = "Token is required" });
                 }
 
-                var response = _tokenService.RevokeToken(token, GetIpAddress()); //Change to CQS
+                var response = _tokenService.RevokeToken(token, GetIpAddress());
                 return Ok(new { message = "Token is revoked" });
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 return BadRequest(new ResponseMessage { Message = ex.Message });
             }
         }
