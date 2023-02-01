@@ -46,7 +46,8 @@ namespace NewsAggregator.Domain.Services
             {
                 if (sourceDto != null)
                 {
-                    var existSource = (await _unitOfWork.Sources.FindBy(s => s.Name.ToLower() == sourceDto.Name.ToLower()));
+                    var existSource = await _unitOfWork.Sources
+                        .FindBy(s => s.Name.ToLower() == sourceDto.Name.ToLower());
 
                     if (!existSource.Any())
                     {

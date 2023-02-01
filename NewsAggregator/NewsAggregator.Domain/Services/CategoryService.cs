@@ -46,7 +46,8 @@ namespace NewsAggregator.Domain.Services
             {
                 if (categoryDto != null)
                 {
-                    var existCategory = (await _unitOfWork.Categories.FindBy(c => c.Name.ToLower() == categoryDto.Name.ToLower()));
+                    var existCategory = (await _unitOfWork.Categories
+                        .FindBy(c => c.Name.ToLower() == categoryDto.Name.ToLower()));
 
                     if (!existCategory.Any())
                     {
@@ -120,7 +121,8 @@ namespace NewsAggregator.Domain.Services
                 var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
                 var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
 
-                var category = await _unitOfWork.Categories.Get().Result.Select(category => category.Name).ToListAsync();
+                var category = await _unitOfWork.Categories.Get().Result
+                    .Select(category => category.Name).ToListAsync();
 
                 if (category.Contains(res))
                 {

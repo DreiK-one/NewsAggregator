@@ -65,7 +65,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }

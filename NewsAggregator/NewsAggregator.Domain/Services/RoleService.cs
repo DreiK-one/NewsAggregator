@@ -63,7 +63,8 @@ namespace NewsAggregator.Domain.Services
             {
                 if (roleDto != null)
                 {
-                    var existRole = (await _unitOfWork.Roles.FindBy(r => r.Name.ToLower() == roleDto.Name.ToLower()));
+                    var existRole = (await _unitOfWork.Roles
+                        .FindBy(r => r.Name.ToLower() == roleDto.Name.ToLower()));
 
                     if (!existRole.Any())
                     {

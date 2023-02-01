@@ -7,6 +7,7 @@ using System.Collections.Concurrent;
 using System.ServiceModel.Syndication;
 using System.Xml;
 
+
 namespace NewsAggregator.Domain.Services
 {
     public class RssService : IRssService
@@ -37,7 +38,9 @@ namespace NewsAggregator.Domain.Services
                 using (var reader = XmlReader.Create(rssUrl))
                 {
                     SyndicationFeed feed = SyndicationFeed.Load(reader);
-                    var result = feed.Items.Select(item => _mapper.Map<RssArticleDto>(item)).ToList();
+                    var result = feed.Items
+                        .Select(item => _mapper.Map<RssArticleDto>(item)).ToList();
+
                     return result;
                 }
             }
