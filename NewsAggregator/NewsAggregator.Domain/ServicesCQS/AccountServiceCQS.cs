@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
@@ -8,6 +7,8 @@ using NewsAggregetor.CQS.Models.Queries.AccountQueries;
 using System.Text;
 using System.Security.Cryptography;
 using NewsAggregetor.CQS.Models.Commands.AccountCommands;
+using NewsAggregator.Core.Helpers;
+
 
 namespace NewsAggregator.Domain.ServicesCQS
 {
@@ -35,7 +36,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -51,7 +52,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             } 
         }
@@ -65,7 +66,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -107,7 +108,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -133,7 +134,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -160,7 +161,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -176,7 +177,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -198,7 +199,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -214,7 +215,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -230,7 +231,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }

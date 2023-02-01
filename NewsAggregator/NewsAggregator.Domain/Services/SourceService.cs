@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data.Entities;
@@ -34,7 +35,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex )
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -64,7 +65,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                throw;
             }
         }
@@ -85,7 +86,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -106,7 +107,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -121,8 +122,8 @@ namespace NewsAggregator.Domain.Services
                 return result;
             }
             catch (Exception ex)
-            {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                {
+                    _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
@@ -141,7 +142,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             } 
         }
@@ -155,7 +156,7 @@ namespace NewsAggregator.Domain.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{DateTime.Now}: Exception in {ex.Source}, message: {ex.Message}, stacktrace: {ex.StackTrace}");
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
         }
