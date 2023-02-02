@@ -186,7 +186,7 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                var roleId = await _mediator.Send(new GetRoleIdByRoleNameQuery("USER"), 
+                var roleId = await _mediator.Send(new GetRoleIdByRoleNameQuery(Variables.Roles.User), 
                     new CancellationToken());
 
                 var command = new CreateRoleCommand

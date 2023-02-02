@@ -8,5 +8,11 @@
             public static readonly string Admin = "Admin";
             public static readonly string Anonimous = "Anonimous";
         }
+
+        public static class Application
+        {
+            public static readonly string PageSize = "ApplicationVariables:PageSize";
+            public static readonly string Salt = "ApplicationVariables:Salt";
+        }
     }
 }
