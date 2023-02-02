@@ -39,7 +39,7 @@ namespace NewsAggregator.Domain.Services
 
                 switch (sourceId.ToString("D").ToUpperInvariant())
                 {
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B5":
+                    case Variables.IdOfNewsSources.Onliner:
                         var articleOnliner = await ParseOnlinerArticle(article.SourceUrl);
                         article.Title = articleOnliner.Title;
                         article.Description = articleOnliner.Description;
@@ -47,7 +47,7 @@ namespace NewsAggregator.Domain.Services
                         article.Image = articleOnliner.Image;
                         return await _unitOfWork.Save();
 
-                    case "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4":
+                    case Variables.IdOfNewsSources.Goha:
                         var articleGoha = await ParseGohaArticle(article.SourceUrl);
                         article.Title = articleGoha.Title;
                         article.Description = articleGoha.Description;
@@ -55,7 +55,7 @@ namespace NewsAggregator.Domain.Services
                         article.Image = articleGoha.Image;
                         return await _unitOfWork.Save();
 
-                    case "C13088A4-9467-4FCE-9EF7-3903425F1F81":
+                    case Variables.IdOfNewsSources.Shazoo:
                         var article4pda = await ParseShazooArticle(article.SourceUrl);
                         article.Title = article4pda.Title;
                         article.Description = article4pda.Description;
