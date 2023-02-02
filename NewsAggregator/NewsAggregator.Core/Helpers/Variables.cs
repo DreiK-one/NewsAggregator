@@ -29,5 +29,10 @@
             public const string Goha = "F2FB2A60-C1DE-4DA5-B047-0871D2D677B4";
             public const string Shazoo = "C13088A4-9467-4FCE-9EF7-3903425F1F81";
         }
+
+        public static class ArticleFields
+        {
+            public static readonly string Coefficient = "Coefficient";
+        }
     }
 }

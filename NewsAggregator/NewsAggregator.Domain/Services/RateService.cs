@@ -19,6 +19,9 @@ namespace NewsAggregator.Domain.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IArticleService _articleService;
 
+        const string AppJson = "application/json";
+        const string WordsJson = "Words.json";
+
         public RateService(ILogger<RateService> logger,
             IUnitOfWork unitOfWork, 
             IArticleService articleService)
@@ -36,7 +39,7 @@ namespace NewsAggregator.Domain.Services
 
                 var cleantext = await GetCleanTextOfArticle(article);
                 var unratedArticle = await GetJsonFromTexterra(cleantext);
-                var fileWithRatedWords = File.ReadAllText("Words.json");
+                var fileWithRatedWords = File.ReadAllText(WordsJson);
 
                 Dictionary<string, int?> ratedWordsDictionary = JsonConvert.DeserializeObject<Dictionary<string, int?>>(fileWithRatedWords);
                 Root deserializedArticles = JsonConvert.DeserializeObject<Root>(unratedArticle);
@@ -120,14 +123,12 @@ namespace NewsAggregator.Domain.Services
                 {
                     httpClient.DefaultRequestHeaders
                         .Accept
-                        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                        .Add(new MediaTypeWithQualityHeaderValue(AppJson));
 
                     var request = new HttpRequestMessage(HttpMethod.Post, "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=bc1bfe69945f1cc9f1b565b0928f537065d21b25")
                     {
                         Content = new StringContent("[{\"text\":\"" + newsText + "\"}]",
-
-                            Encoding.UTF8,
-                            "application/json")
+                            Encoding.UTF8, AppJson)
                     };
                     var response = await httpClient.SendAsync(request);
 
@@ -156,7 +157,7 @@ namespace NewsAggregator.Domain.Services
                     {
                         new PatchModel
                         {
-                            PropertyName = "Coefficient",
+                            PropertyName = Variables.ArticleFields.Coefficient,
                             PropertyValue = ratedArticle.Coefficient
                         }
                     });
