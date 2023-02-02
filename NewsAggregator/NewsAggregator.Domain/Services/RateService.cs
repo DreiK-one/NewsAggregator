@@ -21,6 +21,7 @@ namespace NewsAggregator.Domain.Services
 
         const string AppJson = "application/json";
         const string WordsJson = "Words.json";
+        const string TexterraPath = "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=bc1bfe69945f1cc9f1b565b0928f537065d21b25";
 
         public RateService(ILogger<RateService> logger,
             IUnitOfWork unitOfWork, 
@@ -125,7 +126,7 @@ namespace NewsAggregator.Domain.Services
                         .Accept
                         .Add(new MediaTypeWithQualityHeaderValue(AppJson));
 
-                    var request = new HttpRequestMessage(HttpMethod.Post, "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=bc1bfe69945f1cc9f1b565b0928f537065d21b25")
+                    var request = new HttpRequestMessage(HttpMethod.Post, TexterraPath)
                     {
                         Content = new StringContent("[{\"text\":\"" + newsText + "\"}]",
                             Encoding.UTF8, AppJson)
