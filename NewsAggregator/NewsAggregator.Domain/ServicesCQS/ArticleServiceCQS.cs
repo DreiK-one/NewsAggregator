@@ -42,13 +42,13 @@ namespace NewsAggregator.Domain.ServicesCQS
         {
             try
             {
-                role = role ?? "Anonimous";
+                role = role ?? Variables.Roles.Anonimous;
                 if (page > 0 && page != null)
                 {
                    return await GetArticlesByPage(Convert.ToInt32(page), role);
                 }
 
-                if (role.Equals("Admin"))
+                if (role.Equals(Variables.Roles.Admin))
                 {
                     return await _mediator.Send(new GetAllArticlesQuery(),
                     new CancellationToken());
@@ -71,7 +71,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                 var size = Convert.ToInt32(
                     _configuration["ApplicationVariables:PageSize"]);
 
-                if (role.Equals("Admin"))
+                if (role.Equals(Variables.Roles.Admin))
                 {
                     return await _mediator.Send(new GetArticlesByPageQuery(size, page),
                         new CancellationToken());
