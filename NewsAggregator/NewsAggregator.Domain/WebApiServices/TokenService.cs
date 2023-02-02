@@ -159,10 +159,10 @@ namespace NewsAggregator.Domain.WebApiServices
             {
                 await _unitOfWork.RefreshTokens.PatchAsync(token.Id, new List<PatchModel>
                 {
-                    new PatchModel() { PropertyName = "Revoked", PropertyValue = DateTime.UtcNow },
-                    new PatchModel() { PropertyName = "RevokedByIp", PropertyValue = ipAddress },
-                    new PatchModel() { PropertyName = "ReasonOfRevoke", PropertyValue = reason },
-                    new PatchModel() { PropertyName = "ReplacedByToken", PropertyValue = replacedByToken },
+                    new PatchModel() { PropertyName = Variables.RefreshTokens.Revoked, PropertyValue = DateTime.UtcNow },
+                    new PatchModel() { PropertyName = Variables.RefreshTokens.RevokedByIp, PropertyValue = ipAddress },
+                    new PatchModel() { PropertyName = Variables.RefreshTokens.ReasonOfRevoke, PropertyValue = reason },
+                    new PatchModel() { PropertyName = Variables.RefreshTokens.ReplacedByToken, PropertyValue = replacedByToken },
                 });
                 await _unitOfWork.Save();
             }

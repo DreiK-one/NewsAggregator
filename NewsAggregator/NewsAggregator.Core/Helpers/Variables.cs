@@ -46,5 +46,13 @@
         {
             public static readonly string Games = "Games";
         }
+
+        public static class RefreshTokens
+        {
+            public static readonly string Revoked = "Revoked";
+            public static readonly string RevokedByIp = "RevokedByIp";
+            public static readonly string ReasonOfRevoke = "ReasonOfRevoke";
+            public static readonly string ReplacedByToken = "ReplacedByToken";
+        }
     }
 }
