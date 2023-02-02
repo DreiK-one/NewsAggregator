@@ -90,7 +90,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                 }
 
                 var passwordHash = GetPasswordHash(dto.Password, 
-                    _configuration[Variables.Application.Salt]);
+                    _configuration[Variables.ConfigurationFields.Salt]);
 
                 var command = new CreateUserCommand
                 {
@@ -122,7 +122,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                 {
                     if (!string.IsNullOrEmpty(user.PasswordHash))
                     {
-                        var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.Application.Salt]);
+                        var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
 
                         if (user.PasswordHash.Equals(enteredPasswordHash))
                         {
@@ -154,7 +154,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                     throw new ArgumentException("User not found");
                 }
 
-                var password = GetPasswordHash(newPass, _configuration[Variables.Application.Salt]);
+                var password = GetPasswordHash(newPass, _configuration[Variables.ConfigurationFields.Salt]);
                 var command = new ChangePasswordCommand(user.Id, password);
 
                 return await _mediator.Send(command, new CancellationToken());

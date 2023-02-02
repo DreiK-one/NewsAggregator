@@ -215,7 +215,7 @@ namespace NewsAggregator.Domain.Services
                     new PatchModel()
                     {
                         PropertyName = Variables.UserFields.PasswordHash,
-                        PropertyValue = GetPasswordHash(password, _configuration[Variables.Application.Salt])
+                        PropertyValue = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt])
                     }
                 });
                 return await _unitOfWork.Save();
@@ -236,7 +236,7 @@ namespace NewsAggregator.Domain.Services
                 {
                     if (!string.IsNullOrEmpty(user.PasswordHash))
                     {
-                        var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.Application.Salt]);
+                        var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
 
                         if (user.PasswordHash.Equals(enteredPasswordHash))
                         {
@@ -260,7 +260,7 @@ namespace NewsAggregator.Domain.Services
                 var userPasswordHash = (await _unitOfWork.Users.GetById(id)).PasswordHash;
                 if (!string.IsNullOrEmpty(userPasswordHash))
                 {
-                    var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.Application.Salt]);
+                    var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
 
                     if (userPasswordHash.Equals(enteredPasswordHash))
                     {

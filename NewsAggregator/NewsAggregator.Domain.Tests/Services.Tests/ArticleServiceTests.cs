@@ -48,7 +48,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             _logger = new Mock<ILogger<ArticleService>>();
             _configuration = new Mock<IConfiguration>();
     
-            _configuration.Setup(cfg => cfg[Variables.Application.PageSize]).Returns("10");
+            _configuration.Setup(cfg => cfg[Variables.ConfigurationFields.PageSize]).Returns("10");
 
             _unitOfWork.Setup(uOw => uOw.Articles.Get())
                 .ReturnsAsync(TestFunctions.GetMockData(TestArticlesData.Articles).Object);

@@ -9,10 +9,11 @@
             public static readonly string Anonimous = "Anonimous";
         }
 
-        public static class Application
+        public static class ConfigurationFields
         {
             public static readonly string PageSize = "ApplicationVariables:PageSize";
             public static readonly string Salt = "ApplicationVariables:Salt";
+            public static readonly string Secret = "AppSettings:Secret";
         }
 
         public static class UserFields

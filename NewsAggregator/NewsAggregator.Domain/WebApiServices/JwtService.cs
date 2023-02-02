@@ -27,7 +27,7 @@ namespace NewsAggregator.Domain.WebApiServices
             try
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var secretKey = Encoding.UTF8.GetBytes(_configuration["AppSettings:Secret"]);
+                var secretKey = Encoding.UTF8.GetBytes(_configuration[Variables.ConfigurationFields.Secret]);
 
                 var claims = user.UserRoles
                     .Select(rn => new Claim(ClaimTypes.Role, rn.Role.Name))
@@ -60,7 +60,7 @@ namespace NewsAggregator.Domain.WebApiServices
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var secretKey = Encoding.UTF8.GetBytes(_configuration["AppSettings:Secret"]);
+            var secretKey = Encoding.UTF8.GetBytes(_configuration[Variables.ConfigurationFields.Secret]);
 
             try
             {
