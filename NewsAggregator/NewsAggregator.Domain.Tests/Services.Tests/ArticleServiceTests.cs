@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NewsAggregator.App.Mappers;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.Domain.Services;
@@ -47,7 +48,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             _logger = new Mock<ILogger<ArticleService>>();
             _configuration = new Mock<IConfiguration>();
     
-            _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
+            _configuration.Setup(cfg => cfg[Variables.Application.PageSize]).Returns("10");
 
             _unitOfWork.Setup(uOw => uOw.Articles.Get())
                 .ReturnsAsync(TestFunctions.GetMockData(TestArticlesData.Articles).Object);

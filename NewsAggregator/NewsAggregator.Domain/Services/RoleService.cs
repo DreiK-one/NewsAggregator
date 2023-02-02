@@ -183,7 +183,7 @@ namespace NewsAggregator.Domain.Services
                     {
                         new PatchModel
                         {
-                            PropertyName = "RoleId",
+                            PropertyName = Variables.RoleFields.RoleId,
                             PropertyValue = dto.RoleId
                         }
                     });

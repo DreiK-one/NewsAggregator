@@ -21,6 +21,7 @@
             public static readonly string NormalizedEmail = "NormalizedEmail";
             public static readonly string Nickname = "Nickname";
             public static readonly string NormalizedNickname = "NormalizedNickname";
+            public static readonly string PasswordHash = "PasswordHash";
         }
 
         public static class IdOfNewsSources
@@ -33,6 +34,16 @@
         public static class ArticleFields
         {
             public static readonly string Coefficient = "Coefficient";
+        }
+
+        public static class RoleFields
+        {
+            public static readonly string RoleId = "RoleId";
+        }
+
+        public static class Categories
+        {
+            public static readonly string Games = "Games";
         }
     }
 }

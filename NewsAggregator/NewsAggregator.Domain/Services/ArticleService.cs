@@ -51,7 +51,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var pageSize = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]);
+                    _configuration[Variables.Application.PageSize]);
                 return await _unitOfWork.Articles.Get().Result
                     .Where(art => !string.IsNullOrWhiteSpace(art.Body))
                     .OrderByDescending(article => article.CreationDate)
@@ -89,7 +89,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var pageSize = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]);
+                    _configuration[Variables.Application.PageSize]);
                 return await _unitOfWork.Articles.Get().Result
                     .Where(article => article.Coefficient > 0)
                     .OrderByDescending(article => article.CreationDate)

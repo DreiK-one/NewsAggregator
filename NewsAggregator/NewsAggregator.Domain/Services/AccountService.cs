@@ -214,8 +214,8 @@ namespace NewsAggregator.Domain.Services
                 {
                     new PatchModel()
                     {
-                        PropertyName = "PasswordHash",
-                        PropertyValue = GetPasswordHash(password, _configuration["ApplicationVariables:Salt"])
+                        PropertyName = Variables.UserFields.PasswordHash,
+                        PropertyValue = GetPasswordHash(password, _configuration[Variables.Application.Salt])
                     }
                 });
                 return await _unitOfWork.Save();
@@ -236,7 +236,7 @@ namespace NewsAggregator.Domain.Services
                 {
                     if (!string.IsNullOrEmpty(user.PasswordHash))
                     {
-                        var enteredPasswordHash = GetPasswordHash(password, _configuration["ApplicationVariables:Salt"]);
+                        var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.Application.Salt]);
 
                         if (user.PasswordHash.Equals(enteredPasswordHash))
                         {
@@ -260,7 +260,7 @@ namespace NewsAggregator.Domain.Services
                 var userPasswordHash = (await _unitOfWork.Users.GetById(id)).PasswordHash;
                 if (!string.IsNullOrEmpty(userPasswordHash))
                 {
-                    var enteredPasswordHash = GetPasswordHash(password, _configuration["ApplicationVariables:Salt"]);
+                    var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.Application.Salt]);
 
                     if (userPasswordHash.Equals(enteredPasswordHash))
                     {
@@ -300,13 +300,13 @@ namespace NewsAggregator.Domain.Services
             {
                 new PatchModel
                 {
-                    PropertyName = "Email",
+                    PropertyName = Variables.UserFields.Email,
                     PropertyValue = email
                 },
 
                 new PatchModel
                 {
-                    PropertyName = "NormalizedEmail",
+                    PropertyName = Variables.UserFields.NormalizedEmail,
                     PropertyValue = email.ToUpperInvariant()
                 }
             });
@@ -327,13 +327,13 @@ namespace NewsAggregator.Domain.Services
             {
                 new PatchModel
                 {
-                    PropertyName = "Nickname",
+                    PropertyName = Variables.UserFields.Nickname,
                     PropertyValue = nickname
                 },
 
                 new PatchModel
                 {
-                    PropertyName = "NormalizedNickname",
+                    PropertyName = Variables.UserFields.NormalizedNickname,
                     PropertyValue = nickname.ToUpperInvariant()
                 }
             });
