@@ -14,5 +14,13 @@
             public static readonly string PageSize = "ApplicationVariables:PageSize";
             public static readonly string Salt = "ApplicationVariables:Salt";
         }
+
+        public static class UserFields
+        {
+            public static readonly string Email = "Email";
+            public static readonly string NormalizedEmail = "NormalizedEmail";
+            public static readonly string Nickname = "Nickname";
+            public static readonly string NormalizedNickname = "NormalizedNickname";
+        }
     }
 }

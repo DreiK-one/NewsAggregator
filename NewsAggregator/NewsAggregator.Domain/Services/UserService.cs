@@ -75,22 +75,22 @@ namespace NewsAggregator.Domain.Services
                     {
                         new PatchModel
                         {
-                            PropertyName = "Email",
+                            PropertyName = Variables.UserFields.Email,
                             PropertyValue = userDto.Email
                         },
                         new PatchModel
                         {
-                            PropertyName = "NormalizedEmail",
+                            PropertyName = Variables.UserFields.NormalizedEmail,
                             PropertyValue = userDto.Email.ToUpperInvariant()
                         },
                         new PatchModel
                         {
-                            PropertyName = "Nickname",
+                            PropertyName = Variables.UserFields.Nickname,
                             PropertyValue = userDto.Nickname
                         },
                         new PatchModel
                         {
-                            PropertyName = "NormalizedNickname",
+                            PropertyName = Variables.UserFields.NormalizedNickname,
                             PropertyValue = userDto.Nickname.ToUpperInvariant()
                         },
                     });

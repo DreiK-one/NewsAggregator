@@ -69,7 +69,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             try
             {
                 var size = Convert.ToInt32(
-                    _configuration["ApplicationVariables:PageSize"]);
+                    _configuration[Variables.Application.PageSize]);
 
                 if (role.Equals(Variables.Roles.Admin))
                 {
