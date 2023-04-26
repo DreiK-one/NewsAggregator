@@ -121,10 +121,10 @@ namespace NewsAggregator.Domain.Services
                 var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
                 var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
 
-                var category = await _unitOfWork.Categories.Get().Result
+                var categories = await _unitOfWork.Categories.Get().Result
                     .Select(category => category.Name).ToListAsync();
 
-                if (category.Contains(res))
+                if (categories.Contains(res))
                 {
                     return (await _unitOfWork.Categories.Get().Result
                     .FirstOrDefaultAsync(category => category.Name.Equals(res)))?.Id ?? Guid.Empty;
