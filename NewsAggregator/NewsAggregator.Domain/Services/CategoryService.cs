@@ -46,8 +46,8 @@ namespace NewsAggregator.Domain.Services
             {
                 if (categoryDto != null)
                 {
-                    var existCategory = (await _unitOfWork.Categories
-                        .FindBy(c => c.Name.ToLower() == categoryDto.Name.ToLower()));
+                    var existCategory = await _unitOfWork.Categories
+                        .FindBy(c => c.Name.ToLower() == categoryDto.Name.ToLower());
 
                     if (!existCategory.Any())
                     {
