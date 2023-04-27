@@ -17,17 +17,20 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                     new Source()
                     {
                         Id = new Guid("cdb6ae1b-36f0-4dae-832c-1315e1e0634a"),
-                        BaseUrl = "onliner.by"
+                        BaseUrl = "onliner.by",
+                        RssUrl = "http://onliner.by/feed"
                     },
                     new Source
                     {
                         Id = new Guid("31ecd07b-8e20-42c0-8b12-8d3f0b7b2be2"),
-                        BaseUrl = "goha.ru"
+                        BaseUrl = "goha.ru",
+                        RssUrl = "http://goha.ru/feed"
                     },
                     new Source
                     {
                         Id = new Guid("119af140-9ccb-42e8-9d03-d0ae8f362b51"),
-                        BaseUrl = "shazoo.ru"
+                        BaseUrl = "shazoo.ru",
+                        RssUrl = "http://shazoo.ru/feed"
                     }
                 }.AsQueryable();
             }

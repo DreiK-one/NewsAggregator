@@ -99,12 +99,12 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
         [Test]
         public async Task UpdateAsync_WithCorrectModel_ReturnsSaveResult()
         {
-            var articleDto = new CategoryDto
+            var categoryDto = new CategoryDto
             {
                 Id = Guid.NewGuid()
             };
 
-            await _categoryService.UpdateAsync(articleDto);
+            await _categoryService.UpdateAsync(categoryDto);
 
             _unitOfWork.Verify(uOw => uOw.Categories.Update(It.IsAny<Category>()));
             _unitOfWork.Verify(uOw => uOw.Save());
