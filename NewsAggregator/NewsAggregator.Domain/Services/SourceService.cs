@@ -11,18 +11,18 @@ using NewsAggregator.Data.Entities;
 namespace NewsAggregator.Domain.Services
 {
     public class SourceService : ISourceService
-    {
-        private readonly IUnitOfWork _unitOfWork;
+    {  
         private readonly IMapper _mapper;
         private readonly ILogger<SourceService> _logger;
-        
-        public SourceService(IUnitOfWork unitOfWork,
-            IMapper mapper,
-            ILogger<SourceService> logger)
+        private readonly IUnitOfWork _unitOfWork;
+
+        public SourceService(IMapper mapper,
+            ILogger<SourceService> logger, 
+            IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
             _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<IEnumerable<SourceDto>> GetAllSourcesAsync()
