@@ -13,10 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Threading;
+
 
 namespace NewsAggregator.Domain.Tests.Services.Tests
 {
