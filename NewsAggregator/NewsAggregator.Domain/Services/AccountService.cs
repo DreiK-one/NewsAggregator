@@ -59,9 +59,12 @@ namespace NewsAggregator.Domain.Services
             {
                 string normalizedEmail = email.ToUpperInvariant();
 
-                return (await (await _unitOfWork.Users.FindBy(user =>
-                    user.NormalizedEmail != null && user.NormalizedEmail
-                        .Equals(normalizedEmail))).FirstOrDefaultAsync())?.Id;
+                var user = await _unitOfWork.Users.Get().Result
+                    .FirstOrDefaultAsync(u =>
+                        u.NormalizedEmail != null && 
+                        u.NormalizedEmail.Equals(normalizedEmail));
+
+                return user?.Id;
             }
             catch (Exception ex)
             {
@@ -69,6 +72,7 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
         public async Task<UserDto> GetUserById(Guid id)
         {
             try
@@ -89,12 +93,12 @@ namespace NewsAggregator.Domain.Services
             {
                 string normalizedEmail = email.ToUpperInvariant();
 
-                var user = await (await _unitOfWork.Users.FindBy(user =>
-                    user.NormalizedEmail != null && user.NormalizedEmail
-                        .Equals(normalizedEmail)))
+                var user = await _unitOfWork.Users.Get().Result
                     .Include(user => user.UserRoles)
-                        .ThenInclude(role => role.Role)
-                    .FirstOrDefaultAsync();
+                    .ThenInclude(role => role.Role)
+                    .FirstOrDefaultAsync(user => user.NormalizedEmail != null && 
+                            user.NormalizedEmail.Equals(normalizedEmail));
+                    
                 return _mapper.Map<UserDto>(user);
             }
             catch (Exception ex)
@@ -110,9 +114,16 @@ namespace NewsAggregator.Domain.Services
             {
                 string normalizedNickname = nickname.ToUpperInvariant();
 
-                return (await (await _unitOfWork.Users.FindBy(user =>
-                    user.NormalizedNickname != null && user.NormalizedNickname
-                        .Equals(normalizedNickname))).FirstOrDefaultAsync()).Id;
+                var user = await _unitOfWork.Users.Get().Result
+                    .FirstOrDefaultAsync(user => user.NormalizedNickname != null && 
+                        user.NormalizedNickname.Equals(normalizedNickname));
+
+                if (user == null)
+                {
+                    return Guid.Empty;
+                }
+
+                return user.Id;
             }
             catch (Exception ex)
             {
@@ -125,7 +136,9 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                return (await _unitOfWork.Users.GetById(id)).Nickname;
+                var user = await _unitOfWork.Users.GetById(id);
+
+                return user?.Nickname;
             }
             catch (Exception ex)
             {
