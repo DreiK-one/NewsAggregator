@@ -262,5 +262,72 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             Assert.ThrowsAsync<NullReferenceException>(async () => await _accountService.CreateUserAsync(null, null));
         }
         #endregion
+
+
+
+
+
+
+        #region ValidateIsEmailExists tests
+        [Test]
+        [TestCase("andrew1993@gmail.com")]
+        [TestCase("margo17@gmail.com")]
+        public async Task ValidateIsEmailExists_WithExistEmail_ReturnsTrue(string email)
+        {
+            var ifExist = await Task.Run(() => 
+                _accountService.ValidateIsEmailExists(email));
+
+            Assert.IsTrue(ifExist);
+        }
+
+        [Test]
+        [TestCase("max14@gmail.com")]
+        [TestCase("dany@gmail.ru")]
+        public async Task ValidateIsEmailExists_WithNotExistEmail_ReturnsFalse(string email)
+        {
+            var ifExist = await Task.Run(() => 
+                _accountService.ValidateIsEmailExists(email));
+
+            Assert.IsFalse(ifExist);
+        }
+
+        [Test]
+        public async Task ValidateIsEmailExists_WithNull_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await Task.Run(() => 
+                _accountService.ValidateIsEmailExists(null)));
+        }
+        #endregion
+
+        #region ValidateIsNicknameExists tests
+        [Test]
+        [TestCase("Andrew")]
+        [TestCase("Mick")]
+        public async Task ValidateIsNicknameExists_WithExistEmail_ReturnsTrue(string nickname)
+        {
+            var ifExist = await Task.Run(() =>
+                _accountService.ValidateIsNicknameExists(nickname));
+
+            Assert.IsTrue(ifExist);
+        }
+
+        [Test]
+        [TestCase("Dave")]
+        [TestCase("John")]
+        public async Task ValidateIsNicknameExists_WithNotExistEmail_ReturnsFalse(string nickname)
+        {
+            var ifExist = await Task.Run(() =>
+                _accountService.ValidateIsNicknameExists(nickname));
+
+            Assert.IsFalse(ifExist);
+        }
+
+        [Test]
+        public async Task ValidateIsNicknameExists_WithNull_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await Task.Run(() =>
+                _accountService.ValidateIsNicknameExists(null)));
+        }
+        #endregion
     }
 }
