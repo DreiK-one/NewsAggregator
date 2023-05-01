@@ -15,8 +15,10 @@ using NewsAggregator.WebAPI.Mappers;
 using NewsAggregator.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using NewsAggregator.Data.Entities;
+using NewsAggregator.Data;
+using System.Security.Cryptography;
+using NewsAggregator.App.Controllers;
 using Microsoft.EntityFrameworkCore;
-using NewsAggregator.Core.DTOs;
 
 namespace NewsAggregator.Domain.Tests.Services.Tests
 {
@@ -51,7 +53,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             _configuration = new Mock<IConfiguration>();
             _roleService = new Mock<IRoleService>();
 
-            //_configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
+            _configuration.Setup(cfg => cfg["ApplicationVariables:Salt"]).Returns("qwerty123456");
 
             _unitOfWork.Setup(uOw => uOw.Users.Get())
                 .ReturnsAsync(TestFunctions.GetMockData(TestUserData.Users).Object);
@@ -265,8 +267,129 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
 
 
 
+        #region CheckPasswordByEmailAsync tests
+        [Test]
+        [TestCase("andrew1993@gmail.com", "Pit_big123")]
+        [TestCase("mick1990@mail.ru", "Mick_is_good!")]
+        public async Task CheckPasswordByEmailAsync_WithCorrectData_ReturnsTrue(string email, string password)
+        {
+            var res = await _accountService.CheckPasswordByEmailAsync(email, password);
 
+            Assert.True(res);
+        }
 
+        [Test]
+        [TestCase("andrew1993@gmail.com", "Qwe_123")]
+        [TestCase("mick1990@mail.ru", "Man_123-1")]
+        public async Task CheckPasswordByEmailAsync_WithIncorrectData_ReturnsFalse(string email, string password)
+        {
+            var res = await _accountService.CheckPasswordByEmailAsync(email, password);
+
+            Assert.False(res);
+        }
+
+        [Test]
+        [TestCase("andrew1993@gmail.com", null)]
+        [TestCase("mick1990@mail.ru", null)]
+        public async Task CheckPasswordByEmailAsync_WithNullPassword_ReturnsFalse(string email, string password)
+        {
+            var res = await _accountService.CheckPasswordByEmailAsync(email, password);
+
+            Assert.False(res);
+        }
+
+        [Test]
+        public async Task CheckPasswordByEmailAsync_WithNull_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () =>
+                await _accountService.CheckPasswordByEmailAsync(null, null));
+        }
+        #endregion
+
+        #region CheckPasswordByIdAsync tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98", "Pit_big123")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", "Mick_is_good!")]
+        public async Task CheckPasswordByIdAsync_WithCorrectData_ReturnsTrue(Guid id, string password)
+        {
+            _unitOfWork.Setup(uOw => uOw.Users.GetById(id))
+                .ReturnsAsync(TestUserData.Users.FirstOrDefault(u => u.Id == id));
+
+            var res = await _accountService.CheckPasswordByIdAsync(id, password);
+
+            Assert.True(res);
+        }
+
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98", "Jack_14123")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", "Rick_13_1!")]
+        public async Task CheckPasswordByIdAsync_WithIncorrectData_ReturnsFalse(Guid id, string password)
+        {
+            _unitOfWork.Setup(uOw => uOw.Users.GetById(id))
+                .ReturnsAsync(TestUserData.Users.FirstOrDefault(u => u.Id == id));
+
+            var res = await _accountService.CheckPasswordByIdAsync(id, password);
+
+            Assert.False(res);
+        }
+
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6")]
+        public async Task CheckPasswordByIdAsync_WithNull_ReturnsFalse(Guid id)
+        {
+            _unitOfWork.Setup(uOw => uOw.Users.GetById(id))
+                .ReturnsAsync(TestUserData.Users.FirstOrDefault(u => u.Id == id));
+
+            var res = await _accountService.CheckPasswordByIdAsync(id, null);
+
+            Assert.False(res);
+        }
+        #endregion
+
+        #region UpdateEmail tests
+        [Test]
+        [TestCase("eb8e8568-2248-4ac0-95ac-14aeb2bc08cc", "Nick")]
+        [TestCase("daf04b71-47ac-4615-aa78-92b3f85d3d93", "Glen")]
+        public async Task UpdateEmail_WithCorrectData_CorrectSaveChanges(Guid id, string name)
+        {
+            await _accountService.UpdateEmail(id, name);
+
+            _unitOfWork.Verify(uOw => uOw.Users.PatchAsync(id, It.IsAny<List<PatchModel>>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        [TestCase("eb8e8568-2248-4ac0-95ac-14aeb2bc08cc")]
+        [TestCase("daf04b71-47ac-4615-aa78-92b3f85d3d93")]
+        public async Task UpdateEmail_WithNull_ReturnsNullReferenceException(Guid id)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await
+                _accountService.UpdateEmail(id, null));
+        }
+        #endregion
+
+        #region UpdateNickname tests
+        [Test]
+        [TestCase("eb8e8568-2248-4ac0-95ac-14aeb2bc08cc", "Nick")]
+        [TestCase("daf04b71-47ac-4615-aa78-92b3f85d3d93", "Glen")]
+        public async Task UpdateNickname_WithCorrectData_CorrectSaveChanges(Guid id, string name)
+        {
+            await _accountService.UpdateNickname(id, name);
+
+            _unitOfWork.Verify(uOw => uOw.Users.PatchAsync(id, It.IsAny<List<PatchModel>>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        [TestCase("eb8e8568-2248-4ac0-95ac-14aeb2bc08cc")]
+        [TestCase("daf04b71-47ac-4615-aa78-92b3f85d3d93")]
+        public async Task UpdateNickname_WithNull_ReturnsNullReferenceException(Guid id)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await 
+                _accountService.UpdateNickname(id, null));
+        }
+        #endregion
 
         #region ValidateIsEmailExists tests
         [Test]
