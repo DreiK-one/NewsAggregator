@@ -9,16 +9,13 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using NewsAggregator.WebAPI.Mappers;
 using NewsAggregator.Core.Interfaces;
 using Microsoft.Extensions.Configuration;
 using NewsAggregator.Data.Entities;
 using NewsAggregator.Data;
-using System.Security.Cryptography;
-using NewsAggregator.App.Controllers;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace NewsAggregator.Domain.Tests.Services.Tests
 {
@@ -57,6 +54,9 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
 
             _unitOfWork.Setup(uOw => uOw.Users.Get())
                 .ReturnsAsync(TestFunctions.GetMockData(TestUserData.Users).Object);
+
+            _unitOfWork.Setup(uOw => uOw.UserRoles.Get())
+                .ReturnsAsync(TestFunctions.GetMockData(TestUserRolesData.UserRoles).Object);
 
             _accountService = new AccountService(_mapper,
                 _logger.Object,
@@ -265,7 +265,84 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
         }
         #endregion
 
+        #region SetRoleAsync tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98", "User")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", "Admin")]
+        public async Task SetRoleAsync_WithCorrectData_ReturnsSaveData(Guid userId, string roleName)
+        {
+            var roleId = Guid.NewGuid();
+            _roleService.Setup(rs => rs.GetRoleIdByNameAsync(roleName))
+                .ReturnsAsync(roleId);
 
+            await _accountService.SetRoleAsync(userId, roleName);
+
+            _unitOfWork.Verify(uOw => uOw.UserRoles.Add(It.IsAny<UserRole>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98", "User")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", "Admin")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", null)]
+        public async Task SetRoleAsync_WithEmptyIdOrNullRoleName_ReturnsCreateRoleAndSaveData(Guid userId, string roleName)
+        {
+            var roleId = Guid.Empty;
+            _roleService.Setup(rs => rs.GetRoleIdByNameAsync(roleName))
+                .ReturnsAsync(roleId);
+
+            await _accountService.SetRoleAsync(userId, roleName);
+
+            _roleService.Verify(rs => rs.CreateRole(roleName));
+            _unitOfWork.Verify(uOw => uOw.UserRoles.Add(It.IsAny<UserRole>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+        #endregion
+
+        #region GetRolesAsync tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6")]
+        public async Task GetRolesAsync_WithCorrectData_ReturnsSaveData(Guid userId)
+        {
+            _unitOfWork.Setup(uOw => uOw.Users.GetByIdWithIncludes(userId, u => u.UserRoles))
+                .ReturnsAsync(TestUserData.Users.FirstOrDefault(u => u.Id == userId));
+
+            var roles = await _accountService.GetRolesAsync(userId);
+
+            Assert.NotNull(roles);
+
+        }
+
+        [Test]
+        public async Task GetRolesAsync_WithEmpty_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => 
+                await _accountService.GetRolesAsync(Guid.Empty));
+        }
+        #endregion
+
+        #region SetPasswordAsync tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98", "asd123g")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6", "xcv567dfg")]
+        public async Task SetPasswordAsync_WithCorrectData_ReturnsSaveData(Guid userId, string password)
+        {
+            await _accountService.SetPasswordAsync(userId, password);
+
+            _unitOfWork.Verify(uOw => uOw.Users.PatchAsync(userId, It.IsAny<List<PatchModel>>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6")]
+        public async Task SetPasswordAsync_WithNull_ReturnsNullReferenceException(Guid userId)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await
+                _accountService.SetPasswordAsync(userId, null));
+        }
+        #endregion
 
         #region CheckPasswordByEmailAsync tests
         [Test]

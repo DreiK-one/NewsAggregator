@@ -23,7 +23,8 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                         NormalizedEmail = "ANDREW1993@GMAIL.COM",
                         Nickname = "Andrew",
                         NormalizedNickname = "ANDREW",
-                        PasswordHash = "�\u0015�M=*{��Oz`\u0003k�nh4��"
+                        PasswordHash = "�\u0015�M=*{��Oz`\u0003k�nh4��",
+                        UserRoles = TestUserRolesData.UserRoles
                     },
                     new User
                     {
@@ -32,7 +33,8 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                         NormalizedEmail = "MICK1990@MAIL.RU",
                         Nickname = "Mick",
                         NormalizedNickname = "MICK",
-                        PasswordHash = "V��P�u�ܥ�\u0005�z�+�0]b�"
+                        PasswordHash = "V��P�u�ܥ�\u0005�z�+�0]b�",
+                        UserRoles = TestUserRolesData.UserRoles
                     },
                     new User
                     {
@@ -41,7 +43,8 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                         NormalizedEmail = "MARGO17@GMAIL.COM",
                         Nickname = "Margo",
                         NormalizedNickname = "MARGO",
-                        PasswordHash = ""
+                        PasswordHash = "",
+                        UserRoles = TestUserRolesData.UserRoles
                     }
                 }.AsQueryable();
             }
@@ -60,7 +63,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                         NormalizedEmail = "ANDREW1993@GMAIL.COM",
                         Nickname = "Andrew",
                         NormalizedNickname = "ANDREW",
-                        PasswordHash = "�\u0015�M=*{��Oz`\u0003k�nh4��"
+                        PasswordHash = "�\u0015�M=*{��Oz`\u0003k�nh4��",
                     },
                     new UserDto
                     {

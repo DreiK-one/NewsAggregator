@@ -223,6 +223,11 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw new NullReferenceException();
+                }
+
                 await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
                 {
                     new PatchModel()
