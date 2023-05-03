@@ -24,7 +24,6 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                         {
                             Name = "User"
                         }
-
                     },
                     new UserRole
                     {

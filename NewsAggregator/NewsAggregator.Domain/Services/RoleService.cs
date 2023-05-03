@@ -63,10 +63,10 @@ namespace NewsAggregator.Domain.Services
             {
                 if (roleDto != null)
                 {
-                    var existRole = (await _unitOfWork.Roles
-                        .FindBy(r => r.Name.ToLower() == roleDto.Name.ToLower()));
+                    var existRole = await _unitOfWork.Roles.Get().Result
+                        .FirstOrDefaultAsync(r => r.Name.ToLower() == roleDto.Name.ToLower());
 
-                    if (!existRole.Any())
+                    if (existRole == null)
                     {
                         await _unitOfWork.Roles.Add(_mapper.Map<Role>(roleDto));
                         return await _unitOfWork.Save();
