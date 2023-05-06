@@ -146,53 +146,12 @@ namespace NewsAggregator.Domain.Services
 
         public async Task<Guid> GetRoleIdByNameAsync(string name)
         {
-            var id = await (await _unitOfWork.Roles
-                .FindBy(role => role.Name.Equals(name)))
-                .Select(role => role.Id)
-                .FirstOrDefaultAsync();
-            return id;
-        }
-
-        public async Task<string> GetRoleNameByIdAsync(Guid id)
-        {
-            return (await _unitOfWork.Roles.GetById(id)).Name;
-        }
-
-        public async Task<Guid> CreateRole(string name)
-        {
-            var id = Guid.NewGuid();
-            await _unitOfWork.Roles.Add(new Role()
-            {
-                Id = id,
-                Name = name
-            });
-            await _unitOfWork.Save();
-            return id;
-        }
-
-        public async Task<int?> ChangeUserRole(UserRoleDto dto)
-        {
             try
             {
-                if (dto != null)
-                {
-                    var userRoleId = FindUserRoleIdByUserId(dto.UserId);
-                    dto.Id = userRoleId;
+                var role = await _unitOfWork.Roles.Get().Result
+                    .FirstOrDefaultAsync(role => role.Name.Equals(name));
 
-                    await _unitOfWork.UserRoles.PatchAsync(dto.Id, new List<PatchModel>
-                    {
-                        new PatchModel
-                        {
-                            PropertyName = Variables.RoleFields.RoleId,
-                            PropertyValue = dto.RoleId
-                        }
-                    });
-                    return await _unitOfWork.Save();
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
+                return role.Id;
             }
             catch (Exception ex)
             {
@@ -201,13 +160,78 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public Guid FindUserRoleIdByUserId(Guid id)
+        public async Task<string> GetRoleNameByIdAsync(Guid id)
         {
             try
             {
-                return (_unitOfWork.UserRoles.Get().Result
-                          .Where(userId => userId.UserId.Equals(id))
-                          .FirstOrDefault()).Id;
+                var role = await _unitOfWork.Roles.GetById(id);
+
+                return role.Name;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid> CreateRole(string name)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new NullReferenceException();
+                }
+
+                var id = Guid.NewGuid();
+                var role = new Role()
+                {
+                    Id = id,
+                    Name = name
+                };
+
+                await _unitOfWork.Roles.Add(role);
+                await _unitOfWork.Save();
+
+                return id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<int?> ChangeUserRole(UserRoleDto dto)
+        {
+            try
+            {
+                if (dto != null)
+                {
+                    var userRole = await _unitOfWork.UserRoles.Get().Result
+                        .FirstOrDefaultAsync(u => u.UserId == dto.UserId);
+
+                    if (userRole == null)
+                    {
+                        return null;
+                    }
+
+                    await _unitOfWork.UserRoles.PatchAsync(userRole.UserId, new List<PatchModel>
+                    {
+                        new PatchModel
+                        {
+                            PropertyName = Variables.RoleFields.RoleId,
+                            PropertyValue = dto.RoleId
+                        }
+                    });
+
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {

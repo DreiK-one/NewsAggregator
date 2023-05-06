@@ -7,7 +7,6 @@ using NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData;
 using NewsAggregator.Domain.Tests.Services.Tests.Helpers;
 using NUnit.Framework;
 using NewsAggregator.App.Mappers;
-using NewsAggregator.Core.Interfaces;
 using System.Threading.Tasks;
 using System.Linq;
 using NewsAggregator.Data.Entities;
@@ -15,7 +14,7 @@ using System.Collections.Generic;
 using System;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data;
-
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace NewsAggregator.Domain.Tests.Services.Tests
 {
@@ -207,5 +206,119 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             Assert.Null(res);
         }
         #endregion 
+
+        #region GetRoleIdByNameAsync tests
+        [Test]
+        [TestCase("Admin")]
+        [TestCase("User")]
+        public async Task GetRoleIdByNameAsync_WithExistedName_ReturnsId(string name)
+        {
+            var expected = TestRoleData.Roles.FirstOrDefault(r => r.Name == name).Id;
+
+            var res = await _roleService.GetRoleIdByNameAsync(name);
+
+            Assert.AreEqual(res, expected);
+        }
+
+        [Test]
+        [TestCase("Owner")]
+        [TestCase("Moderator")]
+        public async Task GetRoleIdByNameAsync_WithNotExistingName_ReturnsNullReferenceException(string name)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => 
+                await _roleService.GetRoleIdByNameAsync(name));
+        }
+        #endregion 
+
+        #region GetRoleNameByIdAsync tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6")]
+        public async Task GetRoleNameByIdAsync_WithExistedId_ReturnsName(Guid id)
+        {
+            _unitOfWork.Setup(uOw => uOw.Roles.GetById(id)).
+                ReturnsAsync(TestRoleData.Roles.FirstOrDefault(r => r.Id == id));
+
+            var expected = TestRoleData.Roles.FirstOrDefault(r => r.Id == id).Name;
+
+            var res = await _roleService.GetRoleNameByIdAsync(id);
+
+            Assert.AreEqual(res, expected);
+        }
+
+        [Test]
+        public async Task GetRoleNameByIdAsync_WithNotExistingId_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () =>
+                await _roleService.GetRoleNameByIdAsync(Guid.NewGuid()));
+        }
+        #endregion 
+
+        #region CreateRole tests
+        [Test]
+        [TestCase("Owner")]
+        [TestCase("Moderator")]
+        public async Task CreateRole_WithCorrectName_ReturnsId(string name)
+        {
+            var res = await _roleService.CreateRole(name);
+
+            _unitOfWork.Verify(uOw => uOw.Roles.Add(It.IsAny<Role>()));
+            _unitOfWork.Verify(uOw => uOw.Save());
+
+            Assert.IsInstanceOf<Guid>(res);
+        }
+
+        [Test]
+        public async Task CreateRole_WithEmptyName_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _roleService.CreateRole(""));
+        }
+        #endregion
+
+        #region ChangeUserRole tests
+        [Test]
+        [TestCase("f1dc4182-9459-49ea-a4d2-98f928c6da98")]
+        [TestCase("08fe00bc-6f69-48bf-9d52-19a74a7be2f6")]
+        public async Task ChangeUserRole_WithExistedUserId_ReturnsSaveResult(Guid userId)
+        {
+            var dto = new UserRoleDto
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                RoleId = Guid.NewGuid()
+            };
+
+            await _roleService.ChangeUserRole(dto);
+
+            _unitOfWork.Verify(uOw => uOw.UserRoles
+                .PatchAsync(It.IsAny<Guid>(), It.IsAny<List<PatchModel>>()));
+
+            _unitOfWork.Verify(uOw => uOw.Save());
+        }
+
+        [Test]
+        [TestCase("232fdbde-0edf-436a-9629-eaa89931156e")]
+        [TestCase("67f3248c-d78a-426d-b8f8-8d98ae21769d")]
+        public async Task ChangeUserRole_WithNotExistingUserId_ReturnsNull(Guid userId)
+        {
+            var dto = new UserRoleDto
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                RoleId = Guid.NewGuid()
+            };
+
+            var res = await _roleService.ChangeUserRole(dto);
+
+            Assert.Null(res);
+        }
+
+        [Test]
+        public async Task ChangeUserRole_WithNullModel_ReturnsNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => 
+                await _roleService.ChangeUserRole(null));
+        }
+        #endregion
     }
 }

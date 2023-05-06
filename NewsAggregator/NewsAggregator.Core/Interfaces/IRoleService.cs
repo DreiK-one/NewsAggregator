@@ -15,6 +15,5 @@ namespace NewsAggregator.Core.Interfaces
         Task<Guid> CreateRole(string name);
         Task<string> GetRoleNameByIdAsync(Guid id);
         Task<int?> ChangeUserRole(UserRoleDto dto);
-        Guid FindUserRoleIdByUserId(Guid id);
     }
 }
