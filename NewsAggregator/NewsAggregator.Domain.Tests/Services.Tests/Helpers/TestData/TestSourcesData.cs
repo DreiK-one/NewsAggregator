@@ -24,13 +24,13 @@ namespace NewsAggregator.Domain.Tests.Services.Tests.Helpers.TestData
                     {
                         Id = new Guid("31ecd07b-8e20-42c0-8b12-8d3f0b7b2be2"),
                         BaseUrl = "goha.ru",
-                        RssUrl = "http://goha.ru/feed"
+                        RssUrl = "https://www.goha.ru/rss/articles"
                     },
                     new Source
                     {
                         Id = new Guid("119af140-9ccb-42e8-9d03-d0ae8f362b51"),
                         BaseUrl = "shazoo.ru",
-                        RssUrl = "http://shazoo.ru/feed"
+                        RssUrl = "https://shazoo.ru/feed/rss"
                     }
                 }.AsQueryable();
             }
