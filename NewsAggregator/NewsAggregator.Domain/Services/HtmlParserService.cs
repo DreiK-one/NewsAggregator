@@ -28,9 +28,9 @@ namespace NewsAggregator.Domain.Services
         {
             try
             {
-                var article = await (await _unitOfWork.Articles
-                    .FindBy(a => string.IsNullOrWhiteSpace(a.Body) && string.IsNullOrWhiteSpace(a.Title)))
-                    .FirstOrDefaultAsync();
+                var article = await _unitOfWork.Articles.Get().Result
+                    .FirstOrDefaultAsync(a => string.IsNullOrWhiteSpace(a.Body) 
+                        && string.IsNullOrWhiteSpace(a.Title));
                 if (article == null)
                 {
                     return null;
@@ -200,47 +200,37 @@ namespace NewsAggregator.Domain.Services
                 var web = new HtmlWeb();
                 var htmlDoc = web.Load(url);
 
-                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h1");
+                var titleNode = htmlDoc.DocumentNode.SelectSingleNode("//head/title");
                 var title = titleNode.InnerHtml.Trim();
 
-                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='head']/h2");
-                if(descriptionNode == null)
-                {
-                    descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]/p");
-                }
+                var descriptionNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='description']");
                 var description = descriptionNode.InnerHtml.Trim();
 
-                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='data']/div[@class='date']");
+                var dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='entry-article__article-date']");
+                string? date = null;
                 if (dateNode == null)
                 {
-                    dateNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='date']");
+                    dateNode = htmlDoc.DocumentNode.SelectSingleNode("//meta[@property='article:published_time']");
+                    date = dateNode.Attributes["content"].Value.Trim();
                 }
-                var date = dateNode.InnerHtml.Trim();
-
-                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
-                var imageSource = imageNode.Attributes["src"].Value.Trim();
-                var image = $"background-image: url('{imageSource}');";
-
-                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'body goharumd')]");
-                var quoteNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[contains(@class, 'quote')]");
-                if (quoteNode != null)
+                else
                 {
-                    bodyNode.RemoveChildren(quoteNode);
+                    date = dateNode.InnerHtml.Trim();
                 }
-                var videoNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[@class='youtube-container']");
+                
+                var imageNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='wrapper']/div[@class='image-wrapper']/img");
+                var image = "";
+                if (imageNode != null)
+                {
+                    var imageSource = imageNode.Attributes["src"].Value.Trim();
+                    image = $"background-image: url('{imageSource}');";
+                }
+
+                var bodyNode = htmlDoc.DocumentNode.SelectSingleNode("//div[contains(@class, 'editor-body entry-article__article-body')]");
+                var videoNode = bodyNode.SelectNodes("//div[@class='editor-body-youtube']");
                 if (videoNode != null)
                 {
                     bodyNode.RemoveChildren(videoNode);
-                }
-                var figureNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/figure[contains(@class,'image-container')]");
-                if (figureNode != null)
-                {
-                    bodyNode.RemoveChildren(figureNode);
-                }
-                var hrefNode = bodyNode.SelectNodes("//div[contains(@class, 'body goharumd')]/div[@class='twitter-container']");
-                if (hrefNode != null)
-                {
-                    bodyNode.RemoveChildren(hrefNode);
                 }
                 var text = bodyNode.InnerHtml.Trim();
                 
