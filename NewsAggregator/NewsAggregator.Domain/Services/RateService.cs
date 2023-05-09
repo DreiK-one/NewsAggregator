@@ -21,7 +21,7 @@ namespace NewsAggregator.Domain.Services
 
         const string AppJson = "application/json";
         const string WordsJson = "Words.json";
-        const string TexterraPath = "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=bc1bfe69945f1cc9f1b565b0928f537065d21b25";
+        const string TexterraPath = "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=9360c69a4a225b0ccfc786102f69d01351deca5c";
 
         public RateService(ILogger<RateService> logger,
             IUnitOfWork unitOfWork, 
