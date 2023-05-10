@@ -38,6 +38,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
                 _configuration.Object);
         }
 
+        #region GetArticleById tests
         [Test]
         [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
         [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
@@ -58,7 +59,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         }
 
         [Test]
-        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")] //fake id
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")]
         public async Task GetArticleById_NoExistentId_ReturnedNull(Guid id)
         {
             _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),
@@ -69,7 +70,9 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 
             Assert.Null(article);
         }
+        #endregion
 
+        #region GetAllArticles tests
         [Test]
         [TestCase(1, "User")]
         [TestCase(13, "Moderator")]
@@ -192,5 +195,6 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 
             Assert.That(articles, Is.Not.Null);
         }
+        #endregion
     }
 }
