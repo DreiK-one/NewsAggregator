@@ -166,44 +166,6 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        private string GetPasswordHash(string password, string salt)
-        {
-            try
-            {
-                var sha1 = new SHA1CryptoServiceProvider();
-                var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{salt}_{password}"));
-                var hashedPassword = Encoding.UTF8.GetString(sha1Data);
-                return hashedPassword;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        private async Task<bool> SetRoleAsync(Guid userId)
-        {
-            try
-            {
-                var roleId = await _mediator.Send(new GetRoleIdByRoleNameQuery(Variables.Roles.User), 
-                    new CancellationToken());
-
-                var command = new CreateRoleCommand
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = userId,
-                    RoleId = roleId
-                };
-                return await _mediator.Send(command, new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
         public async Task<bool> ValidateIsNicknameExists(string nickname)
         {
             try
@@ -228,6 +190,44 @@ namespace NewsAggregator.Domain.ServicesCQS
 
                 return await _mediator.Send(new ValidateEmailQuery(normEmail),
                     new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        private string GetPasswordHash(string password, string salt)
+        {
+            try
+            {
+                var sha1 = new SHA1CryptoServiceProvider();
+                var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{salt}_{password}"));
+                var hashedPassword = Encoding.UTF8.GetString(sha1Data);
+                return hashedPassword;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        private async Task<bool> SetRoleAsync(Guid userId)
+        {
+            try
+            {
+                var roleId = await _mediator.Send(new GetRoleIdByRoleNameQuery(Variables.Roles.User),
+                    new CancellationToken());
+
+                var command = new CreateRoleCommand
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = userId,
+                    RoleId = roleId
+                };
+                return await _mediator.Send(command, new CancellationToken());
             }
             catch (Exception ex)
             {

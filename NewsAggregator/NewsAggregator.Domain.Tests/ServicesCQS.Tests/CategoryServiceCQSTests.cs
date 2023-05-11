@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NewsAggregator.Core.DTOs;
-using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
-using NewsAggregator.WebAPI.Mappers;
-using NewsAggregetor.CQS.Models.Commands.CommentCommands;
-using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
-using NewsAggregetor.CQS.Models.Queries.CommentQueries;
 using NUnit.Framework;
 
 
