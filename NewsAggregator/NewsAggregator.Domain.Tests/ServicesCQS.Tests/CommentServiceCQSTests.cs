@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -19,11 +17,11 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 {
     [TestFixture]
     public class CommentServiceCQSTests
-    {
-        private CommentServiceCQS _commentServiceCQS;
+    {   
         private IMapper _mapper;
         private Mock<ILogger<CommentServiceCQS>> _logger;
         private Mock<IMediator> _mediator;
+        private CommentServiceCQS _commentServiceCQS;
 
         public CommentServiceCQSTests()
         {
