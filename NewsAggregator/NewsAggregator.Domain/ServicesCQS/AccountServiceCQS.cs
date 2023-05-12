@@ -14,11 +14,11 @@ namespace NewsAggregator.Domain.ServicesCQS
 {
     public class AccountServiceCQS : IAccountServiceCQS
     {
-        private readonly ILogger<CommentServiceCQS> _logger;
+        private readonly ILogger<AccountServiceCQS> _logger;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
 
-        public AccountServiceCQS(ILogger<CommentServiceCQS> logger,
+        public AccountServiceCQS(ILogger<AccountServiceCQS> logger,
             IConfiguration configuration,
             IMediator mediator)
         {
@@ -197,6 +197,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                 throw;
             }
         }
+
 
         private string GetPasswordHash(string password, string salt)
         {
