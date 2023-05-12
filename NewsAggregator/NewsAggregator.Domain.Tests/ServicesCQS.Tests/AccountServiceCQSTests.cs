@@ -135,5 +135,64 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             Assert.Null(user);
         }
         #endregion
+
+
+        #region ValidateIsNicknameExists tests
+        [Test]
+        [TestCase("Pit1992")]
+        [TestCase("greg17")]
+        public async Task ValidateIsNicknameExists_ExistingNickname_ReturnedTrue(string nickname)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateNicknameQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => true);
+
+            var isExist = await _accountServiceCQS.ValidateIsNicknameExists(nickname);
+
+            Assert.AreEqual(isExist, true);
+        }
+
+        [Test]
+        [TestCase("megg18")]
+        public async Task ValidateIsNicknameExists_NoExistentNickname_ReturnedFalse(string nickname)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateNicknameQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            var isExist = await _accountServiceCQS.ValidateIsNicknameExists(nickname);
+
+            Assert.AreEqual(isExist, false);
+        }
+        #endregion
+
+        #region ValidateIsEmailExists tests
+        [Test]
+        [TestCase("test1@gmail.com")]
+        [TestCase("test2@gmail.com")]
+        public async Task ValidateIsEmailExists_ExistingEmailReturnedTrue(string email)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => true);
+
+            var isExist = await _accountServiceCQS.ValidateIsEmailExists(email);
+
+            Assert.AreEqual(isExist, true);
+        }
+
+        [Test]
+        [TestCase("nonexist@mail.com")]
+        public async Task ValidateIsEmailExists_NoExistentEmail_ReturnedFalse(string email)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            var isExist = await _accountServiceCQS.ValidateIsEmailExists(email);
+
+            Assert.AreEqual(isExist, false);
+        }
+        #endregion
     }
 }
