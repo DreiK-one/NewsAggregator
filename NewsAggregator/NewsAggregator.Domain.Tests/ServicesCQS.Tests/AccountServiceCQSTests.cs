@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -10,7 +8,6 @@ using Moq;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Domain.ServicesCQS;
 using NewsAggregetor.CQS.Models.Queries.AccountQueries;
-using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using NUnit.Framework;
 
 

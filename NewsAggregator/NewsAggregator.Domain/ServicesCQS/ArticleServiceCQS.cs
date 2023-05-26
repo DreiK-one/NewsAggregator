@@ -24,20 +24,6 @@ namespace NewsAggregator.Domain.ServicesCQS
             _configuration = configuration;
         }
 
-        public async Task<ArticleDto> GetArticleById(Guid id)
-        {
-            try
-            {
-                return await _mediator.Send(new GetArticleByIdQuery(id),
-                new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }          
-        }
-
         public async Task<IEnumerable<ArticleDto>> GetAllArticles(int? page, string? role)
         {
             try
@@ -45,13 +31,13 @@ namespace NewsAggregator.Domain.ServicesCQS
                 role = role ?? Variables.Roles.Anonimous;
                 if (page > 0 && page != null)
                 {
-                   return await GetArticlesByPage(Convert.ToInt32(page), role);
+                    return await GetArticlesByPage(Convert.ToInt32(page), role);
                 }
 
                 if (role.Equals(Variables.Roles.Admin))
                 {
                     return await _mediator.Send(new GetAllArticlesQuery(),
-                    new CancellationToken());
+                        new CancellationToken());
                 }
 
                 return await _mediator.Send(new GetAllPositiveArticlesQuery(),
@@ -61,8 +47,65 @@ namespace NewsAggregator.Domain.ServicesCQS
             {
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
-            }            
+            }
         }
+
+        public async Task<ArticleDto> GetArticleById(Guid id)
+        {
+            try
+            {
+                return await _mediator.Send(new GetArticleByIdQuery(id),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }          
+        }
+
+        public Task<float?> MaxCoefOfToday()
+        {
+            try
+            {
+                return _mediator.Send(new MaxCoefOfTodayQuery(),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<float?> MaxCoefOfTheMonth()
+        {
+            try
+            {
+                return _mediator.Send(new MaxCoefOfTheMonthQuery(),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<float?> MaxCoefOfAllTime()
+        {
+            try
+            {
+                return _mediator.Send(new MaxCoefOfAllTimeQuery(), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
 
         private async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page, string role)
         {

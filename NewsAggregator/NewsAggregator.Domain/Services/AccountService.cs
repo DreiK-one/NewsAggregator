@@ -176,6 +176,7 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var roleId = await _roleService.GetRoleIdByNameAsync(roleName);
+
                 if (roleId == Guid.Empty)
                 {
                     roleId = await _roleService.CreateRole(roleName);
@@ -187,6 +188,7 @@ namespace NewsAggregator.Domain.Services
                     UserId = userId,
                     RoleId = roleId
                 });
+
                 return await _unitOfWork.Save();
             }
             catch (Exception ex)
@@ -294,22 +296,6 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        private string GetPasswordHash(string password, string salt)
-        {
-            try
-            {
-                var sha1 = new SHA1CryptoServiceProvider();
-                var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{salt}_{password}"));
-                var hashedPassword = Encoding.UTF8.GetString(sha1Data);
-                return hashedPassword;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
         public async Task<int> UpdateEmail(Guid userId, string email)
         {
             try
@@ -388,6 +374,23 @@ namespace NewsAggregator.Domain.Services
 
                 return _unitOfWork.Users.Get().Result
                     .Any(user => user.NormalizedNickname.Equals(normalizedNickname));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+
+        private string GetPasswordHash(string password, string salt)
+        {
+            try
+            {
+                var sha1 = new SHA1CryptoServiceProvider();
+                var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{salt}_{password}"));
+                var hashedPassword = Encoding.UTF8.GetString(sha1Data);
+                return hashedPassword;
             }
             catch (Exception ex)
             {
