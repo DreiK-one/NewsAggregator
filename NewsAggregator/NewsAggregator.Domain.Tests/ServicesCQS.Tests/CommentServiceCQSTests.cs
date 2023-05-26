@@ -91,7 +91,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
                 Id = Guid.NewGuid()
             };
 
-            _mediator.Setup(m => m.Send(It.IsAny<CreateCommentCommand>(),
+            _mediator.Setup(m => m.Send(It.IsAny<CreateArticleCommand>(),
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => It.IsAny<bool>());
 

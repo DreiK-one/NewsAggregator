@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 
 
@@ -11,14 +13,17 @@ namespace NewsAggregator.Domain.ServicesCQS
 {
     public class ArticleServiceCQS : IArticleServiceCQS
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<ArticleServiceCQS> _logger;
         private readonly IMediator _mediator;
         private readonly IConfiguration _configuration;
 
-        public ArticleServiceCQS(ILogger<ArticleServiceCQS> logger, 
+        public ArticleServiceCQS(IMapper mapper, 
+            ILogger<ArticleServiceCQS> logger, 
             IMediator mediator, 
             IConfiguration configuration)
         {
+            _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
             _configuration = configuration;
@@ -64,7 +69,51 @@ namespace NewsAggregator.Domain.ServicesCQS
             }          
         }
 
+        public async Task<int?> CreateAsync(CreateOrEditArticleDto articleDto)
+        {
+            try
+            {
+                var command = _mapper.Map<CreateArticleCommand>(articleDto);
 
+                return await _mediator.Send(command, 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<int?> UpdateAsync(CreateOrEditArticleDto articleDto)
+        {
+            try
+            {
+                var command = _mapper.Map<EditArticleCommand>(articleDto);
+
+                return await _mediator.Send(command,
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<int?> DeleteAsync(Guid modelId)
+        {
+            try
+            {
+                return await _mediator.Send(new DeleteArticleCommand(modelId),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
 
         public Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
         {
@@ -205,6 +254,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                 throw;
             }
         }
+
 
 
         private async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page, string role)

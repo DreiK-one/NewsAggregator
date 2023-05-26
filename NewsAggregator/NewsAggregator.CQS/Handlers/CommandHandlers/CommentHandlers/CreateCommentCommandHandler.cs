@@ -4,6 +4,7 @@ using MediatR;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
 
+
 namespace NewsAggregetor.CQS.Handlers.CommandHandlers.CommentHandlers
 {
     public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, bool>

@@ -23,11 +23,11 @@ namespace NewsAggregator.WebAPI.Mappers
             CreateMap<CreateOrEditCommentDto, EditCommentRequest>()
                 .ReverseMap();
 
-            CreateMap<CreateCommentCommand, Comment>();
+            CreateMap<CreateArticleCommand, Comment>();
 
             CreateMap<EditCommentCommand, Comment>();
 
-            CreateMap<CreateOrEditCommentDto, CreateCommentCommand>();
+            CreateMap<CreateOrEditCommentDto, CreateArticleCommand>();
 
             CreateMap<CreateOrEditCommentDto, EditCommentCommand>();
         }

@@ -144,9 +144,6 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-
-
-
         public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
         {
             try
