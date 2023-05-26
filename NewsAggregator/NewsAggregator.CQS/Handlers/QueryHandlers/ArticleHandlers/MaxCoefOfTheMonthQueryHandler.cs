@@ -6,19 +6,19 @@ using NewsAggregator.Data;
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {
-    public class MaxCoefOfTodayHandler : IRequestHandler<MaxCoefOfTodayQuery, float?>
+    public class MaxCoefOfTheMonthQueryHandler : IRequestHandler<MaxCoefOfTheMonthQuery, float?>
     {
         private readonly NewsAggregatorContext _database;
 
-        public MaxCoefOfTodayHandler(NewsAggregatorContext database)
+        public MaxCoefOfTheMonthQueryHandler(NewsAggregatorContext database)
         {
             _database = database;
         }
 
-        public async Task<float?> Handle(MaxCoefOfTodayQuery query, CancellationToken token)
+        public async Task<float?> Handle(MaxCoefOfTheMonthQuery query, CancellationToken token)
         {
             var maxCoef = await _database.Articles
-                .Where(article => article.CreationDate.Date == DateTime.Today.Date)
+                .Where(article => article.CreationDate.Date.Month == DateTime.Today.Date.Month)
                     .MaxAsync(article => article.Coefficient);
 
             return maxCoef;

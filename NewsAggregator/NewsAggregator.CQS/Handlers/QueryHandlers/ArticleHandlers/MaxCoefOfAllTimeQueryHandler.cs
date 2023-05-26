@@ -6,11 +6,11 @@ using NewsAggregator.Data;
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers
 {
-    public class MaxCoefOfAllTimeHandler : IRequestHandler<MaxCoefOfAllTimeQuery, float?>
+    public class MaxCoefOfAllTimeQueryHandler : IRequestHandler<MaxCoefOfAllTimeQuery, float?>
     {
         private readonly NewsAggregatorContext _database;
 
-        public MaxCoefOfAllTimeHandler(NewsAggregatorContext database)
+        public MaxCoefOfAllTimeQueryHandler(NewsAggregatorContext database)
         {
             _database = database;
         }

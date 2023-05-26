@@ -64,6 +64,106 @@ namespace NewsAggregator.Domain.ServicesCQS
             }          
         }
 
+
+
+        public Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
+        {
+            try
+            {
+                return _mediator.Send(new GetArticleWithAllNavigationPropertiesQuery(id), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<ArticleDto> GetArticleWithAllNavigationPropertiesByRating(Guid id)
+        {
+            try
+            {
+                return _mediator.Send(new GetArticleWithAllNavigationPropertiesByRatingQuery(id), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<List<string>> GetAllExistingArticleUrls()
+        {
+            try
+            {
+                return _mediator.Send(new GetAllExistingArticleUrlsQuery(), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<ArticleDto> GetArticleWithoutRating()
+        {
+            try
+            {
+                return _mediator.Send(new GetArticleWithoutRatingQuery(), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync()
+        {
+            try
+            {
+                return _mediator.Send(new GetAllNewsByRatingAsyncQuery(), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<IEnumerable<ArticleDto>> GetNewsByRatingByPageAsync(int page)
+        {
+            try
+            {
+                return _mediator.Send(new GetNewsByRatingByPageAsyncQuery(page), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<ArticleDto> MostRatedArticleByPeriodOfTime(float? maxCoef)
+        {
+            try
+            {
+                return _mediator.Send(new MostRatedArticleByPeriodOfTimeQuery(maxCoef), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public Task<float?> MaxCoefOfToday()
         {
             try

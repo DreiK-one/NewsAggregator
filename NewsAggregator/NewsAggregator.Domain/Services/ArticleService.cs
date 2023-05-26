@@ -67,90 +67,12 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync()
-        {
-            try
-            {
-                return await _unitOfWork.Articles.Get().Result
-                    .Where(article => article.Coefficient > 0)
-                    .OrderByDescending(article => article.CreationDate)
-                    .Select(article => _mapper.Map<ArticleDto>(article))
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<ArticleDto>> GetNewsByRatingByPageAsync(int page)
-        {
-            try
-            {
-                var pageSize = Convert.ToInt32(
-                    _configuration[Variables.ConfigurationFields.PageSize]);
-                return await _unitOfWork.Articles.Get().Result
-                    .Where(article => article.Coefficient > 0)
-                    .OrderByDescending(article => article.CreationDate)
-                    .Skip(page * pageSize)
-                    .Take(pageSize)
-                    .Select(article => _mapper.Map<ArticleDto>(article))
-                    .ToListAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
         public async Task<CreateOrEditArticleDto> GetArticleAsync(Guid Id)
         {
             try
             {
                 var article = await _unitOfWork.Articles.GetById(Id);
                 return _mapper.Map<CreateOrEditArticleDto>(article);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
-        {
-            try
-            {
-                var model = await _unitOfWork.Articles.Get().Result
-                    .Where(a => a.Id == id)
-                    .Include(source => source.Source)
-                    .Include(comments => comments.Comments)
-                    .ThenInclude(user => user.User)
-                    .FirstOrDefaultAsync();
-
-                return _mapper.Map<ArticleDto>(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }           
-        }
-
-        public async Task<ArticleDto> GetArticleWithAllNavigationPropertiesByRating(Guid id)
-        {
-            try
-            {
-                var model = await _unitOfWork.Articles.Get().Result
-                    .Where(a => a.Id.Equals(id) && a.Coefficient > 0)
-                    .Include(source => source.Source)
-                    .Include(comments => comments.Comments)
-                    .ThenInclude(user => user.User)
-                    .FirstOrDefaultAsync();
-
-                return _mapper.Map<ArticleDto>(model);
             }
             catch (Exception ex)
             {
@@ -222,6 +144,49 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+
+
+
+        public async Task<ArticleDto> GetArticleWithAllNavigationProperties(Guid id)
+        {
+            try
+            {
+                var model = await _unitOfWork.Articles.Get().Result
+                    .Where(a => a.Id == id)
+                    .Include(source => source.Source)
+                    .Include(comments => comments.Comments)
+                    .ThenInclude(user => user.User)
+                    .FirstOrDefaultAsync();
+
+                return _mapper.Map<ArticleDto>(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<ArticleDto> GetArticleWithAllNavigationPropertiesByRating(Guid id)
+        {
+            try
+            {
+                var model = await _unitOfWork.Articles.Get().Result
+                    .Where(a => a.Id.Equals(id) && a.Coefficient > 0)
+                    .Include(source => source.Source)
+                    .Include(comments => comments.Comments)
+                    .ThenInclude(user => user.User)
+                    .FirstOrDefaultAsync();
+
+                return _mapper.Map<ArticleDto>(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<List<string>> GetAllExistingArticleUrls()
         {
             try
@@ -247,6 +212,45 @@ namespace NewsAggregator.Domain.Services
                     .Take(1).FirstOrDefaultAsync();
 
                 return _mapper.Map<ArticleDto>(article);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetAllNewsByRatingAsync()
+        {
+            try
+            {
+                return await _unitOfWork.Articles.Get().Result
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<ArticleDto>> GetNewsByRatingByPageAsync(int page)
+        {
+            try
+            {
+                var pageSize = Convert.ToInt32(
+                    _configuration[Variables.ConfigurationFields.PageSize]);
+
+                return await _unitOfWork.Articles.Get().Result
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate)
+                    .Skip(page * pageSize)
+                    .Take(pageSize)
+                    .Select(article => _mapper.Map<ArticleDto>(article))
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
