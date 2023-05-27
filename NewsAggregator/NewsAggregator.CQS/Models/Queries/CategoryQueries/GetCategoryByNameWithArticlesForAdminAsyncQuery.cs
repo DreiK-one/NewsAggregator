@@ -4,9 +4,9 @@ using NewsAggregator.Core.DTOs;
 
 namespace NewsAggregetor.CQS.Models.Queries.CategoryQueries
 {
-    public class GetCategoryByNameQuery : IRequest<CategoryWithArticlesDto>
+    public class GetCategoryByNameWithArticlesForAdminAsyncQuery : IRequest<CategoryWithArticlesDto>
     {
-        public GetCategoryByNameQuery(string name)
+        public GetCategoryByNameWithArticlesForAdminAsyncQuery(string name)
         {
             Name = name;
         }

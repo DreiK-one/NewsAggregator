@@ -14,17 +14,14 @@ namespace NewsAggregator.WebAPI.Controllers
     [ApiController]
     public class ArticlesController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<ArticlesController> _logger;
         private readonly IArticleServiceCQS _articleServiceCQS;
 
         public ArticlesController(IArticleServiceCQS articleServiceCQS,
-            ILogger<ArticlesController> logger,
-            IMapper mapper)
+            ILogger<ArticlesController> logger)
         {
             _articleServiceCQS = articleServiceCQS;
             _logger = logger;
-            _mapper = mapper;
         }
 
         [HttpGet("{id}"), AllowAnonymous]

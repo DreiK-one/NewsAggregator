@@ -40,6 +40,106 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<CategoryDto> GetCategoryAsync(Guid id)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.GetById(id);
+                return _mapper.Map<CategoryDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid> GetCategoryByUrl(string url)
+        {
+            try
+            {
+                var str = url.Substring(8);
+                var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
+                var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
+
+                var categories = await _unitOfWork.Categories.Get().Result
+                    .Select(category => category.Name).ToListAsync();
+
+                if (categories.Contains(res))
+                {
+                    return (await _unitOfWork.Categories.Get().Result
+                    .FirstOrDefaultAsync(category => category.Name.Equals(res)))?.Id ?? Guid.Empty;
+                }
+                else
+                {
+                    return (await _unitOfWork.Categories.Get().Result
+                    .FirstOrDefaultAsync(category => category.Name.Equals(Variables.Categories.Games)))?.Id ?? Guid.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByIdWithArticlesAsync(Guid id)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get().Result
+                .Where(category => category.Id.Equals(id))
+                .Include(article => article.Articles
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate))
+                .FirstOrDefaultAsync();
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw; ;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get().Result
+                .Where(category => category.Name.Equals(name))
+                .Include(article => article.Articles
+                    .Where(article => article.Coefficient > 0)
+                    .OrderByDescending(article => article.CreationDate))
+                .FirstOrDefaultAsync();
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw; ;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesForAdminAsync(string name)
+        {
+            try
+            {
+                var category = await _unitOfWork.Categories.Get().Result
+                    .Where(category => category.Name.Equals(name))
+                    .Include(article => article.Articles
+                        .OrderByDescending(article => article.CreationDate))
+                    .FirstOrDefaultAsync();
+
+                return _mapper.Map<CategoryWithArticlesDto>(category);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw; ;
+            }
+        }
+
         public async Task<int?> CreateAsync(CategoryDto categoryDto)
         {
             try
@@ -111,105 +211,6 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
-        }
-
-        public async Task<Guid> GetCategoryByUrl(string url)
-        {
-            try
-            {
-                var str = url.Substring(8);
-                var str2 = str.Remove(str.IndexOf('.'), str.Length - str.IndexOf('.'));
-                var res = str2.Substring(0, 1).ToUpper() + (str2.Length > 1 ? str2.Substring(1) : "");
-
-                var categories = await _unitOfWork.Categories.Get().Result
-                    .Select(category => category.Name).ToListAsync();
-
-                if (categories.Contains(res))
-                {
-                    return (await _unitOfWork.Categories.Get().Result
-                    .FirstOrDefaultAsync(category => category.Name.Equals(res)))?.Id ?? Guid.Empty;
-                }
-                else
-                {
-                    return (await _unitOfWork.Categories.Get().Result
-                    .FirstOrDefaultAsync(category => category.Name.Equals(Variables.Categories.Games)))?.Id ?? Guid.Empty;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name)
-        {
-            try
-            {
-                var category = await _unitOfWork.Categories.Get().Result
-                .Where(category => category.Name.Equals(name))
-                .Include(article => article.Articles
-                    .Where(article => article.Coefficient > 0)
-                    .OrderByDescending(article => article.CreationDate))
-                .FirstOrDefaultAsync();
-                return _mapper.Map<CategoryWithArticlesDto>(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw; ;
-            }
-        }
-
-        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesForAdminAsync(string name)
-        {
-            try
-            {
-                var category = await _unitOfWork.Categories.Get().Result
-                .Where(category => category.Name.Equals(name))
-                .Include(article => article.Articles
-                    .OrderByDescending(article => article.CreationDate))
-                .FirstOrDefaultAsync();
-                return _mapper.Map<CategoryWithArticlesDto>(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw; ;
-            }
-        }
-
-        public async Task<CategoryDto> GetCategoryAsync(Guid id)
-        {
-            try
-            {
-                var category = await _unitOfWork.Categories.GetById(id);
-                return _mapper.Map<CategoryDto>(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<CategoryWithArticlesDto> GetCategoryByIdWithArticlesAsync(Guid id)
-        {
-            try
-            {
-                var category = await _unitOfWork.Categories.Get().Result
-                .Where(category => category.Id.Equals(id))
-                .Include(article => article.Articles
-                    .Where(article => article.Coefficient > 0)
-                    .OrderByDescending(article => article.CreationDate))
-                .FirstOrDefaultAsync();
-                return _mapper.Map<CategoryWithArticlesDto>(category);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw; ;
-            }
-        }
+        }  
     }
 }

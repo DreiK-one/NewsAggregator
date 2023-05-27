@@ -20,11 +20,11 @@ namespace NewsAggregator.Domain.ServicesCQS
             _mediator = mediator;
         }
 
-        public async Task<CategoryWithArticlesDto> GetCategoryById(Guid id)
+        public async Task<IEnumerable<CategoryWithArticlesDto>> GetAllCategories()
         {
             try
             {
-                return await _mediator.Send(new GetCategoryByIdQuery(id),
+                return await _mediator.Send(new GetAllCategoriesQuery(),
                 new CancellationToken());
             }
             catch (Exception ex)
@@ -34,11 +34,53 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public async Task<CategoryWithArticlesDto> GetCategoryByName(string name)
+        public async Task<CategoryDto> GetCategoryAsync(Guid id)
         {
             try
             {
-                return await _mediator.Send(new GetCategoryByNameQuery(name),
+                return await _mediator.Send(new GetCategoryAsyncQuery(id), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            } 
+        }
+
+        public async Task<Guid> GetCategoryByUrlAsync(string url)
+        {
+            try
+            {
+                return await _mediator.Send(new GetCategoryByUrlAsyncQuery(url), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByIdWithArticlesAsync(Guid id)
+        {
+            try
+            {
+                return await _mediator.Send(new GetCategoryByIdWithArticlesAsyncQuery(id),
+                new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesAsync(string name)
+        {
+            try
+            {
+                return await _mediator.Send(new GetCategoryByNameWithArticlesAsyncQuery(name),
                 new CancellationToken());
             }
             catch (Exception ex)
@@ -48,12 +90,51 @@ namespace NewsAggregator.Domain.ServicesCQS
             }          
         }
 
-        public async Task<IEnumerable<CategoryWithArticlesDto>> GetAllCategories()
+        public async Task<CategoryWithArticlesDto> GetCategoryByNameWithArticlesForAdminAsync(string name)
         {
             try
             {
-                return await _mediator.Send(new GetAllCategoriesQuery(),
-                new CancellationToken());
+                return await _mediator.Send(new GetCategoryByNameWithArticlesForAdminAsyncQuery(name), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<int?> CreateAsync(CategoryDto categoryDto)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<int?> UpdateAsync(CategoryDto categoryDto)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<int?> DeleteAsync(Guid id)
+        {
+            try
+            {
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {

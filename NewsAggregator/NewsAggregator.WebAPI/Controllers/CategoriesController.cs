@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
@@ -13,16 +12,13 @@ namespace NewsAggregator.WebAPI.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly ILogger<CategoriesController> _logger;
         private readonly ICategoryServiceCQS _categoryServiceCQS;
 
-        public CategoriesController(IMapper mapper, 
-            ILogger<CategoriesController> logger, 
+        public CategoriesController(ILogger<CategoriesController> logger, 
             ICategoryServiceCQS categoryServiceCQS)
         {
             _logger = logger;
-            _mapper = mapper;
             _categoryServiceCQS = categoryServiceCQS;
         }
 
@@ -39,7 +35,8 @@ namespace NewsAggregator.WebAPI.Controllers
                     return BadRequest(new ResponseMessage { Message = "Identificator is null" });
                 }
 
-                var category = await _categoryServiceCQS.GetCategoryById(id);
+                var category = await _categoryServiceCQS
+                    .GetCategoryByIdWithArticlesAsync(id);
 
                 if (category != null)
                 {
@@ -66,7 +63,9 @@ namespace NewsAggregator.WebAPI.Controllers
             {
                 if (!string.IsNullOrEmpty(name))
                 {
-                    var category = await _categoryServiceCQS.GetCategoryByName(Convert.ToString(name));
+                    var category = await _categoryServiceCQS
+                        .GetCategoryByNameWithArticlesAsync(Convert.ToString(name));
+
                     if (category != null)
                     {
                         return Ok(category);
