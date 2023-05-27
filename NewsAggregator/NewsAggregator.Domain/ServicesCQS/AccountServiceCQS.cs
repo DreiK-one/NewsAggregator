@@ -27,6 +27,22 @@ namespace NewsAggregator.Domain.ServicesCQS
             _mediator = mediator;
         }
 
+        public async Task<UserDto> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+                var upperEmail = email.ToUpperInvariant();
+
+                return await _mediator.Send(new GetUserByEmailQuery(upperEmail),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<UserDto> GetUserByIdAsync(Guid id)
         {
             try
@@ -41,28 +57,68 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public async Task<UserDto> GetUserByEmailAsync(string email)
-        {
-            try
-            {
-                var upperEmail = email.ToUpperInvariant();
-
-                return await _mediator.Send(new GetUserByEmailQuery(upperEmail),
-                    new CancellationToken());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            } 
-        }
-
         public async Task<UserDto> GetUserByRefreshTokenAsync(string token)
         {
             try
             {
                 return await _mediator.Send(new GetUserByRefreshToken(token),
                     new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid?> GetUserIdByEmailAsync(string email)
+        {
+            try
+            {
+                return await _mediator.Send(new GetUserIdByEmailAsyncQuery(email), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid> GetUserIdByNicknameAsync(string nickname)
+        {
+            try
+            {
+                return await _mediator.Send(new GetUserIdByNicknameAsyncQuery(nickname),
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<string?> GetUserNicknameByIdAsync(Guid id)
+        {
+            try
+            {
+                return await _mediator.Send(new GetUserNicknameByIdAsyncQuery(id), 
+                    new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        //todo
+        public Task<IEnumerable<string>> GetRolesAsync(Guid userId)
+        {
+            try
+            {
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
@@ -113,6 +169,19 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
+        public Task<int> SetPasswordAsync(Guid userId, string password)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<bool> CheckPasswordByEmailAsync(string email, string password)
         {
             try
@@ -131,6 +200,19 @@ namespace NewsAggregator.Domain.ServicesCQS
                     }
                 }
                 return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<bool> CheckPasswordByIdAsync(Guid id, string password)
+        {
+            try
+            {
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
@@ -158,6 +240,32 @@ namespace NewsAggregator.Domain.ServicesCQS
                 var command = new ChangePasswordCommand(user.Id, password);
 
                 return await _mediator.Send(command, new CancellationToken());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<int> UpdateEmail(Guid userId, string email)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public Task<int> UpdateNickname(Guid userId, string nickname)
+        {
+            try
+            {
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
@@ -199,6 +307,7 @@ namespace NewsAggregator.Domain.ServicesCQS
         }
 
 
+
         private string GetPasswordHash(string password, string salt)
         {
             try
@@ -235,6 +344,6 @@ namespace NewsAggregator.Domain.ServicesCQS
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
-        }
+        }  
     }
 }

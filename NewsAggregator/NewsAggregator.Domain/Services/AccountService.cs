@@ -35,36 +35,19 @@ namespace NewsAggregator.Domain.Services
             _configuration = configuration;
         }
 
-        public async Task<bool> CheckUserWithThatEmailIsExistAsync(string email)
-        {
-            try
-            {
-                var normalizedEmail = email.ToUpperInvariant();
-
-                return await _unitOfWork.Users.Get().Result
-                    .AnyAsync(user =>
-                        user.NormalizedEmail
-                           .Equals(normalizedEmail));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<Guid?> GetUserIdByEmailAsync(string email)
+        public async Task<UserDto> GetUserByEmailAsync(string email)
         {
             try
             {
                 string normalizedEmail = email.ToUpperInvariant();
 
                 var user = await _unitOfWork.Users.Get().Result
-                    .FirstOrDefaultAsync(u =>
-                        u.NormalizedEmail != null && 
-                        u.NormalizedEmail.Equals(normalizedEmail));
+                    .Include(user => user.UserRoles)
+                    .ThenInclude(role => role.Role)
+                    .FirstOrDefaultAsync(user => user.NormalizedEmail != null &&
+                            user.NormalizedEmail.Equals(normalizedEmail));
 
-                return user?.Id;
+                return _mapper.Map<UserDto>(user);
             }
             catch (Exception ex)
             {
@@ -87,19 +70,18 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
-        public async Task<UserDto> GetUserByEmailAsync(string email)
+        public async Task<Guid?> GetUserIdByEmailAsync(string email)
         {
             try
             {
                 string normalizedEmail = email.ToUpperInvariant();
 
                 var user = await _unitOfWork.Users.Get().Result
-                    .Include(user => user.UserRoles)
-                    .ThenInclude(role => role.Role)
-                    .FirstOrDefaultAsync(user => user.NormalizedEmail != null && 
-                            user.NormalizedEmail.Equals(normalizedEmail));
-                    
-                return _mapper.Map<UserDto>(user);
+                    .FirstOrDefaultAsync(u =>
+                        u.NormalizedEmail != null &&
+                        u.NormalizedEmail.Equals(normalizedEmail));
+
+                return user?.Id;
             }
             catch (Exception ex)
             {
@@ -115,7 +97,7 @@ namespace NewsAggregator.Domain.Services
                 string normalizedNickname = nickname.ToUpperInvariant();
 
                 var user = await _unitOfWork.Users.Get().Result
-                    .FirstOrDefaultAsync(user => user.NormalizedNickname != null && 
+                    .FirstOrDefaultAsync(user => user.NormalizedNickname != null &&
                         user.NormalizedNickname.Equals(normalizedNickname));
 
                 if (user == null)
@@ -147,6 +129,29 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<IEnumerable<string>> GetRolesAsync(Guid userId)
+        {
+            try
+            {
+                var userRoleIds = (await _unitOfWork.Users
+                .GetByIdWithIncludes(userId, user => user.UserRoles))
+                .UserRoles.Select(role => role.RoleId);
+
+                var names = new List<string>();
+                foreach (var userRoleId in userRoleIds)
+                {
+                    names.Add(await _roleService.GetRoleNameByIdAsync(userRoleId));
+                }
+
+                return names;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<Guid> CreateUserAsync(string email, string nickname)
         {
             try
@@ -168,7 +173,7 @@ namespace NewsAggregator.Domain.Services
             {
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
-            }           
+            }
         }
 
         public async Task<int> SetRoleAsync(Guid userId, string roleName)
@@ -190,29 +195,6 @@ namespace NewsAggregator.Domain.Services
                 });
 
                 return await _unitOfWork.Save();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<string>> GetRolesAsync(Guid userId)
-        {
-            try
-            {
-                var userRoleIds = (await _unitOfWork.Users
-                .GetByIdWithIncludes(userId, user => user.UserRoles))
-                .UserRoles.Select(role => role.RoleId);
-
-                var names = new List<string>();
-                foreach (var userRoleId in userRoleIds)
-                {
-                    names.Add(await _roleService.GetRoleNameByIdAsync(userRoleId));
-                }
-
-                return names;
             }
             catch (Exception ex)
             {
@@ -247,6 +229,24 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<bool> CheckUserWithThatEmailIsExistAsync(string email)
+        {
+            try
+            {
+                var normalizedEmail = email.ToUpperInvariant();
+
+                return await _unitOfWork.Users.Get().Result
+                    .AnyAsync(user =>
+                        user.NormalizedEmail
+                           .Equals(normalizedEmail));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<bool> CheckPasswordByEmailAsync(string email, string password)
         {
             try
@@ -270,7 +270,7 @@ namespace NewsAggregator.Domain.Services
             {
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
-            } 
+            }
         }
 
         public async Task<bool> CheckPasswordByIdAsync(Guid id, string password)
