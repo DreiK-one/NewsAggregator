@@ -270,11 +270,12 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int> UpdateEmail(Guid userId, string email)
+        public async Task<int> UpdateEmail(Guid userId, string email)
         {
             try
             {
-                throw new NotImplementedException();
+                return await _mediator.Send(new UpdateEmailCommand(userId, email), 
+                    new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -283,11 +284,12 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int> UpdateNickname(Guid userId, string nickname)
+        public async Task<int> UpdateNickname(Guid userId, string nickname)
         {
             try
             {
-                throw new NotImplementedException();
+                return await _mediator.Send(new UpdateNicknameCommand(userId, nickname),
+                    new CancellationToken());
             }
             catch (Exception ex)
             {

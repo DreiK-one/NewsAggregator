@@ -303,19 +303,20 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
-            {
-                new PatchModel
                 {
-                    PropertyName = Variables.UserFields.Email,
-                    PropertyValue = email
-                },
+                    new PatchModel
+                    {
+                        PropertyName = Variables.UserFields.Email,
+                        PropertyValue = email
+                    },
 
-                new PatchModel
-                {
-                    PropertyName = Variables.UserFields.NormalizedEmail,
-                    PropertyValue = email.ToUpperInvariant()
-                }
-            });
+                    new PatchModel
+                    {
+                        PropertyName = Variables.UserFields.NormalizedEmail,
+                        PropertyValue = email.ToUpperInvariant()
+                    }
+                });
+
                 return await _unitOfWork.Save();
             }
             catch (Exception ex)
@@ -330,19 +331,20 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 await _unitOfWork.Users.PatchAsync(userId, new List<PatchModel>
-            {
-                new PatchModel
                 {
-                    PropertyName = Variables.UserFields.Nickname,
-                    PropertyValue = nickname
-                },
+                    new PatchModel
+                    {
+                        PropertyName = Variables.UserFields.Nickname,
+                        PropertyValue = nickname
+                    },
 
-                new PatchModel
-                {
-                    PropertyName = Variables.UserFields.NormalizedNickname,
-                    PropertyValue = nickname.ToUpperInvariant()
-                }
-            });
+                    new PatchModel
+                    {
+                        PropertyName = Variables.UserFields.NormalizedNickname,
+                        PropertyValue = nickname.ToUpperInvariant()
+                    }
+                });
+
                 return await _unitOfWork.Save();
             }
             catch (Exception ex)
