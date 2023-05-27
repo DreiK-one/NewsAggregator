@@ -1,9 +1,9 @@
-﻿using AutoMapper;
-using NewsAggregetor.CQS.Models.Queries.TokenQueries;
+﻿using NewsAggregetor.CQS.Models.Queries.TokenQueries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.Data;
 using NewsAggregator.Data.Entities;
+
 
 namespace NewsAggregetor.CQS.Handlers.QueryHandlers.TokenQueries
 {
