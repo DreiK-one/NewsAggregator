@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Commands.CategoryCommands;
 using NewsAggregetor.CQS.Models.Queries.CategoryQueries;
 
 
@@ -10,12 +12,14 @@ namespace NewsAggregator.Domain.ServicesCQS
 {
     public class CategoryServiceCQS : ICategoryServiceCQS
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<CategoryServiceCQS> _logger;
         private readonly IMediator _mediator;
 
-        public CategoryServiceCQS(IMediator mediator, 
+        public CategoryServiceCQS(IMapper mapper, IMediator mediator, 
             ILogger<CategoryServiceCQS> logger)
         {
+            _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
         }
@@ -104,11 +108,31 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> CreateAsync(CategoryDto categoryDto)
+        public async Task<int?> CreateAsync(CategoryDto categoryDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (categoryDto != null)
+                {
+                    var existCategory = GetAllCategories().Result
+                        .Select(c => c.Name.ToLower() == categoryDto.Name.ToLower());
+
+                    if (!existCategory.Any())
+                    {
+                        var command = _mapper.Map<CreateCategoryCommand>(categoryDto);
+
+                        return await _mediator.Send(command, 
+                            new CancellationToken());
+                    }
+                    else
+                    {
+                        throw new NullReferenceException();
+                    }
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -117,11 +141,21 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> UpdateAsync(CategoryDto categoryDto)
+        public async Task<int?> UpdateAsync(CategoryDto categoryDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (categoryDto != null)
+                {
+                    var command = _mapper.Map<UpdateCategoryCommand>(categoryDto);
+
+                    return await _mediator.Send(command, 
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -130,11 +164,19 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> DeleteAsync(Guid id)
+        public async Task<int?> DeleteAsync(Guid id)
         {
             try
             {
-                throw new NotImplementedException();
+                if (GetCategoryAsync(id) != null)
+                {
+                    return await _mediator.Send(new DeleteCategoryCommand(id), 
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
