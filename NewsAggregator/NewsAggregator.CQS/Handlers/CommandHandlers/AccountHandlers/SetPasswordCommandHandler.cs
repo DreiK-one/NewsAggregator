@@ -5,22 +5,21 @@ using NewsAggregator.Data;
 
 namespace NewsAggregetor.CQS.Handlers.CommandHandlers.AccountCommands
 {
-    public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand, bool>
+    public class SetPasswordCommandHandler : IRequestHandler<SetPasswordCommand, int>
     {
         private readonly NewsAggregatorContext _database;
         
-        public ChangePasswordCommandHandler(NewsAggregatorContext database)
+        public SetPasswordCommandHandler(NewsAggregatorContext database)
         {
             _database = database;
         }
 
-        public async Task<bool> Handle(ChangePasswordCommand command, CancellationToken token)
+        public async Task<int> Handle(SetPasswordCommand command, CancellationToken token)
         {
             var user = await _database.Users.FindAsync(command.UserId);
             user.PasswordHash = command.Password;
-            await _database.SaveChangesAsync(token);
-
-            return true;
+            
+            return await _database.SaveChangesAsync(token);
         }
     }
 }

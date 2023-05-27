@@ -169,11 +169,19 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int> SetPasswordAsync(Guid userId, string password)
+        public async Task<int> SetPasswordAsync(Guid userId, string password)
         {
             try
             {
-                throw new NotImplementedException();
+                if (string.IsNullOrEmpty(password))
+                {
+                    throw new NullReferenceException();
+                }
+
+                var passwordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
+                var command = new SetPasswordCommand(userId, passwordHash);
+
+                return await _mediator.Send(command, new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -187,6 +195,7 @@ namespace NewsAggregator.Domain.ServicesCQS
             try
             {
                 var user = await GetUserByEmailAsync(email);
+
                 if (user.Id != Guid.Empty)
                 {
                     if (!string.IsNullOrEmpty(user.PasswordHash))
@@ -199,6 +208,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                         }
                     }
                 }
+
                 return false;
             }
             catch (Exception ex)
@@ -208,11 +218,23 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<bool> CheckPasswordByIdAsync(Guid id, string password)
+        public async Task<bool> CheckPasswordByIdAsync(Guid id, string password)
         {
             try
             {
-                throw new NotImplementedException();
+                var user = await GetUserByIdAsync(id);
+
+                if (!string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
+
+                    if (user.PasswordHash == enteredPasswordHash)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
             catch (Exception ex)
             {

@@ -278,15 +278,17 @@ namespace NewsAggregator.Domain.Services
             try
             {
                 var userPasswordHash = (await _unitOfWork.Users.GetById(id)).PasswordHash;
+
                 if (!string.IsNullOrEmpty(userPasswordHash))
                 {
                     var enteredPasswordHash = GetPasswordHash(password, _configuration[Variables.ConfigurationFields.Salt]);
 
-                    if (userPasswordHash.Equals(enteredPasswordHash))
+                    if (userPasswordHash == enteredPasswordHash)
                     {
                         return true;
                     }
                 }
+
                 return false;
             }
             catch (Exception ex)
