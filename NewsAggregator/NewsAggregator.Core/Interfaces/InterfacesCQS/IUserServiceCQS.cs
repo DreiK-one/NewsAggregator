@@ -1,7 +1,7 @@
 ﻿using NewsAggregator.Core.DTOs;
 
 
-namespace NewsAggregator.Core.InterfacesCQS
+namespace NewsAggregator.Core.Interfaces.InterfacesCQS
 {
     public interface IUserServiceCQS
     {

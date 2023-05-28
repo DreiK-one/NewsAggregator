@@ -1,13 +1,13 @@
 ﻿using NewsAggregator.Core.DTOs;
 
 
-namespace NewsAggregator.Core.Interfaces
+namespace NewsAggregator.Core.Interfaces.InterfacesCQS
 {
-    public interface IRoleService
+    public interface IRoleServiceCQS
     {
         Task<IEnumerable<RoleDto>> GetAllRolesAsync();
         Task<RoleDto> GetRoleAsync(Guid id);
-        Task<Guid> GetRoleIdByUserIdAsync(Guid id);
+        Task<Guid> GetRoleIdByUserIdAsync(Guid id); 
         Task<Guid> GetRoleIdByNameAsync(string name);
         Task<string> GetRoleNameByIdAsync(Guid id);
         Task<int?> CreateAsync(RoleDto roleDto);

@@ -25,7 +25,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
         private IMapper _mapper;
         private Mock<ILogger<AccountService>> _logger;
         private Mock<IUnitOfWork> _unitOfWork;
-        private Mock<IRoleService> _roleService;
+        private Mock<IRoleServiceCQS> _roleService;
         private Mock<IConfiguration> _configuration;
         private AccountService _accountService;
 
@@ -48,7 +48,7 @@ namespace NewsAggregator.Domain.Tests.Services.Tests
             _logger = new Mock<ILogger<AccountService>>();
             _unitOfWork = new Mock<IUnitOfWork>();
             _configuration = new Mock<IConfiguration>();
-            _roleService = new Mock<IRoleService>();
+            _roleService = new Mock<IRoleServiceCQS>();
 
             _configuration.Setup(cfg => cfg["ApplicationVariables:Salt"]).Returns("qwerty123456");
 

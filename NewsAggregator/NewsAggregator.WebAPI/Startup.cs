@@ -20,7 +20,7 @@ using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using System.Reflection;
 using Microsoft.ApplicationInsights;
-using NewsAggregator.Core.InterfacesCQS;
+
 
 namespace NewsAggregator.WebAPI
 {
@@ -71,6 +71,7 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IAccountServiceCQS, AccountServiceCQS>();
             services.AddScoped<IUserServiceCQS, UserServiceCQS>();
             services.AddScoped<ISourceServiceCQS, SourceServiceCQS>();
+            services.AddScoped<IRoleServiceCQS, RoleServiceCQS>();
 
             services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
 

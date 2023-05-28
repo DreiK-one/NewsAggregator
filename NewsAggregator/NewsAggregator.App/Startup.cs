@@ -48,7 +48,7 @@ namespace NewsAggregator.App
             services.AddScoped<IArticleService, ArticleService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICommentService, CommentService>();
-            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleServiceCQS, RoleService>();
             services.AddScoped<ISourceService, SourceService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRssService, RssService>();

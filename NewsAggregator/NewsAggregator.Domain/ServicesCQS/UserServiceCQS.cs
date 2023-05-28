@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
-using NewsAggregator.Core.InterfacesCQS;
 using NewsAggregetor.CQS.Models.Commands.UserCommands;
 using NewsAggregetor.CQS.Models.Queries.UserQueries;
 

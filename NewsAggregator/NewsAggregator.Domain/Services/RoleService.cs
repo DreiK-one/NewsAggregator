@@ -41,6 +41,36 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<RoleDto> GetRoleAsync(Guid id)
+        {
+            try
+            {
+                var role = await _unitOfWork.Roles.GetById(id);
+                return _mapper.Map<RoleDto>(role);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid> GetRoleIdByNameAsync(string name)
+        {
+            try
+            {
+                var role = await _unitOfWork.Roles.Get().Result
+                    .FirstOrDefaultAsync(role => role.Name == name);
+
+                return role.Id;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<Guid> GetRoleIdByUserIdAsync(Guid id)
         {
             try
@@ -49,6 +79,21 @@ namespace NewsAggregator.Domain.Services
                     .Where(userId => userId.UserId.Equals(id))
                     .Select(roleId => roleId.RoleId)
                     .FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<string> GetRoleNameByIdAsync(Guid id)
+        {
+            try
+            {
+                var role = await _unitOfWork.Roles.GetById(id);
+
+                return role.Name;
             }
             catch (Exception ex)
             {
@@ -80,93 +125,6 @@ namespace NewsAggregator.Domain.Services
                 {
                     throw new NullReferenceException();
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<int?> UpdateAsync(RoleDto roleDto)
-        {
-            try
-            {
-                if (roleDto != null)
-                {
-                    await _unitOfWork.Roles.Update(_mapper.Map<Role>(roleDto));
-                    return await _unitOfWork.Save();
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<int?> DeleteAsync(Guid id)
-        {
-            try
-            {
-                if (await _unitOfWork.Roles.GetById(id) != null)
-                {
-                    await _unitOfWork.Roles.Remove(id);
-                    return await _unitOfWork.Save();
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<RoleDto> GetRoleAsync(Guid id)
-        {
-            try
-            {
-                var role = await _unitOfWork.Roles.GetById(id);
-                return _mapper.Map<RoleDto>(role);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<Guid> GetRoleIdByNameAsync(string name)
-        {
-            try
-            {
-                var role = await _unitOfWork.Roles.Get().Result
-                    .FirstOrDefaultAsync(role => role.Name.Equals(name));
-
-                return role.Id;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<string> GetRoleNameByIdAsync(Guid id)
-        {
-            try
-            {
-                var role = await _unitOfWork.Roles.GetById(id);
-
-                return role.Name;
             }
             catch (Exception ex)
             {
@@ -239,5 +197,47 @@ namespace NewsAggregator.Domain.Services
                 throw;
             }
         }
+
+        public async Task<int?> UpdateAsync(RoleDto roleDto)
+        {
+            try
+            {
+                if (roleDto != null)
+                {
+                    await _unitOfWork.Roles.Update(_mapper.Map<Role>(roleDto));
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<int?> DeleteAsync(Guid id)
+        {
+            try
+            {
+                if (await _unitOfWork.Roles.GetById(id) != null)
+                {
+                    await _unitOfWork.Roles.Remove(id);
+                    return await _unitOfWork.Save();
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }  
     }
 }
