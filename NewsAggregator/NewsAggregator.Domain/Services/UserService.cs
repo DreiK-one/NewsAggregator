@@ -65,6 +65,44 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<int?> CreateAsync(CreateOrEditUserDto userDto)
+        {
+            try
+            {
+                if (userDto != null)
+                {
+                    await _unitOfWork.UserRoles.Add(new UserRole
+                    {
+                        Id = Guid.NewGuid(),
+                        UserId = userDto.Id,
+                        RoleId = userDto.RoleId
+                    });
+
+                    await _unitOfWork.Users.Add(new User
+                    {
+                        Id = userDto.Id,
+                        Email = userDto.Email,
+                        NormalizedEmail = userDto.Email.ToUpperInvariant(),
+                        Nickname = userDto.Nickname,
+                        NormalizedNickname = userDto.Nickname.ToUpperInvariant(),
+                        RegistrationDate = userDto.RegistrationDate,
+                    });
+                    await _unitOfWork.Save();
+
+                    return await _accountService.SetPasswordAsync(userDto.Id, userDto.PasswordHash);
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<int?> UpdateAsync(CreateOrEditUserDto userDto)
         {
             try
@@ -127,44 +165,6 @@ namespace NewsAggregator.Domain.Services
                 _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
                 throw;
             }
-        }
-
-        public async Task<int?> CreateAsync(CreateOrEditUserDto userDto)
-        {
-            try
-            {
-                if (userDto != null)
-                {
-                    await _unitOfWork.UserRoles.Add(new UserRole
-                    {
-                        Id = Guid.NewGuid(),
-                        UserId = userDto.Id,
-                        RoleId = userDto.RoleId
-                    });
-
-                    await _unitOfWork.Users.Add(new User
-                    {
-                        Id = userDto.Id,
-                        Email = userDto.Email,
-                        NormalizedEmail = userDto.Email.ToUpperInvariant(),
-                        Nickname = userDto.Nickname,
-                        NormalizedNickname = userDto.Nickname.ToUpperInvariant(),
-                        RegistrationDate = userDto.RegistrationDate,
-                    });
-                    await _unitOfWork.Save();
-
-                   return await _accountService.SetPasswordAsync(userDto.Id, userDto.PasswordHash);
-                }
-                else
-                {
-                    throw new NullReferenceException();
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
+        } 
     }
 }
