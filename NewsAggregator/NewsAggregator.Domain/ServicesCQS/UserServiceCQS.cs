@@ -4,11 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
-using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Core.InterfacesCQS;
-using NewsAggregator.Data;
-using NewsAggregator.Data.Entities;
+using NewsAggregetor.CQS.Models.Queries.UserQueries;
 
 
 namespace NewsAggregator.Domain.ServicesCQS
@@ -31,11 +29,12 @@ namespace NewsAggregator.Domain.ServicesCQS
             _accountServiceCQS = accountServiceCQS;
         }
 
-        public Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync()
+        public async Task<IEnumerable<UserDto>> GetAllUsersWithAllInfoAsync()
         {
             try
             {
-                throw new NotImplementedException();
+                return await _mediator.Send(new GetAllUsersWithAllInfoAsyncQuery(), 
+                    new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -44,11 +43,12 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<UserDto> GetUserByIdAsync(Guid id)
+        public async Task<UserDto> GetUserByIdAsync(Guid id)
         {
             try
             {
-                throw new NotImplementedException();
+                return await _mediator.Send(new GetUserByIdAsyncQuery(id), 
+                    new CancellationToken());
             }
             catch (Exception ex)
             {
