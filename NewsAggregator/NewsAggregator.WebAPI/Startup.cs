@@ -20,10 +20,7 @@ using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using System.Reflection;
 using Microsoft.ApplicationInsights;
-using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
-using NewsAggregator.Core.DTOs;
-using NewsAggregetor.CQS.Handlers.QueryHandlers.ArticleHandlers;
-using Microsoft.AspNetCore.Builder;
+using NewsAggregator.Core.InterfacesCQS;
 
 namespace NewsAggregator.WebAPI
 {
@@ -72,6 +69,8 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<ICommentServiceCQS, CommentServiceCQS>();
             services.AddScoped<ICategoryServiceCQS, CategoryServiceCQS>();
             services.AddScoped<IAccountServiceCQS, AccountServiceCQS>();
+            services.AddScoped<IUserServiceCQS, UserServiceCQS>();
+            services.AddScoped<ISourceServiceCQS, SourceServiceCQS>();
 
             services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
 

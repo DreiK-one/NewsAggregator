@@ -40,6 +40,58 @@ namespace NewsAggregator.Domain.Services
             }
         }
 
+        public async Task<SourceDto> GetSourceAsync(Guid id)
+        {
+            try
+            {
+                var source = await _unitOfWork.Sources.GetById(id);
+
+                return _mapper.Map<SourceDto>(source);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<Guid> GetSourceByUrl(string url)
+        {
+            try
+            {
+                var domain = string.Join(".",
+                new Uri(url).Host
+                .Split('.')
+                .TakeLast(2)
+                .ToList());
+
+                return (await _unitOfWork.Sources.Get().Result
+                     .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<RssUrlsFromSourceDto>> GetRssUrlsAsync()
+        {
+            try
+            {
+                var result = await _unitOfWork.Sources.Get().Result
+                    .Select(source => _mapper.Map<RssUrlsFromSourceDto>(source))
+                    .ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
+                throw;
+            }
+        }
+
         public async Task<int?> CreateAsync(SourceDto sourceDto)
         {
             try
@@ -105,55 +157,6 @@ namespace NewsAggregator.Domain.Services
                 {
                     throw new NullReferenceException();
                 }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<IEnumerable<RssUrlsFromSourceDto>> GetRssUrlsAsync()
-        {
-            try
-            {
-                var result = await _unitOfWork.Sources.Get().Result
-                    .Select(source => _mapper.Map<RssUrlsFromSourceDto>(source))
-                    .ToListAsync();
-                return result;
-            }
-            catch (Exception ex)
-                {
-                    _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            }
-        }
-
-        public async Task<Guid> GetSourceByUrl(string url)
-        {
-            try
-            {
-                var domain = string.Join(".",
-                new Uri(url).Host
-                .Split('.')
-                .TakeLast(2)
-                .ToList());
-                return (await _unitOfWork.Sources.Get().Result
-                     .FirstOrDefaultAsync(source => source.BaseUrl.Equals(domain)))?.Id ?? Guid.Empty;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ExceptionMessageHelper.GetExceptionMessage(ex));
-                throw;
-            } 
-        }
-
-        public async Task<SourceDto> GetSourceAsync(Guid Id)
-        {
-            try
-            {
-                var source = await _unitOfWork.Sources.GetById(Id);
-                return _mapper.Map<SourceDto>(source);
             }
             catch (Exception ex)
             {
