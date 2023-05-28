@@ -4,7 +4,10 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Commands.RoleCommands;
+using NewsAggregetor.CQS.Models.Commands.UserRoleCommands;
 using NewsAggregetor.CQS.Models.Queries.RoleQueries;
+using NewsAggregetor.CQS.Models.Queries.UserRoleQueries;
 
 
 namespace NewsAggregator.Domain.ServicesCQS
@@ -14,17 +17,14 @@ namespace NewsAggregator.Domain.ServicesCQS
         private readonly IMapper _mapper;
         private readonly ILogger<RoleServiceCQS> _logger;
         private readonly IMediator _mediator;
-        private readonly IAccountServiceCQS _accountServiceCQS;
 
         public RoleServiceCQS(IMapper mapper,
             ILogger<RoleServiceCQS> logger,
-            IMediator mediator,
-            IAccountServiceCQS accountServiceCQS)
+            IMediator mediator)
         {
             _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
-            _accountServiceCQS = accountServiceCQS;
         }
 
         public async Task<IEnumerable<RoleDto>> GetAllRolesAsync()
@@ -97,11 +97,31 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> CreateAsync(RoleDto roleDto)
+        public async Task<int?> CreateAsync(RoleDto roleDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (roleDto != null)
+                {
+                    var existRole = GetAllRolesAsync().Result
+                        .Select(c => c.Name.ToLower() == roleDto.Name.ToLower());
+
+                    if (!existRole.Any())
+                    {
+                        var command = _mapper.Map<CreateRoleAsyncCommand>(roleDto);
+
+                        return await _mediator.Send(command,
+                            new CancellationToken());
+                    }
+                    else
+                    {
+                        throw new NullReferenceException();
+                    }
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -110,11 +130,17 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<Guid> CreateRole(string name)
+        public async Task<Guid> CreateRole(string name)
         {
             try
             {
-                throw new NotImplementedException();
+                if (string.IsNullOrEmpty(name))
+                {
+                    throw new NullReferenceException();
+                }
+
+                return await _mediator.Send(new CreateRoleCommand(name), 
+                    new CancellationToken());
             }
             catch (Exception ex)
             {
@@ -123,11 +149,29 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> ChangeUserRole(UserRoleDto dto)
+        public async Task<int?> ChangeUserRole(UserRoleDto dto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (dto != null)
+                {
+                    var userRole = await _mediator.Send(new GetUserRoleByUserIdQuery(dto.UserId), 
+                        new CancellationToken());
+
+                    if (userRole == null)
+                    {
+                        return null;
+                    }
+
+                    var command = _mapper.Map<UpdateUserRoleCommand>(dto);
+
+                    return await _mediator.Send(command, 
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -136,11 +180,21 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> UpdateAsync(RoleDto roleDto)
+        public async Task<int?> UpdateAsync(RoleDto roleDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (roleDto != null)
+                {
+                    var command = _mapper.Map<UpdateRoleCommand>(roleDto);
+
+                    return await _mediator.Send(command,
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -149,11 +203,19 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> DeleteAsync(Guid id)
+        public async Task<int?> DeleteAsync(Guid id)
         {
             try
             {
-                throw new NotImplementedException();
+                if (GetRoleAsync(id) != null)
+                {
+                    return await _mediator.Send(new DeleteRoleCommand(id),
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
