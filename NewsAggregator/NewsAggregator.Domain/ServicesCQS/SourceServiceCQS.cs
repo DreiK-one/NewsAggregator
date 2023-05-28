@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Commands.SourceCommands;
 using NewsAggregetor.CQS.Models.Queries.SourceQueries;
 
 
@@ -80,11 +81,31 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> CreateAsync(SourceDto sourceDto)
+        public async Task<int?> CreateAsync(SourceDto sourceDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (sourceDto != null)
+                {
+                    var existSources = GetAllSourcesAsync().Result
+                        .Select(c => c.Name.ToLower() == sourceDto.Name.ToLower());
+
+                    if (!existSources.Any())
+                    {
+                        var command = _mapper.Map<CreateSourceCommand>(sourceDto);
+
+                        return await _mediator.Send(command,
+                            new CancellationToken());
+                    }
+                    else
+                    {
+                        throw new NullReferenceException();
+                    }
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -93,11 +114,21 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> UpdateAsync(SourceDto sourceDto)
+        public async Task<int?> UpdateAsync(SourceDto sourceDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (sourceDto != null)
+                {
+                    var command = _mapper.Map<UpdateSourceCommand>(sourceDto);
+
+                    return await _mediator.Send(command,
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
@@ -106,11 +137,19 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        public Task<int?> DeleteAsync(Guid id)
+        public async Task<int?> DeleteAsync(Guid id)
         {
             try
             {
-                throw new NotImplementedException();
+                if (GetSourceAsync(id) != null)
+                {
+                    return await _mediator.Send(new DeleteSourceCommand(id),
+                        new CancellationToken());
+                }
+                else
+                {
+                    throw new NullReferenceException();
+                }
             }
             catch (Exception ex)
             {
