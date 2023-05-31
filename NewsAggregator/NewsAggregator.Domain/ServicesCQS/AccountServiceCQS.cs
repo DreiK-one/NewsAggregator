@@ -8,6 +8,7 @@ using System.Text;
 using System.Security.Cryptography;
 using NewsAggregetor.CQS.Models.Commands.AccountCommands;
 using NewsAggregator.Core.Helpers;
+using NewsAggregetor.CQS.Models.Queries.UserRoleQueries;
 
 
 namespace NewsAggregator.Domain.ServicesCQS
@@ -17,14 +18,17 @@ namespace NewsAggregator.Domain.ServicesCQS
         private readonly ILogger<AccountServiceCQS> _logger;
         private readonly IConfiguration _configuration;
         private readonly IMediator _mediator;
+        private readonly IRoleServiceCQS _roleServiceCQS;
 
         public AccountServiceCQS(ILogger<AccountServiceCQS> logger,
             IConfiguration configuration,
-            IMediator mediator)
+            IMediator mediator,
+            IRoleServiceCQS roleServiceCQS)
         {
             _logger = logger;
             _configuration = configuration;
             _mediator = mediator;
+            _roleServiceCQS = roleServiceCQS;
         }
 
         public async Task<UserDto> GetUserByEmailAsync(string email)
@@ -113,12 +117,21 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        //todo
-        public Task<IEnumerable<string>> GetRolesAsync(Guid userId)
+        public async Task<IEnumerable<string>> GetRolesAsync(Guid userId)
         {
             try
             {
-                throw new NotImplementedException();
+                var roleIds = await _mediator.Send(new GetUserRoleIdsByUserIdQuery(userId), 
+                    new CancellationToken());
+
+                var names = new List<string>();
+
+                foreach (var roleId in roleIds)
+                {
+                    names.Add(await _roleServiceCQS.GetRoleNameByIdAsync(roleId));
+                }
+
+                return names;
             }
             catch (Exception ex)
             {

@@ -20,12 +20,12 @@ namespace NewsAggregator.Domain.Services
         private readonly ILogger<AccountService> _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
-        private readonly IRoleServiceCQS _roleService;
+        private readonly IRoleService _roleService;
 
         public AccountService(IMapper mapper,
             ILogger<AccountService> logger,
             IUnitOfWork unitOfWork,
-            IRoleServiceCQS roleService, 
+            IRoleService roleService, 
             IConfiguration configuration)
         {
             _mapper = mapper;
