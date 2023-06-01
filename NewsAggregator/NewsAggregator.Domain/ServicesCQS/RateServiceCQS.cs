@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
-using NewsAggregator.Core.Interfaces.Data;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.Services.Tools;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
@@ -15,6 +16,7 @@ namespace NewsAggregator.Domain.ServicesCQS
 {
     public class RateServiceCQS : IRateServiceCQS
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<RateServiceCQS> _logger;
         private readonly IMediator _mediator;
         private readonly IArticleServiceCQS _articleServiceCQS;
@@ -23,10 +25,11 @@ namespace NewsAggregator.Domain.ServicesCQS
         const string WordsJson = "Words.json";
         const string TexterraPath = "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=9360c69a4a225b0ccfc786102f69d01351deca5c";
 
-        public RateServiceCQS(ILogger<RateServiceCQS> logger,
+        public RateServiceCQS(IMapper mapper, ILogger<RateServiceCQS> logger,
             IMediator mediator,
             IArticleServiceCQS articleService)
         {
+            _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
             _articleServiceCQS = articleService;
@@ -147,7 +150,6 @@ namespace NewsAggregator.Domain.ServicesCQS
             }
         }
 
-        //todo
         public async Task<int?> RateArticle()
         {
             try
@@ -155,7 +157,10 @@ namespace NewsAggregator.Domain.ServicesCQS
                 var ratedArticle = GetRatingForNews().Result;
                 if (ratedArticle != null)
                 {
-                    throw new NotImplementedException();
+                    var command = _mapper.Map<EditArticleCommand>(ratedArticle);
+
+                    return await _mediator.Send(command, 
+                        new CancellationToken());
                 }
                 else
                 {
