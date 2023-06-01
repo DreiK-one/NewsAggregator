@@ -14,11 +14,11 @@ namespace NewsAggregator.App.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILogger<RoleController> _logger;
-        private readonly IRoleServiceCQS _roleService;
+        private readonly IRoleService _roleService;
 
         public RoleController(IMapper mapper, 
             ILogger<RoleController> logger, 
-            IRoleServiceCQS roleService)
+            IRoleService roleService)
         {
             _mapper = mapper;
             _logger = logger;

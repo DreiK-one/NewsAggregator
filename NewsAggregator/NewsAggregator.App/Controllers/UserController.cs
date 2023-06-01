@@ -15,12 +15,12 @@ namespace NewsAggregator.App.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
-        private readonly IRoleServiceCQS _roleService;
+        private readonly IRoleService _roleService;
 
         public UserController(IMapper mapper,
             ILogger<UserController> logger,
             IUserService userService,
-            IRoleServiceCQS roleService)
+            IRoleService roleService)
         {
             _mapper = mapper;
             _logger = logger;
