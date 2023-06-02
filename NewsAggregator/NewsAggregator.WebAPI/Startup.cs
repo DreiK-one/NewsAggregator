@@ -74,6 +74,8 @@ namespace NewsAggregator.WebAPI
             services.AddScoped<IRoleServiceCQS, RoleServiceCQS>();
             services.AddScoped<IRssServiceCQS, RssServiceCQS>();
             services.AddScoped<IRateServiceCQS, RateServiceCQS>();
+            services.AddScoped<IHtmlParserServiceCQS, HtmlParserServiceCQS>();
+
 
             services.AddScoped<IValidationMethodsCQS, ValidationMethodsCQS>();
 
