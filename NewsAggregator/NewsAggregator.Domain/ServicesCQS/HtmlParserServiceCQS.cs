@@ -1,32 +1,73 @@
-﻿using HtmlAgilityPack;
+﻿using AutoMapper;
+using HtmlAgilityPack;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Helpers;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
+using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
+
 
 
 namespace NewsAggregator.Domain.ServicesCQS
 {
     public class HtmlParserServiceCQS : IHtmlParserServiceCQS
     {
+        private readonly IMapper _mapper;
         private readonly ILogger<HtmlParserServiceCQS> _logger;
         private readonly IMediator _mediator;
         private readonly ISourceServiceCQS _sourceServiceCQS;
 
-        public HtmlParserServiceCQS(ILogger<HtmlParserServiceCQS> logger,
+        public HtmlParserServiceCQS(IMapper mapper, 
+            ILogger<HtmlParserServiceCQS> logger,
             IMediator mediator,
             ISourceServiceCQS sourceServiceCQS)
         {
+            _mapper = mapper;
             _logger = logger;
             _mediator = mediator;
             _sourceServiceCQS = sourceServiceCQS;
         }
 
 
-        public Task<int?> GetArticleContentFromUrlAsync()
+        public async Task<int?> GetArticleContentFromUrlAsync()
         {
-            throw new NotImplementedException();
+            var article = await _mediator.Send(new GetArticleWithEmptyBodyAndTitleQuery(), 
+                new CancellationToken());
+
+            if (article == null)
+            {
+                return null;
+            }
+
+            var sourceId = await _sourceServiceCQS.GetSourceByUrl(article.SourceUrl);
+
+            switch (sourceId.ToString("D").ToUpperInvariant())
+            {
+                case Variables.IdOfNewsSources.Onliner:
+                    var articleOnliner = await ParseOnlinerArticle(article.SourceUrl);
+
+                    return await _mediator.Send(_mapper.Map<EditArticleCommand>(articleOnliner), 
+                        new CancellationToken());
+
+                case Variables.IdOfNewsSources.Goha:
+                    var articleGoha = await ParseGohaArticle(article.SourceUrl);
+
+                    return await _mediator.Send(_mapper.Map<EditArticleCommand>(articleGoha),
+                        new CancellationToken());
+
+                case Variables.IdOfNewsSources.Shazoo:
+                    var article4pda = await ParseShazooArticle(article.SourceUrl);
+
+                    return await _mediator.Send(_mapper.Map<EditArticleCommand>(article4pda),
+                        new CancellationToken());
+
+                default:
+                    break;
+            }
+
+            return null;
         }
 
         public async Task<NewArticleDto> ParseOnlinerArticle(string url)

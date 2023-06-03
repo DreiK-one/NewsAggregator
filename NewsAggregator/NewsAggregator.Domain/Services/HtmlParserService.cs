@@ -35,6 +35,7 @@ namespace NewsAggregator.Domain.Services
                 {
                     return null;
                 }
+
                 var sourceId = await _sourceService.GetSourceByUrl(article.SourceUrl);
 
                 switch (sourceId.ToString("D").ToUpperInvariant())
