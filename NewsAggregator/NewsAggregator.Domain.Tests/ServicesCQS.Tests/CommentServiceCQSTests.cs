@@ -8,6 +8,7 @@ using Moq;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Domain.ServicesCQS;
 using NewsAggregator.WebAPI.Mappers;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 using NewsAggregetor.CQS.Models.Queries.CommentQueries;
 using NUnit.Framework;
@@ -93,7 +94,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 
             _mediator.Setup(m => m.Send(It.IsAny<CreateArticleCommand>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => It.IsAny<bool>());
+                .ReturnsAsync(() => It.IsAny<int?>());
 
             var comment = await _commentServiceCQS.CreateAsync(dto);
 

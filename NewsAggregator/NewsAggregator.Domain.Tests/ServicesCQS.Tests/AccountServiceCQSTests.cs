@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NewsAggregator.Core.DTOs;
+using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
 using NewsAggregetor.CQS.Models.Queries.AccountQueries;
 using NUnit.Framework;
@@ -20,6 +21,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         private Mock<IMediator> _mediator;
         private Mock<ILogger<AccountServiceCQS>> _logger;
         private Mock<IConfiguration> _configuration;
+        private Mock<IRoleServiceCQS> _roleServiceCQS;
 
         [SetUp]
         public void Setup()
@@ -27,48 +29,16 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             _mediator = new Mock<IMediator>();
             _logger = new Mock<ILogger<AccountServiceCQS>>();
             _configuration = new Mock<IConfiguration>();
+            _roleServiceCQS = new Mock<IRoleServiceCQS>();
 
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
 
             _accountServiceCQS = new AccountServiceCQS(
                 _logger.Object,
                 _configuration.Object,
-                _mediator.Object);
+                _mediator.Object,
+                _roleServiceCQS.Object);
         }
-
-        #region GetUserByIdAsync tests
-        [Test]
-        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
-        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
-        public async Task GetArticleById_ExistingId_ReturnedDto(Guid id)
-        {
-            var dto = new UserDto()
-            {
-                Id = id
-            };
-
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => dto);
-
-            var user = await _accountServiceCQS.GetUserByIdAsync(id);
-
-            Assert.AreEqual(dto.Id, user.Id);
-        }
-
-        [Test]
-        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")]
-        public async Task GetUserByIdAsync_NoExistentId_ReturnedNull(Guid id)
-        {
-            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => null);
-
-            var user = await _accountServiceCQS.GetUserByIdAsync(id);
-
-            Assert.Null(user);
-        }
-        #endregion
 
         #region GetUserByEmailAsync tests
         [Test]
@@ -104,6 +74,40 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         }
         #endregion
 
+        #region GetUserByIdAsync tests
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
+        public async Task GetArticleById_ExistingId_ReturnedDto(Guid id)
+        {
+            var dto = new UserDto()
+            {
+                Id = id
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var user = await _accountServiceCQS.GetUserByIdAsync(id);
+
+            Assert.AreEqual(dto.Id, user.Id);
+        }
+
+        [Test]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")]
+        public async Task GetUserByIdAsync_NoExistentId_ReturnedNull(Guid id)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var user = await _accountServiceCQS.GetUserByIdAsync(id);
+
+            Assert.Null(user);
+        }
+        #endregion
+
         #region GetUserByRefreshTokenAsync tests
         [Test]
         [TestCase("test1@gmail.com")]
@@ -130,6 +134,70 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             var user = await _accountServiceCQS.GetUserByRefreshTokenAsync(token);
 
             Assert.Null(user);
+        }
+        #endregion
+
+        #region GetUserIdByEmailAsync tests
+        [Test]
+        [TestCase("test@gmail.com")]
+        [TestCase("test2@mail.ru")]
+        public async Task GetUserIdByEmailAsync_ExistingEmail_ReturnedGuid(string email)
+        {
+            var expected = Guid.NewGuid();
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdByEmailAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var userId = await _accountServiceCQS.GetUserIdByEmailAsync(email);
+
+            Assert.AreEqual(expected, userId);
+        }
+
+        [Test]
+        [TestCase("test3@mail.ru")]
+        public async Task GetUserIdByEmailAsync_NoExistentEmail_ReturnedNull(string email)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdByEmailAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var userId = await _accountServiceCQS.GetUserIdByEmailAsync(email);
+
+            Assert.Null(userId);
+        }
+        #endregion
+
+        #region GetUserIdByNicknameAsync tests
+        [Test]
+        [TestCase("TestNickname")]
+        [TestCase("TestNickname2")]
+        public async Task GetUserIdByNicknameAsync_ExistingNickname_ReturnedGuid(string nickname)
+        {
+            var expected = Guid.NewGuid();
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdByNicknameAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var userId = await _accountServiceCQS.GetUserIdByNicknameAsync(nickname);
+
+            Assert.AreEqual(expected, userId);
+        }
+
+        [Test]
+        [TestCase("NotExNick")]
+        public async Task GetUserIdByNicknameAsync_NoExistentNickname_ReturnedNull(string nickname)
+        {
+            var expected = Guid.Empty;
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserIdByNicknameAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var userId = await _accountServiceCQS.GetUserIdByNicknameAsync(nickname);
+
+            Assert.AreEqual(expected, userId);
         }
         #endregion
 

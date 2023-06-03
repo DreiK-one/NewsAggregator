@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
     [TestFixture]
     public class ArticleServiceCQSTests
     {
+        private IMapper _mapper;
         private ArticleServiceCQS _articleServiceCQS;
         private Mock<IMediator> _mediator;
         private Mock<ILogger<ArticleServiceCQS>> _logger;
@@ -33,6 +35,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
 
             _articleServiceCQS = new ArticleServiceCQS(
+                _mapper,
                 _logger.Object,
                 _mediator.Object,
                 _configuration.Object);
