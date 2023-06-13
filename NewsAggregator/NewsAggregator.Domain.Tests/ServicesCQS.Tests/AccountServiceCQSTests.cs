@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -8,8 +11,11 @@ using Moq;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Core.Interfaces.InterfacesCQS;
 using NewsAggregator.Domain.ServicesCQS;
+using NewsAggregetor.CQS.Models.Commands.AccountCommands;
 using NewsAggregetor.CQS.Models.Queries.AccountQueries;
+using NewsAggregetor.CQS.Models.Queries.UserRoleQueries;
 using NUnit.Framework;
+using System.Security.Cryptography;
 
 
 namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
@@ -32,6 +38,7 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             _roleServiceCQS = new Mock<IRoleServiceCQS>();
 
             _configuration.Setup(cfg => cfg["ApplicationVariables:PageSize"]).Returns("10");
+            _configuration.Setup(cfg => cfg["ApplicationVariables:Salt"]).Returns("asd1234ad");
 
             _accountServiceCQS = new AccountServiceCQS(
                 _logger.Object,
@@ -200,6 +207,226 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             Assert.AreEqual(expected, userId);
         }
         #endregion
+
+        #region GetUserNicknameByIdAsync tests
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
+        public async Task GetUserNicknameByIdAsync_ExistingId_ReturnedNickname(Guid id)
+        {
+            var expected = "Existed nickname";
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserNicknameByIdAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var userNickname = await _accountServiceCQS.GetUserNicknameByIdAsync(id);
+
+            Assert.AreEqual(expected, userNickname);
+        }
+
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
+        public async Task GetUserNicknameByIdAsync_NoExistentId_ReturnedNull(Guid id)
+        {
+            string? expected = null;
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserNicknameByIdAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var userId = await _accountServiceCQS.GetUserNicknameByIdAsync(id);
+
+            Assert.AreEqual(expected, userId);
+        }
+        #endregion
+
+        #region GetRolesAsync tests
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
+        public async Task GetRolesAsync_ExistingId_ReturnedListOfNicknames(Guid id)
+        {
+            var expected = new List<Guid> 
+            { 
+                Guid.NewGuid(),
+                Guid.NewGuid(),
+                Guid.NewGuid()
+            }.AsEnumerable();
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserRoleIdsByUserIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            _roleServiceCQS.Setup(rs => rs.GetRoleNameByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync("someName");
+
+            var names = await _accountServiceCQS.GetRolesAsync(id);
+
+            Assert.NotNull(names);
+            Assert.AreEqual(expected.Count(), names.Count());
+        }
+
+        [Test]
+        public async Task GetRolesAsync_NoExistentId_ReturnedNullList()
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserNicknameByIdAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var names = await _accountServiceCQS.GetRolesAsync(Guid.NewGuid());
+
+            Assert.AreEqual(0, names.Count());
+        }
+        #endregion
+
+
+
+        #region SetPasswordAsync tests
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6", "asd1234")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350", "fgh567dg")]
+        public async Task SetPasswordAsync_WithFilledPassword_CorrectlyReturnedResult(Guid id, string password)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<SetPasswordCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int>());
+
+            var res = await _accountServiceCQS.SetPasswordAsync(id, password);
+
+            Assert.AreEqual(It.IsAny<int>(), res);
+        }
+
+        [Test]
+        public async Task SetPasswordAsync_NoExistentId_ReturnedNullReferenceException()
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () => 
+                await _accountServiceCQS.SetPasswordAsync(Guid.NewGuid(), ""));
+        }
+        #endregion
+
+        #region CheckPasswordByEmailAsync tests
+        [Test]
+        [TestCase("asd12345aqweq")]
+        [TestCase("asdasdfadsdfa123")]
+        public async Task CheckPasswordByEmailAsync_WithCorrectPasswordAndEmail_ReturnedTrue(string password)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = "test@mail.com",
+                PasswordHash = ""
+            };
+
+            var sha1 = new SHA1CryptoServiceProvider();
+            var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{"asd1234ad"}_{password}"));
+            var hashedPassword = Encoding.UTF8.GetString(sha1Data);
+            dto.PasswordHash = hashedPassword;
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var res = await _accountServiceCQS
+                .CheckPasswordByEmailAsync("test@mail.com", password);
+
+            Assert.AreEqual(true, res);
+        }
+
+        [Test]
+        [TestCase("asd12345aqweq")]
+        [TestCase("")]
+        public async Task CheckPasswordByEmailAsync_WithWrongOrEmptyPassword_ReturnedFalse(string password)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = "test@mail.com",
+                PasswordHash = password
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var res = await _accountServiceCQS
+                .CheckPasswordByEmailAsync("test@mail.com", password);
+
+            Assert.AreEqual(false, res);
+        }
+
+        [Test]
+        [TestCase("wrong1@mail.com", "asd12345aqweq")]
+        [TestCase("wrong2@mail.com", "adsayui124g")]
+        public async Task CheckPasswordByEmailAsync_WithWrongEmail_ReturnedNullReferenceException(string email, string password)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () =>
+                await _accountServiceCQS.CheckPasswordByEmailAsync(email, password));
+        }
+        #endregion
+
+        #region CheckPasswordByIdAsync tests
+        [Test]
+        [TestCase("asd12345aqweq")]
+        [TestCase("asdasdfadsdfa123")]
+        public async Task CheckPasswordByIdAsync_WithCorrectPasswordAndId_ReturnedTrue(string password)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = "test@mail.com",
+                PasswordHash = ""
+            };
+
+            var sha1 = new SHA1CryptoServiceProvider();
+            var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{"asd1234ad"}_{password}"));
+            var hashedPassword = Encoding.UTF8.GetString(sha1Data);
+            dto.PasswordHash = hashedPassword;
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var res = await _accountServiceCQS
+                .CheckPasswordByIdAsync(Guid.NewGuid(), password);
+
+            Assert.AreEqual(true, res);
+        }
+
+        [Test]
+        [TestCase("asd12345aqweq")]
+        [TestCase("")]
+        public async Task CheckPasswordByIdAsync_WithWrongOrEmptyPassword_ReturnedFalse(string password)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = "test@mail.com",
+                PasswordHash = password
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var res = await _accountServiceCQS
+                .CheckPasswordByIdAsync(Guid.NewGuid(), password);
+
+            Assert.AreEqual(false, res);
+        }
+
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6", "asd12345aqweq")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312", "adsayui124g")]
+        public async Task CheckPasswordByIdAsync_WithWrongId_ReturnedNullReferenceException(Guid id, string password)
+        {
+            Assert.ThrowsAsync<NullReferenceException>(async () =>
+                await _accountServiceCQS.CheckPasswordByIdAsync(id, password));
+        }
+        #endregion
+
+
 
 
         #region ValidateIsNicknameExists tests

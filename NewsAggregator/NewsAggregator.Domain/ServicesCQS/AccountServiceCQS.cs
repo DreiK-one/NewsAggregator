@@ -171,6 +171,7 @@ namespace NewsAggregator.Domain.ServicesCQS
                     RegistrationDate = DateTime.Now,
                     PasswordHash = passwordHash
                 };
+
                 await _mediator.Send(command, new CancellationToken());
 
                 return await SetRoleAsync(command.Id);
