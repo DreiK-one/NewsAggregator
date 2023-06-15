@@ -210,6 +210,11 @@ namespace NewsAggregator.Domain.ServicesCQS
             {
                 var user = await GetUserByEmailAsync(email);
 
+                if (user == null)
+                {
+                    throw new NullReferenceException("User not found!");
+                }
+
                 if (user.Id != Guid.Empty)
                 {
                     if (!string.IsNullOrEmpty(user.PasswordHash))

@@ -426,8 +426,106 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         }
         #endregion
 
+        #region ChangePasswordAsync tests
+        [Test]
+        [TestCase("test1@mail.com", "asd12345aqweq", "asdas123")]
+        [TestCase("test2@mail.com", "asdasdfadsdfa123", "ghjgh6786")]
+        public async Task ChangePasswordAsync_WithCorrectPasswordAndEmail_CorrectlyWorked(string email, string oldPass, string newPass)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = email,
+                PasswordHash = ""
+            };
+
+            var sha1 = new SHA1CryptoServiceProvider();
+            var sha1Data = sha1.ComputeHash(Encoding.UTF8.GetBytes($"{"asd1234ad"}_{oldPass}"));
+            var hashedPassword = Encoding.UTF8.GetString(sha1Data);
+            dto.PasswordHash = hashedPassword;
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
 
 
+            _mediator.Setup(m => m.Send(It.IsAny<ChangePasswordCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<bool>());
+
+            var res = await _accountServiceCQS
+                .ChangePasswordAsync(email, oldPass, newPass);
+
+            _mediator.Verify(m => m.Send(It.IsAny<ChangePasswordCommand>(), 
+                It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        [TestCase("test1@mail.com", "asd12345aqweq", "asdas123")]
+        [TestCase("test2@mail.com", "asdasdfadsdfa123", "ghjgh6786")]
+        public async Task ChangePasswordAsync_WithWrongPassword_ReturnedException(string email, string oldPass, string newPass)
+        {
+            var dto = new UserDto()
+            {
+                Id = Guid.NewGuid(),
+                Email = email,
+                PasswordHash = "fwfwq"
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => await _accountServiceCQS
+                .ChangePasswordAsync(email, oldPass, newPass));
+        }
+
+
+        [Test]
+        [TestCase("test1@mail.com", "asd12345aqweq", "asdas123")]
+        [TestCase("test2@mail.com", "asdasdfadsdfa123", "ghjgh6786")]
+        public async Task ChangePasswordAsync_WithNotExistedUser_ReturnedException(string email, string oldPass, string newPass)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetUserByEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            Assert.ThrowsAsync<NullReferenceException>(async () => await _accountServiceCQS
+                .ChangePasswordAsync(email, oldPass, newPass));
+        }
+        #endregion
+
+        #region UpdateEmail tests
+        [Test]
+        [TestCase("testEmail1")]
+        [TestCase("testEmail2")]
+        public async Task UpdateEmail_CorrectlyReturnedResult(string email)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<UpdateEmailCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int>());
+
+            var res = await _accountServiceCQS.UpdateEmail(It.IsAny<Guid>(), email);
+
+            Assert.IsInstanceOf<int>(res);
+        }
+        #endregion
+
+        #region UpdateNickname tests
+        [Test]
+        [TestCase("testNickname1")]
+        [TestCase("testNickname2")]
+        public async Task UpdateNickname_CorrectlyReturnedResult(string nickname)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<UpdateNicknameCommand>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int>());
+
+            var res = await _accountServiceCQS.UpdateNickname(It.IsAny<Guid>(), nickname);
+
+            Assert.IsInstanceOf<int>(res);
+        }
+        #endregion
 
         #region ValidateIsNicknameExists tests
         [Test]
