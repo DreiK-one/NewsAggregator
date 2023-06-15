@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data.Entities;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using System.ServiceModel.Syndication;
+
 
 namespace NewsAggregator.WebAPI.Mappers
 {
@@ -24,6 +26,10 @@ namespace NewsAggregator.WebAPI.Mappers
             CreateMap<NewArticleDto, Article>();
 
             CreateMap<Article, CreateOrEditArticleDto>().ReverseMap();
+
+            CreateMap<CreateOrEditArticleDto, CreateArticleCommand>().ReverseMap();
+
+            CreateMap<CreateOrEditArticleDto, EditArticleCommand>().ReverseMap();
         }
     }
 }

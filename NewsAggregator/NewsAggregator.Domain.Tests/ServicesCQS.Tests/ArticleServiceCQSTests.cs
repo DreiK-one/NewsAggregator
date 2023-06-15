@@ -10,6 +10,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Domain.ServicesCQS;
+using NewsAggregator.WebAPI.Mappers;
+using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using NewsAggregetor.CQS.Models.Queries.ArticleQueries;
 using NUnit.Framework;
 
@@ -24,6 +26,19 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         private Mock<IMediator> _mediator;
         private Mock<ILogger<ArticleServiceCQS>> _logger;
         private Mock<IConfiguration> _configuration;
+
+        public ArticleServiceCQSTests()
+        {
+            if (_mapper == null)
+            {
+                var mappingConfig = new MapperConfiguration(mc =>
+                {
+                    mc.AddProfile(new ArticleProfile());
+                });
+                IMapper mapper = mappingConfig.CreateMapper();
+                _mapper = mapper;
+            }
+        }
 
         [SetUp]
         public void Setup()
@@ -198,5 +213,73 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             Assert.Null(article);
         }
         #endregion 
+
+        #region CreateAsync tests
+        [Test]
+        public async Task CreateAsync_CorrectlyReturnedResult()
+        {
+            var dto = new CreateOrEditArticleDto()
+            {
+                Id = Guid.NewGuid()
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<CreateArticleCommand>(),
+            It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int?>());
+
+            await _articleServiceCQS.CreateAsync(dto);
+
+            _mediator.Verify(m => m.Send(It.IsAny<CreateArticleCommand>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        public async Task CreateAsync_WithNullModel_ReturnedFalse()
+        {
+            var res = await _articleServiceCQS.CreateAsync(null);
+
+            Assert.AreEqual(res, null);
+        }
+        #endregion
+
+        #region UpdateAsync tests
+        [Test]
+        public async Task UpdateAsync_CorrectlyReturnedResult()
+        {
+            var dto = new CreateOrEditArticleDto()
+            {
+                Id = Guid.NewGuid()
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<EditArticleCommand>(),
+            It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int?>());
+
+            await _articleServiceCQS.UpdateAsync(dto);
+
+            _mediator.Verify(m => m.Send(It.IsAny<EditArticleCommand>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        public async Task UpdateAsync_WithNullModel_ReturnedFalse()
+        {
+            var res = await _articleServiceCQS.UpdateAsync(null);
+
+            Assert.AreEqual(res, null);
+        }
+        #endregion
+
+        #region DeleteAsync tests
+        [Test]
+        public async Task DeleteAsync_CorrectlyReturnedResult()
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<DeleteArticleCommand>(),
+            It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => It.IsAny<int?>());
+
+            await _articleServiceCQS.DeleteAsync(It.IsAny<Guid>());
+
+            _mediator.Verify(m => m.Send(It.IsAny<DeleteArticleCommand>(), It.IsAny<CancellationToken>()));
+        }
+        #endregion
     }
 }

@@ -3,6 +3,7 @@ using NewsAggregator.Core.DTOs;
 using NewsAggregator.Data.Entities;
 using NewsAggregetor.CQS.Models.Commands.AccountCommands;
 
+
 namespace NewsAggregator.WebAPI.Mappers
 {
     public class UserProfile : Profile

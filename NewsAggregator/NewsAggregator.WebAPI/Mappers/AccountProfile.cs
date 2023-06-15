@@ -4,6 +4,7 @@ using NewsAggregator.Data.Entities;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregator.WebAPI.Models.Responses;
 
+
 namespace NewsAggregator.WebAPI.Mappers
 {
     public class AccountProfile : Profile

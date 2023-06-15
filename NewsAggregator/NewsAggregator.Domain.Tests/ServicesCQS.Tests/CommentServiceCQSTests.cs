@@ -8,7 +8,6 @@ using Moq;
 using NewsAggregator.Core.DTOs;
 using NewsAggregator.Domain.ServicesCQS;
 using NewsAggregator.WebAPI.Mappers;
-using NewsAggregetor.CQS.Models.Commands.ArticleCommands;
 using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 using NewsAggregetor.CQS.Models.Queries.CommentQueries;
 using NUnit.Framework;
@@ -85,20 +84,20 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 
         #region CreateAsync tests
         [Test]
-        public async Task GetByIdAsync_CorrectlyReturnedResult()
+        public async Task CreateAsync_CorrectlyReturnedResult()
         {
             var dto = new CreateOrEditCommentDto()
             {
                 Id = Guid.NewGuid()
             };
 
-            _mediator.Setup(m => m.Send(It.IsAny<CreateArticleCommand>(),
+            _mediator.Setup(m => m.Send(It.IsAny<CreateCommentCommand>(),
                     It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => It.IsAny<int?>());
+                .ReturnsAsync(() => It.IsAny<bool>());
 
-            var comment = await _commentServiceCQS.CreateAsync(dto);
+            await _commentServiceCQS.CreateAsync(dto);
 
-            Assert.AreEqual(comment, false);
+            _mediator.Verify(m => m.Send(It.IsAny<CreateCommentCommand>(), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -123,9 +122,9 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => It.IsAny<bool>());
 
-            var comment = await _commentServiceCQS.EditAsync(dto);
+            await _commentServiceCQS.EditAsync(dto);
 
-            Assert.AreEqual(comment, false);
+            _mediator.Verify(m => m.Send(It.IsAny<EditCommentCommand>(), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -145,9 +144,9 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
                     It.IsAny<CancellationToken>()))
                 .ReturnsAsync(() => It.IsAny<bool>());
 
-            var comment = await _commentServiceCQS.DeleteAsync(Guid.NewGuid());
+            await _commentServiceCQS.DeleteAsync(Guid.NewGuid());
 
-            Assert.AreEqual(comment, false);
+            _mediator.Verify(m => m.Send(It.IsAny<DeleteCommentCommand>(), It.IsAny<CancellationToken>()));
         }
         #endregion
     }

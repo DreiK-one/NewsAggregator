@@ -4,6 +4,7 @@ using NewsAggregator.Data.Entities;
 using NewsAggregator.WebAPI.Models.Requests;
 using NewsAggregetor.CQS.Models.Commands.CommentCommands;
 
+
 namespace NewsAggregator.WebAPI.Mappers
 {
     public class CommentProfile : Profile
