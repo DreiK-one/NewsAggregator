@@ -256,7 +256,6 @@ namespace NewsAggregator.Domain.ServicesCQS
         }
 
 
-
         private async Task<IEnumerable<ArticleDto>> GetArticlesByPage(int page, string role)
         {
             try

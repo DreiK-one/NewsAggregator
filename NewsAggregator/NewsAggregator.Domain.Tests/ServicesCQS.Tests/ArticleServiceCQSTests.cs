@@ -41,40 +41,6 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
                 _configuration.Object);
         }
 
-        #region GetArticleById tests
-        [Test]
-        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
-        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
-        public async Task GetArticleById_ExistingId_CorrectlyReturnedData(Guid id)
-        {
-            var dto = new ArticleDto()
-            {
-                Id = id
-            };
-
-            _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => dto);
-
-            var article = await _articleServiceCQS.GetArticleById(id);
-
-            Assert.AreEqual(dto.Id, article.Id);
-        }
-
-        [Test]
-        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")]
-        public async Task GetArticleById_NoExistentId_ReturnedNull(Guid id)
-        {
-            _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),
-                    It.IsAny<CancellationToken>()))
-                .ReturnsAsync(() => null);
-
-            var article = await _articleServiceCQS.GetArticleById(id);
-
-            Assert.Null(article);
-        }
-        #endregion
-
         #region GetAllArticles tests
         [Test]
         [TestCase(1, "User")]
@@ -195,9 +161,42 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
 
             var articles = await _articleServiceCQS.GetAllArticles(page, role);
 
-
             Assert.That(articles, Is.Not.Null);
         }
         #endregion
+
+        #region GetArticleById tests
+        [Test]
+        [TestCase("AF53DA74-A935-47E0-B372-000499DDEAA6")]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4350")]
+        public async Task GetArticleById_ExistingId_CorrectlyReturnedData(Guid id)
+        {
+            var dto = new ArticleDto()
+            {
+                Id = id
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var article = await _articleServiceCQS.GetArticleById(id);
+
+            Assert.AreEqual(dto.Id, article.Id);
+        }
+
+        [Test]
+        [TestCase("C2340D56-DBAA-4039-B0A1-0016A22C4312")]
+        public async Task GetArticleById_NoExistentId_ReturnedNull(Guid id)
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetArticleByIdQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var article = await _articleServiceCQS.GetArticleById(id);
+
+            Assert.Null(article);
+        }
+        #endregion 
     }
 }

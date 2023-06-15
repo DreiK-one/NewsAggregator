@@ -281,7 +281,90 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         }
         #endregion
 
+        #region CreateUserAsync tests
+        [Test]
+        public async Task CreateUserAsync_WithCorrectDto_ReturnedCorrectResult()
+        {
+            var dto = new RegisterDto
+            {
+                Email = "test@mail.com",
+                Nickname = "testNickname",
+                Password = "asdqweq"
+            };
 
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateNicknameQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            await _accountServiceCQS.CreateUserAsync(dto);
+
+            _mediator.Verify(m => m.Send(It.IsAny<CreateUserCommand>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        public async Task CreateUserAsync_ExistedEmail_ReturnedException()
+        {
+            var dto = new RegisterDto
+            {
+                Email = "test@mail.com",
+                Nickname = "testNickname",
+                Password = "asdqweq"
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => true);
+
+            Assert.ThrowsAsync<ArgumentException>(async () => 
+                await _accountServiceCQS.CreateUserAsync(dto));
+        }
+
+        [Test]
+        public async Task CreateUserAsync_ExistedNickname_ReturnedException()
+        {
+            var dto = new RegisterDto
+            {
+                Email = "test@mail.com",
+                Nickname = "testNickname",
+                Password = "asdqweq"
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateNicknameQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => true);
+
+            Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _accountServiceCQS.CreateUserAsync(dto));
+        }
+
+        [Test]
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task CreateUserAsync_NullOrEmptyPassword_ReturnedException(string pass)
+        {
+            var dto = new RegisterDto
+            {
+                Email = "test@mail.com",
+                Nickname = "testNickname",
+                Password = pass
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateEmailQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            _mediator.Setup(m => m.Send(It.IsAny<ValidateNicknameQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => false);
+
+            Assert.ThrowsAsync<ArgumentException>(async () =>
+                await _accountServiceCQS.CreateUserAsync(dto));
+        }
+        #endregion
 
         #region SetPasswordAsync tests
         [Test]
