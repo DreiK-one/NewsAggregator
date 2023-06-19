@@ -354,6 +354,83 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
         }
         #endregion 
 
+        #region GetAllExistingArticleUrls tests
+        [Test]
+        public async Task GetAllExistingArticleUrls_CorrectlyReturnedData()
+        {
+            var expected = new List<string> 
+            { 
+                "asada",
+                "awertdg",
+                "tertert"
+            };
 
+            _mediator.Setup(m => m.Send(It.IsAny<GetAllExistingArticleUrlsQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var urls = await _articleServiceCQS
+                .GetAllExistingArticleUrls();
+
+            Assert.AreEqual(expected.Count(), urls.Count());
+        }
+        #endregion 
+
+        #region GetArticleWithoutRating tests
+        [Test]
+        public async Task GetArticleWithoutRating_CorrectlyReturnedDto()
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<GetArticleWithoutRatingQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => new ArticleDto());
+
+            var article = await _articleServiceCQS
+                .GetArticleWithoutRating();
+
+            Assert.IsInstanceOf<ArticleDto>(article);
+        }
+        #endregion 
+
+        #region GetAllNewsByRatingAsync tests
+        [Test]
+        public async Task GetAllNewsByRatingAsync_CorrectlyReturnedData()
+        {
+            var expected = new List<ArticleDto>
+            {
+                new ArticleDto(),
+                new ArticleDto(),
+                new ArticleDto()
+            }.AsEnumerable();
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetAllNewsByRatingAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var articles = await _articleServiceCQS
+                .GetAllNewsByRatingAsync();
+
+            Assert.AreEqual(expected.Count(), articles.Count());
+        }
+        #endregion 
+
+        #region GetNewsByRatingByPageAsync tests
+        [Test]
+        [TestCase(1)]
+        [TestCase(13)]
+        [TestCase(2)]
+        public async Task GetNewsByRatingByPageAsync_PositivePageNumber_CorrectlyReturnedDtos(int page)
+        {
+            var expected = new ArticleDto[2000].AsEnumerable();
+
+            _mediator.Setup(m => m.Send(It.IsAny<GetNewsByRatingByPageAsyncQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var articles = await _articleServiceCQS
+                .GetNewsByRatingByPageAsync(page);
+
+            Assert.AreEqual(articles.Count(), expected.Count());
+        }
+        #endregion
     }
 }
