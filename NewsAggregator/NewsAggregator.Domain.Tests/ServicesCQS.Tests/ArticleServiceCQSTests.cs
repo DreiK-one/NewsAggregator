@@ -432,5 +432,118 @@ namespace NewsAggregator.Domain.Tests.ServicesCQS.Tests
             Assert.AreEqual(articles.Count(), expected.Count());
         }
         #endregion
+
+        #region MostRatedArticleByPeriodOfTime tests
+        [Test]
+        [TestCase(0.4f)]
+        [TestCase(4.5f)]
+        public async Task MostRatedArticleByPeriodOfTime_ExistingCoef_CorrectlyReturnedDto(float coef)
+        {
+            var dto = new ArticleDto()
+            {
+                Coefficient = coef
+            };
+
+            _mediator.Setup(m => m.Send(It.IsAny<MostRatedArticleByPeriodOfTimeQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => dto);
+
+            var article = await _articleServiceCQS
+                .MostRatedArticleByPeriodOfTime(coef);
+
+            Assert.AreEqual(dto.Coefficient, article.Coefficient);
+        }
+
+        [Test]
+        public async Task MostRatedArticleByPeriodOfTime_ReturnedNull()
+        {
+            _mediator.Setup(m => m.Send(It.IsAny<MostRatedArticleByPeriodOfTimeQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => null);
+
+            var article = await _articleServiceCQS
+                .MostRatedArticleByPeriodOfTime(null);
+
+            Assert.Null(article);
+        }
+        #endregion 
+
+        #region MaxCoefOfToday tests
+        [Test]
+        public async Task MaxCoefOfToday_ExistingCoef_CorrectlyReturnedDto()
+        {
+            var expected = 4.5f;
+
+            _mediator.Setup(m => m.Send(It.IsAny<MaxCoefOfTodayQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var coef = await _articleServiceCQS
+                .MaxCoefOfToday();
+
+            Assert.IsInstanceOf<float?>(coef);
+        }
+
+        [Test]
+        public async Task MaxCoefOfToday_NoData_ReturnedNull()
+        {
+            var coef = await _articleServiceCQS
+                .MaxCoefOfToday();
+
+            Assert.Null(coef);
+        }
+        #endregion
+
+        #region MaxCoefOfTheMonth tests
+        [Test]
+        public async Task MaxCoefOfTheMonth_ExistingCoef_CorrectlyReturnedDto()
+        {
+            var expected = 4.5f;
+
+            _mediator.Setup(m => m.Send(It.IsAny<MaxCoefOfTheMonthQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var coef = await _articleServiceCQS
+                .MaxCoefOfTheMonth();
+
+            Assert.IsInstanceOf<float?>(coef);
+        }
+
+        [Test]
+        public async Task MaxCoefOfTheMonth_NoData_ReturnedNull()
+        {
+            var coef = await _articleServiceCQS
+                .MaxCoefOfTheMonth();
+
+            Assert.Null(coef);
+        }
+        #endregion
+
+        #region MaxCoefOfAllTime tests
+        [Test]
+        public async Task MaxCoefOfAllTime_ExistingCoef_CorrectlyReturnedDto()
+        {
+            var expected = 4.5f;
+
+            _mediator.Setup(m => m.Send(It.IsAny<MaxCoefOfAllTimeQuery>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(() => expected);
+
+            var coef = await _articleServiceCQS
+                .MaxCoefOfAllTime();
+
+            Assert.IsInstanceOf<float?>(coef);
+        }
+
+        [Test]
+        public async Task MaxCoefOfAllTime_NoData_ReturnedNull()
+        {
+            var coef = await _articleServiceCQS
+                .MaxCoefOfAllTime();
+
+            Assert.Null(coef);
+        }
+        #endregion
     }
 }
